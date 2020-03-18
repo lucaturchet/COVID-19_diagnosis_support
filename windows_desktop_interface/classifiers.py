@@ -7,6 +7,7 @@ Date: 13/3/2020
 """
 
 # Remove all the unused imports
+import os
 import cv2
 import json
 # import torch
@@ -31,8 +32,7 @@ class TFClassifier(Classifier):
     def __init__(self):
         # Load the default model
         self.img_shape = (224, 224, 3)
-        # self.model = tf.keras.applications.MobileNetV2(input_shape=self.img_shape, include_top=True, weights='imagenet')
-        # self.model.save("model.hdf5")
+        
         self.model = tf.keras.models.load_model("model.hdf5")
         print("Model loaded: {}".format(self.model))
 
@@ -40,29 +40,49 @@ class TFClassifier(Classifier):
         input_data = json.loads(json_input)
         output = input_data
         
-        for file in input_data['avi_files']:
-            cap = cv2.VideoCapture(file)
+        for file in os.listdir(input_data['working_dir']):
+            if ".avi" in file:
+                cap = cv2.VideoCapture(os.path.join(input_data['working_dir'], file))
 
-            clf_output = np.zeros((1, 1000))
-            ctr = 0
-            max_ = 16
-            while cap.isOpened():
-                _, frame = cap.read()
+                clf_output = np.zeros((1, 1000))
+                ctr = 0
+                max_ = 16
+                while cap.isOpened():
+                    _, frame = cap.read()
 
-                if frame is None or len(frame) == 0:
-                    break
-                frame = cv2.resize(frame, (self.img_shape[1], self.img_shape[0]))
-                curr_output = self.model.predict(frame.reshape(-1, *self.img_shape))
-                clf_output += curr_output.reshape((1, 1000))
+                    if frame is None or len(frame) == 0:
+                        break
+                    frame = cv2.resize(frame, (self.img_shape[1], self.img_shape[0]))
+                    curr_output = self.model.predict(frame.reshape(-1, *self.img_shape))
+                    clf_output += curr_output.reshape((1, 1000))
 
-                ctr += 1
-                print("Analizzato frame {} di {}".format(ctr, max_))
-                if ctr == max_:
-                    break
+                    ctr += 1
+                    print("Analizzato frame {} di {}".format(ctr, max_))
+                    if ctr == max_:
+                        break
 
-            output[file] = str(np.argmax(clf_output))
-        output['paziente'] = input_data['avi_files'][0].split("/")[-1].split("\\")[0]
-        output['esito classificazione'] = "TBI"
-        output['dettagli classificazione'] = "Nessuno"
+                output[file] = str(np.argmax(clf_output))
+        output['name'] = output['working_dir'].split("/")[-1]
+
+        output.update(
+            {
+                'left-anterior-apical': 5,
+                'left-anterior-basal': 1,
+                'left-lateral-apical': 2,
+                'left-lateral-basal': 3,
+                'left-posterior-apical': 4,
+                'left-posterior-medial': 5,
+                'left-posterior-basal': 1,
+                'right-anterior-apical': 1,
+                'right-anterior-basal': 1,
+                'right-lateral-apical': 2,
+                'right-lateral-basal': 3,
+                'right-posterior-apical': 4,
+                'right-posterior-medial': 5,
+                'right-posterior-basal': 1,
+            }
+        )
+
         output = json.dumps(output)
         return output
+
