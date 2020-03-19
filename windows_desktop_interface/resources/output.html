@@ -1,0 +1,286 @@
+<!Doctype HTML>
+<html>
+    <head>
+        <style>
+            body {
+                font-family: "Arial";
+            }
+            info {
+                width: 100%;
+            }
+            name {
+                display: inline-block;
+                width: 33%;
+                font-weight: bold;
+            }
+            id {
+                display: inline-block;
+                text-align: center;
+                width: 33%;
+            }
+            date {
+                display: inline-block;
+                float: right;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .header {
+                font-weight: bold;
+                margin:0;
+            }
+            .border-bottom {
+                border-bottom: 1px solid #999;
+                padding-bottom: 2px;
+            }
+            .border-right {
+                border-right: 1px solid #999;
+            }
+            .indicator {
+                margin-left:25%;
+                width: 50%;
+                height: 8px;
+                border: 1px solid #999;
+            }
+            .red {
+                background: #f00;
+            }
+            .white {
+                background: #fff;
+            }
+            .yellow {
+                background: #f4fc03;
+            }
+            .orange {
+                background: #fc9003;
+            }
+            td {
+                text-align: center;
+                float: center;
+                align: center;
+                padding-top: 2px;
+            }
+            tr {
+                height: 200%;
+            }
+            .fixed-width {
+                width: 64px;
+            }
+            textarea {
+                width: 100%;
+            }
+        </style>
+    <body>
+        <!--
+		<canvas id="canvas" width="500" height="2500"></canvas>
+		</div>
+		<script>
+			var canvas = document.getElementById('canvas');
+			if (canvas.getContext) {
+				var ctx = canvas.getContext('2d');
+
+				// Cubic curves example
+				ctx.beginPath();
+				ctx.moveTo(0, 10);
+				ctx.arc(30, 30, 30, -Math.PI, -0.5*Math.PI);
+				ctx.arc(20, 40, 40, -0.5*Math.PI, -0.25*Math.PI);
+				ctx.lineTo(50, 210);
+				ctx.lineTo(0, 210);
+				ctx.fillStyle = "red";
+				ctx.fill();
+
+				ctx.beginPath();
+				ctx.moveTo(55, 55);
+				ctx.arc(55, 65, 50, -0.5*Math.PI, -0.25*Math.PI);
+				ctx.lineTo(105, 40);
+				ctx.lineTo(105, 280);
+				ctx.lineTo(55, 280);
+				// ctx.lineTo(0, 210);
+				ctx.fillStyle = "red";
+				ctx.fill();
+			}
+		</script> 
+        -->
+        <info>
+            <name>Mario Rossi</name>
+            <id>ID-1234-5678-A</id>
+            <date>15/03/2020</date>
+        </info>
+        <graph>
+        </graph>
+        <table>
+            <tr>
+                <td></td>
+                <td class="header border-bottom">Result</td>
+                <td class="header border-bottom">Area</td>
+                <td class="header border-bottom">% Score 0</td>
+                <td class="header border-bottom">% Score 1</td>
+                <td class="header border-bottom">% Score 2</td>
+                <td class="header border-bottom">% Score 3</td>
+            </tr>
+            <tr>
+                <td class="header border-right fixed-width">Left</td>
+                <td><table class="indicator red"><tr><td>&nbsp;</td></tr></table></td>
+                <td>Anterior-apical</td>
+                <td>100</td>
+                <td>100</td>
+                <td>100</td>
+                <td class="border-right">100</td>
+            </tr>
+            <tr>
+                <td class="header border-right"></td>
+                <td><table class="indicator red"><tr><td>&nbsp;</td></tr></table></td>
+                <td>Anterior-medial</td>
+                <td>100</td>
+                <td>100</td>
+                <td>100</td>
+                <td class="border-right">100</td>
+            </tr>
+            <tr>
+                <td class="header border-right"></td>
+                <td><table class="indicator red"><tr><td>&nbsp;</td></tr></table></td>
+                <td>Anterior-basal</td>
+                <td>100</td>
+                <td>100</td>
+                <td>100</td>
+                <td class="border-right">100</td>
+            </tr>
+            <tr>
+                <td class="header border-right"></td>
+                <td><table class="indicator red"><tr><td>&nbsp;</td></tr></table></td>
+                <td>Lateral-apical</td>
+                <td>100</td>
+                <td>100</td>
+                <td>100</td>
+                <td class="border-right">100</td>
+            </tr>
+            <tr>
+                <td class="header border-right"></td>
+                <td><table class="indicator red"><tr><td>&nbsp;</td></tr></table></td>
+                <td>Lateral-basal</td>
+                <td>100</td>
+                <td>100</td>
+                <td>100</td>
+                <td class="border-right">100</td>
+            </tr>
+            <tr>
+                <td class="header border-right"></td>
+                <td><table class="indicator red"><tr><td>&nbsp;</td></tr></table></td>
+                <td>Posterior-apical</td>
+                <td>100</td>
+                <td>100</td>
+                <td>100</td>
+                <td class="border-right">100</td>
+            </tr>
+            <tr>
+                <td class="header border-right"></td>
+                <td><table class="indicator red"><tr><td>&nbsp;</td></tr></table></td>
+                <td>Posterior-medial</td>
+                <td>100</td>
+                <td>100</td>
+                <td>100</td>
+                <td class="border-right">100</td>
+            </tr>
+            <tr>
+                <td class="header border-right"></td>
+                <td class="border-bottom"><table class="indicator red"><tr><td class="border-bottom">&nbsp;</td></tr></table></td>
+                <td class="border-bottom">Posterior-basal</td>
+                <td class="border-bottom">100</td>
+                <td class="border-bottom">100</td>
+                <td class="border-bottom">100</td>
+                <td class="border-right border-bottom">100</td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td></td>
+                <td class="header border-bottom">Result</td>
+                <td class="header border-bottom">Area</td>
+                <td class="header border-bottom">% Score 0</td>
+                <td class="header border-bottom">% Score 1</td>
+                <td class="header border-bottom">% Score 2</td>
+                <td class="header border-bottom">% Score 3</td>
+            </tr>
+            <tr>
+                <td class="header border-right fixed-width">Right</td>
+                <td><table class="indicator red"><tr><td>&nbsp;</td></tr></table></td>
+                <td>Anterior-apical</td>
+                <td>100</td>
+                <td>100</td>
+                <td>100</td>
+                <td class="border-right">100</td>
+            </tr>
+            <tr>
+                <td class="header border-right"></td>
+                <td><table class="indicator red"><tr><td>&nbsp;</td></tr></table></td>
+                <td>Anterior-medial</td>
+                <td>100</td>
+                <td>100</td>
+                <td>100</td>
+                <td class="border-right">100</td>
+            </tr>
+            <tr>
+                <td class="header border-right"></td>
+                <td><table class="indicator red"><tr><td>&nbsp;</td></tr></table></td>
+                <td>Anterior-basal</td>
+                <td>100</td>
+                <td>100</td>
+                <td>100</td>
+                <td class="border-right">100</td>
+            </tr>
+            <tr>
+                <td class="header border-right"></td>
+                <td><table class="indicator red"><tr><td>&nbsp;</td></tr></table></td>
+                <td>Lateral-apical</td>
+                <td>100</td>
+                <td>100</td>
+                <td>100</td>
+                <td class="border-right">100</td>
+            </tr>
+            <tr>
+                <td class="header border-right"></td>
+                <td><table class="indicator red"><tr><td>&nbsp;</td></tr></table></td>
+                <td>Lateral-basal</td>
+                <td>100</td>
+                <td>100</td>
+                <td>100</td>
+                <td class="border-right">100</td>
+            </tr>
+            <tr>
+                <td class="header border-right"></td>
+                <td><table class="indicator red"><tr><td>&nbsp;</td></tr></table></td>
+                <td>Posterior-apical</td>
+                <td>100</td>
+                <td>100</td>
+                <td>100</td>
+                <td class="border-right">100</td>
+            </tr>
+            <tr>
+                <td class="header border-right"></td>
+                <td><table class="indicator red"><tr><td>&nbsp;</td></tr></table></td>
+                <td>Posterior-medial</td>
+                <td>100</td>
+                <td>100</td>
+                <td>100</td>
+                <td class="border-right">100</td>
+            </tr>
+            <tr>
+                <td class="header border-right"></td>
+                <td class="border-bottom"><table class="indicator red"><tr><td class="border-bottom">&nbsp;</td></tr></table></td>
+                <td class="border-bottom">Posterior-basal</td>
+                <td class="border-bottom">100</td>
+                <td class="border-bottom">100</td>
+                <td class="border-bottom">100</td>
+                <td class="border-right border-bottom">100</td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td class="header fixed-width">Notes</td>
+                <td><textarea rows=4>Here the clinician can add a general comment on the findings</textarea></td>
+            </tr>
+        </table>
+
+    <body>
+</html>

@@ -4,32 +4,28 @@
         <style>
             body {
                 font-family: "Arial";
-                background: #eee;
+                background: #fff;
+                overflow: hidden;
             }
             info {
                 width: 100%;
+                display: inline;
             }
             name {
-                display: inline-block;
-                width: 25%;
-                font-weight: bold;
+                display: block;
             }
             id {
-                display: inline-block;
-                text-align: center;
-                width: 25%;
+                display: block;
             }
             dob {
-                display: inline-block;
-                text-align: center;
-                width: 25%;
+                display: block;
             }
             date {
-                display: inline-block;
+                text-align: right;
+                display: block;
                 float: right;
             }
             table {
-                width: 200px;
                 border: 1px solid #999;
                 border-collapse: collapse;
                 margin: auto;
@@ -81,53 +77,123 @@
             textarea {
                 width: 100%;
             }
+            .id_table {
+                border: none !important;
+                width: 100%;
+            }
+            .id_table td {
+                text-align: left;
+            }
         </style>
-    <body>
+        <!--EDITME<style>body {margin: 1in;}</style>EDITME-->
+        <body >
         <!--EDITME
             <info>
-                <name>Patient: _surname _name</name>
-                <id>ID: _id</id>
-                <dob>Date of birth: _dob</dob>
-                <date>Date: _date</date>
-            </info>
-        EDITME-->
-        <table style="width: 980px;float: center;">
-            <tr style="width: 980px;">
-                <td style="height: 400px; width: 700px">
-                    <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600.89 492.73"><defs><style>.red{fill:#f00;} .white{fill:#fff;} .yellow{fill:#f4fc03;} .orange{fill:#fc9003;} .grey{fill:#7d7c7c;} .cls-1,.cls-4{fill:none;}.cls-2{fill:#7d7c7c;}.cls-3{fill:#00ff06;}.cls-4{stroke:#000;stroke-miterlimit:10;}</style></defs><title>lungs_areas-with-extended_lines_v3</title><path class="cls-1" d="M336.61,267.69c0,51.52,0,105.07-.06,140.84H481.76c0-26.65-.07-82-.09-140.84Z" transform="translate(-108.71 -80.9)"/><path class="_left-lateral-apical" d="M206.3,330.31h69.37V87.5q-2.46,1.05-5,2.32c-24.61,9.62-46.21,28.84-64.49,51.94h.16Z" transform="translate(-108.71 -80.9)"/><path class="_left-lateral-basal" d="M206.3,330.81V500.34c22.48.08,48.71.17,69.37.19V330.81Z" transform="translate(-108.71 -80.9)"/><path class="_left-posterior-basal" d="M276.17,500.53h11c40.87,0,49.33-49.81,49.33-49.81s0-16.3,0-41.7H276.17Z" transform="translate(-108.71 -80.9)"/><path class="_left-anterior-apical" d="M205.8,142.19C174,182.62,152.27,234.74,142.58,268H205.8Z" transform="translate(-108.71 -80.9)"/><path class="_left-posterior-apical" d="M336.61,267.19c0-76,.07-147.48.07-150.56,0-6.44-9.56-51-60.51-29.34v179.9Z" transform="translate(-108.71 -80.9)"/><path class="_left-posterior-medial" d="M276.17,267.69V408.53h60.38c0-35.77,0-89.32.06-140.84Z" transform="translate(-108.71 -80.9)"/><path class="cls-3" d="M275.67,573.62h.5V500.53h-.5Z" transform="translate(-108.71 -80.9)"/><path class="cls-3" d="M276.17,86.86h-.5v.64l.5-.21Z" transform="translate(-108.71 -80.9)"/><path class="cls-3" d="M275.92,409v-.5h.25V267.69h-.25v-.5h.25V87.29l-.5.21V330.31h.25v.5h-.25V500.53h.5V409Z" transform="translate(-108.71 -80.9)"/><path class="cls-3" d="M205.8,141.76v.43l.34-.43Z" transform="translate(-108.71 -80.9)"/><path class="cls-3" d="M205.8,573.62h.5V500.34h-.5Z" transform="translate(-108.71 -80.9)"/><path class="cls-3" d="M206.05,330.81v-.5h.25V141.76h-.16l-.34.43V268h.25v.5h-.25V407.76h.25v.5h-.25v92.08h.5V330.81Z" transform="translate(-108.71 -80.9)"/><path class="cls-3" d="M142.51,268.26" transform="translate(-108.71 -80.9)"/><path class="cls-3" d="M142.58,268" transform="translate(-108.71 -80.9)"/><path class="cls-3" d="M142.44,268.51H205.8V268H142.58l-.07.25" transform="translate(-108.71 -80.9)"/><rect class="cls-3" x="97.09" y="187.11" width="0.25" height="0.5"/><path class="_left-anterior-basal" d="M110.21,450.4c6.1,42.38,39.23,49.77,48.31,49.77,4.24,0,23.64.08,47.28.17V408.26H110.89C109,424.51,108.58,439.06,110.21,450.4Z" transform="translate(-108.71 -80.9)"/><path class="cls-2" d="M142.51,268.51v-.25c-11.09,38.22-26.44,95.08-31.56,139.5H205.8V268.51Z" transform="translate(-108.71 -80.9)"/><path class="cls-3" d="M110.56,407.76l-.13.5h.46l.06-.5Z" transform="translate(-108.71 -80.9)"/><path class="cls-3" d="M110.89,408.26H205.8v-.5H111Z" transform="translate(-108.71 -80.9)"/><rect class="cls-3" x="97.09" y="326.86" width="0.25" height="0.5"/><rect class="cls-3" x="97.59" y="249.41" width="69.37" height="0.5"/><rect class="cls-3" x="166.96" y="249.41" width="0.25" height="0.5"/><rect class="cls-3" x="97.34" y="249.41" width="0.25" height="0.5"/><path class="cls-2" d="M481.76,409v2.55c0,2.13,0,39.15,0,39.15s8.46,49.81,49.33,49.81h13.06V409Z" transform="translate(-108.71 -80.9)"/><path class="cls-2" d="M544.17,88.16c-52.73-23.69-62.54,21.94-62.54,28.47,0,40.34,0,96.88,0,150.56h62.5Z" transform="translate(-108.71 -80.9)"/><path class="cls-2" d="M544.67,330.81V500.53c21,0,47.17-.12,69.37-.2V330.81Z" transform="translate(-108.71 -80.9)"/><path class="cls-2" d="M614.54,407.76h92.82c-5.11-44.32-20.4-101-31.49-139.25H614.54Z" transform="translate(-108.71 -80.9)"/><path class="cls-2" d="M614.54,500.33c22.72-.08,41.14-.16,45.25-.16,9.08,0,42.21-7.39,48.31-49.77,1.63-11.34,1.17-25.89-.68-42.14H614.54Z" transform="translate(-108.71 -80.9)"/><path class="cls-2" d="M481.76,408.53h62.41V267.69h-62.5C481.69,326.55,481.72,381.88,481.76,408.53Z" transform="translate(-108.71 -80.9)"/><path class="cls-2" d="M614,330.31V144.14C595.38,120,573.13,99.76,547.69,89.81c-1-.5-2-1-3-1.42V330.31Z" transform="translate(-108.71 -80.9)"/><path class="cls-2" d="M675.73,268c-9.49-32.55-30.45-83.18-61.19-123.22V268Z" transform="translate(-108.71 -80.9)"/><path class="cls-3" d="M509.92,268.18h34.25v-1H430.43v1Z" transform="translate(-108.71 -80.9)"/><path class="cls-3" d="M276.17,267.68H383v-.49H276.17Z" transform="translate(-108.71 -80.9)"/><rect class="cls-3" x="167.21" y="186.29" width="0.25" height="0.5"/><path class="cls-3" d="M544.17,408.53H430.43V409H544.17Z" transform="translate(-108.71 -80.9)"/><path class="cls-3" d="M276.17,408.53v.56H383v-.56Z" transform="translate(-108.71 -80.9)"/><rect class="cls-3" x="167.21" y="327.63" width="0.25" height="0.5"/><polygon class="cls-3" points="435.71 252.8 435.71 252.3 435.96 252.3 435.96 10.38 435.96 7.49 435.46 7.27 435.46 10.15 435.46 189.18 435.46 189.68 435.46 330.52 435.46 331.02 435.46 422.52 435.46 492.73 435.96 492.73 435.96 422.52 435.96 252.8 435.71 252.8"/><polygon class="cls-3" points="505.58 327.36 505.58 326.86 505.83 326.86 505.83 187.61 505.58 187.61 505.58 187.11 505.83 187.11 505.83 63.89 505.83 63.89 505.33 63.24 505.33 63.24 505.33 249.41 505.58 249.41 505.58 249.91 505.33 249.91 505.33 419.43 505.33 492.73 505.83 492.73 505.83 419.43 505.83 327.36 505.58 327.36"/><polygon class="cls-3" points="505.58 187.11 505.58 187.61 505.83 187.61 567.16 187.61 567.16 187.61 567.02 187.11 567.02 187.11 505.83 187.11 505.58 187.11"/><polygon class="cls-3" points="598.65 326.86 598.65 326.86 505.83 326.86 505.58 326.86 505.58 327.36 505.83 327.36 598.71 327.36 598.71 327.36 598.65 326.86"/><polygon class="cls-3" points="435.71 249.41 435.71 249.91 435.96 249.91 505.33 249.91 505.58 249.91 505.58 249.41 505.33 249.41 435.96 249.41 435.71 249.41"/><g id="Layer_2" data-name="Layer 2"><path class="cls-4" d="M336.68,116.64c0,6.67-.15,334.1-.15,334.1s-8.46,49.81-49.33,49.81-119.6-.37-128.68-.37-42.21-7.39-48.31-49.77,17.1-129.77,32.3-182.14S202.78,116.35,270.63,89.83C326.44,62.45,336.68,110,336.68,116.64Z" transform="translate(-108.71 -80.9)"/><path class="cls-4" d="M481.63,116.64c0,6.67.15,334.1.15,334.1s8.46,49.81,49.33,49.81,119.6-.37,128.68-.37,42.21-7.39,48.31-49.77S691,320.63,675.8,268.27,615.53,116.34,547.69,89.82C491.87,62.45,481.63,110,481.63,116.64Z" transform="translate(-108.71 -80.9)"/></g></svg>
+                <table class="id_table">
+                <tr>
+                <td>
+                <name><b>Name</b>: _name</name>
                 </td>
                 <td>
-                    <table>
-                        <tr>
-                            <td>Legend</td>
-							<td>&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td><table class="indicator white"><tr><td>&nbsp;</td></tr></table></td>
-                            <td>Score 0</td>
-                        </tr>
-                         <tr>
-                            <td><table class="indicator yellow"><tr><td>&nbsp;</td></tr></table></td>
-                            <td>Score 1</td>
-                        </tr>
-                         <tr>
-                            <td><table class="indicator orange"><tr><td>&nbsp;</td></tr></table></td>
-                            <td>Score 2</td>
-                        </tr>
-                         <tr>
-                            <td><table class="indicator red"><tr><td>&nbsp;</td></tr></table></td>
-                            <td>Score 3</td>
-                        </tr>
-                         <tr>
-                            <td><table class="indicator grey"><tr><td>&nbsp;</td></tr></table></td>
-                            <td>Not measured</td>
-                        </tr>
-                    </table>
+                <date>Date of acquisition: _doe</date>
+                </td>
+                </tr>
+                <tr>
+                <td>
+                <name><b>Last name</b>: _surname</name>
+                </td>
+                </tr>
+                <tr>
+                <td>
+                <dob>Date of birth: _dob</dob>
+                </td>
+                </tr>
+                </table>
+                </br></br></br></br> 
+            </info>
+        EDITME-->
+        <table style="width: 100%;float: center;">
+            <tr style="width: 100%;">
+                <!--EDITME<td style="height: 400px; width: 70%"><!EDITME--><!--EDITME--EDITME--><td style="height: 400px; width: 100%"><!--EDITME --EDITME--><!--EDITME> EDITME-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600.89 492.73"><defs><style>.red{fill:#f00;} .white{fill:#fff;} .yellow{fill:#f4fc03;} .orange{fill:#fc9003;} .grey{fill:#7d7c7c;} .cls-1{fill:#7d7c7c;}.cls-2{fill:#00ff06;}.cls-3{fill:none;stroke:#000;stroke-miterlimit:10;}</style></defs><title>lungs_areas_with_extended_lines_v5_grey_areas</title><g id="Layer_1_copy" data-name="Layer 1 copy"><path class="_left-lateral-apical" d="M206.3,330.31h69.37V87.5q-2.46,1.05-5,2.32c-24.61,9.62-46.21,28.84-64.49,51.94h.16Z" transform="translate(-108.71 -80.9)"/><path class="_left-lateral-basal" d="M206.3,330.81V500.34c22.48.08,48.71.17,69.37.19V330.81Z" transform="translate(-108.71 -80.9)"/><path class="_left-posterior-basal" d="M276.17,500.53h11c40.87,0,49.33-49.81,49.33-49.81s0-16.3,0-41.7H276.17Z" transform="translate(-108.71 -80.9)"/><path class="_left-posterior-apical" d="M336.61,267.19c0-76,.07-147.48.07-150.56,0-6.44-9.56-51-60.51-29.34v179.9Z" transform="translate(-108.71 -80.9)"/><path class="_left-posterior-medial" d="M276.17,267.69V408.53h60.38c0-35.77,0-89.32.06-140.84Z" transform="translate(-108.71 -80.9)"/><path class="_right-posterior-basal" d="M481.76,409v2.55c0,2.13,0,39.15,0,39.15s8.46,49.81,49.33,49.81h13.06V409Z" transform="translate(-108.71 -80.9)"/><path class="_right-posterior-apical" d="M544.17,88.16c-52.73-23.69-62.54,21.94-62.54,28.47,0,40.34,0,96.88,0,150.56h62.5Z" transform="translate(-108.71 -80.9)"/><path class="_right-lateral-basal" d="M544.67,330.81V500.53c21,0,47.17-.12,69.37-.2V330.81Z" transform="translate(-108.71 -80.9)"/><path class="_right-posterior-medial" d="M481.76,408.53h62.41V267.69h-62.5C481.69,326.55,481.72,381.88,481.76,408.53Z" transform="translate(-108.71 -80.9)"/><path class="_right-lateral-apical" d="M614,330.31V144.14C595.38,120,573.13,99.76,547.69,89.81c-1-.5-2-1-3-1.42V330.31Z" transform="translate(-108.71 -80.9)"/><path class="_right-anterior-apical" d="M675.73,268c-9.49-32.55-30.45-83.18-61.19-123.22V330.31h77.94C686.93,307.54,680.86,285.69,675.73,268Z" transform="translate(-108.71 -80.9)"/><path class="_right-anterior-basal" d="M707.42,408.26c-2.73-23.67-8.42-51.15-14.82-77.45H614.54V500.33c22.72-.08,41.14-.16,45.25-.16,9.08,0,42.21-7.39,48.31-49.77C709.73,439.06,709.27,424.51,707.42,408.26Z" transform="translate(-108.71 -80.9)"/><path class="_left-anterior-basal" d="M111,407.76c-1.85,16.25-2.37,31.3-.74,42.64,6.1,42.38,39.23,49.77,48.31,49.77,4.24,0,23.64.08,47.28.17V330.81H125.67C119.32,356.88,113.67,384.12,111,407.76Z" transform="translate(-108.71 -80.9)"/><path class="_left-anterior-apical" d="M142.58,268c-5.15,17.75-11.23,39.57-16.78,62.3h80V142.19C174,182.62,152.27,234.74,142.58,268Z" transform="translate(-108.71 -80.9)"/></g><g id="Layer_3" data-name="Layer 3"><path d="M276.17,86.86h-.5v.64l.5-.21Z" transform="translate(-108.71 -80.9)"/><path d="M275.92,409v-.5h.25V267.69h-.25v-.5h.25V87.29l-.5.21V330.31h.25v.5h-.25V500.53h.5V409Z" transform="translate(-108.71 -80.9)"/><path d="M205.8,141.76v.43l.34-.43Z" transform="translate(-108.71 -80.9)"/><path d="M206.05,330.81v-.5h.25V141.76h-.16l-.34.43V407.76h.25v.5h-.25v92.08h.5V330.81Z" transform="translate(-108.71 -80.9)"/><path class="cls-2" d="M142.51,268.26" transform="translate(-108.71 -80.9)"/><path class="cls-2" d="M142.58,268" transform="translate(-108.71 -80.9)"/><path class="cls-2" d="M205.8,268" transform="translate(-108.71 -80.9)"/><rect class="cls-2" x="97.09" y="326.86" width="0.25" height="0.5"/><rect class="cls-2" x="166.96" y="249.41" width="0.25" height="0.5"/><rect class="cls-2" x="97.34" y="249.41" width="0.25" height="0.5"/><rect class="cls-2" x="167.21" y="186.29" width="0.25" height="0.5"/><rect class="cls-2" x="167.21" y="327.63" width="0.25" height="0.5"/><polygon points="435.71 252.8 435.71 252.3 435.96 252.3 435.96 10.38 435.96 7.49 435.46 7.27 435.46 10.15 435.46 189.18 435.46 189.68 435.46 330.52 435.46 331.02 435.46 422.52 435.46 492.73 435.96 492.73 435.96 422.52 435.96 252.8 435.71 252.8"/><rect x="505.58" y="249.41" width="0.25" height="0.5"/><path d="M692.48,330.31H614.54v.5H692.6Z" transform="translate(-108.71 -80.9)"/><polygon points="435.71 249.41 435.71 249.91 435.96 249.91 505.33 249.91 505.58 249.91 505.58 249.41 505.33 249.41 435.96 249.41 435.71 249.41"/><path d="M275.67,573.62h.5V500.53h-.5Z" transform="translate(-108.71 -80.9)"/><path d="M205.8,573.62h.5V500.34h-.5Z" transform="translate(-108.71 -80.9)"/><path d="M125.67,330.81H205.8v-.5h-80C125.76,330.48,125.71,330.64,125.67,330.81Z" transform="translate(-108.71 -80.9)"/><rect x="97.59" y="249.41" width="69.37" height="0.5"/><path d="M509.92,268.18h34.25v-1H430.43v1Z" transform="translate(-108.71 -80.9)"/><path d="M276.17,267.68H383v-.49H276.17Z" transform="translate(-108.71 -80.9)"/><path d="M544.17,408.53H430.43V409H544.17Z" transform="translate(-108.71 -80.9)"/><path d="M276.17,408.53v.56H383v-.56Z" transform="translate(-108.71 -80.9)"/><polygon points="505.83 63.89 505.83 63.89 505.33 63.24 505.33 63.24 505.33 249.41 505.58 249.41 505.58 249.91 505.33 249.91 505.33 419.43 505.33 492.73 505.83 492.73 505.83 419.43 505.83 63.89"/></g><g id="Layer_2" data-name="Layer 2"><g id="Layer_2-2" data-name="Layer 2"><path class="cls-3" d="M336.68,116.64c0,6.67-.15,334.1-.15,334.1s-8.46,49.81-49.33,49.81-119.6-.37-128.68-.37-42.21-7.39-48.31-49.77,17.1-129.77,32.3-182.14S202.78,116.35,270.63,89.83C326.44,62.45,336.68,110,336.68,116.64Z" transform="translate(-108.71 -80.9)"/><path class="cls-3" d="M481.63,116.64c0,6.67.15,334.1.15,334.1s8.46,49.81,49.33,49.81,119.6-.37,128.68-.37,42.21-7.39,48.31-49.77S691,320.63,675.8,268.27,615.53,116.34,547.69,89.82C491.87,62.45,481.63,110,481.63,116.64Z" transform="translate(-108.71 -80.9)"/></g></g></svg>
+                </td>
+                <td>
+                    <!--EDITME
+                        <table style="border: none; height: 400px;">
+                            <tr>
+                            <td>
+                            <table style="background: #fff;">
+                            <tr>
+                                <td>Legend</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td><table class="indicator white"><tr><td>&nbsp;</td></tr></table></td>
+                                <td>Score 0</td>
+                            </tr>
+                             <tr>
+                                <td><table class="indicator yellow"><tr><td>&nbsp;</td></tr></table></td>
+                                <td>Score 1</td>
+                            </tr>
+                             <tr>
+                                <td><table class="indicator orange"><tr><td>&nbsp;</td></tr></table></td>
+                                <td>Score 2</td>
+                            </tr>
+                             <tr>
+                                <td><table class="indicator red"><tr><td>&nbsp;</td></tr></table></td>
+                                <td>Score 3</td>
+                            </tr>
+                             <tr>
+                                <td><table class="indicator grey"><tr><td>&nbsp;</td></tr></table></td>
+                                <td>Not measured</td>
+                            </tr>
+                            </table>
+                            </td>
+                            </tr>
+                            <tr style="height: 30%;">
+                            <td style="height: 30%;">
+                            </br></br></br></br></br></br></br></br> 
+                            </td>
+                            </tr>
+                            <tr>
+                            <td>
+                            <table style="background: #777;">
+                            <tr>
+                                <td><b>Totals</b></td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>_pathological_areas</td>
+                            </tr>
+                            <tr>
+                                <td><table class="indicator white"><tr><td>&nbsp;</td></tr></table></td>
+                                <td><b>_n_white</b></td>
+                            </tr>
+                            <tr>
+                                <td><table class="indicator yellow"><tr><td>&nbsp;</td></tr></table></td>
+                                <td><b>_n_yellow</b></td>
+                            </tr>
+                            <tr>
+                                <td><table class="indicator orange"><tr><td>&nbsp;</td></tr></table></td>
+                                <td><b>_n_orange</b></td>
+                            </tr>
+                            <tr>
+                                <td><table class="indicator red"><tr><td>&nbsp;</td></tr></table></td>
+                                <td><b>_n_red</b></td>
+                            </tr>
+                            </table>
+                            </td>
+                            </tr>
+                        </table>
+                            
+
+                            EDITME-->
                 </td>
             </tr>
         </table>
         <!--EDITME
-        <textarea rows="50">_notes</textarea>
+            <b>Notes of the clinician:</b>
+            <textarea rows="10">_notes</textarea>
         EDITME-->
-    <body>
+    </body>
 </html>

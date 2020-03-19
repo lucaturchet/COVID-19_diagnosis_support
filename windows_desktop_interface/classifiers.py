@@ -66,20 +66,25 @@ class TFClassifier(Classifier):
 
         output.update(
             {
-                'left-anterior-apical': 5,
+                'left-anterior-apical': 0,
                 'left-anterior-basal': 1,
                 'left-lateral-apical': 2,
                 'left-lateral-basal': 3,
                 'left-posterior-apical': 4,
-                'left-posterior-medial': 5,
+                'left-posterior-medial': 0,
                 'left-posterior-basal': 1,
-                'right-anterior-apical': 1,
-                'right-anterior-basal': 1,
-                'right-lateral-apical': 2,
-                'right-lateral-basal': 3,
-                'right-posterior-apical': 4,
-                'right-posterior-medial': 5,
-                'right-posterior-basal': 1,
+                'right-anterior-apical': 2,
+                'right-anterior-basal': 3,
+                'right-lateral-apical': 4,
+                'right-lateral-basal': 0,
+                'right-posterior-apical': 1,
+                'right-posterior-medial': 2,
+                'right-posterior-basal': 3,
+                'pathological_areas': 4,
+                'n_score_0': 4,
+                'n_score_1': 3,
+                'n_score_2': 2,
+                'n_score_3': 1                
             }
         )
 

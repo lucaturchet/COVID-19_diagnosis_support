@@ -1,7 +1,7 @@
-opencv_python==4.1.0.25
-tensorflow==2.1.0
-reportlab==3.5.34
-numpy==1.18.1
-PyQt5==5.11.2
-PyQt5-sip==4.19.12
 pdfkit==0.6.1
+tensorflow==2.1.0
+numpy==1.18.1
+opencv_python==4.1.0.25
+reportlab==3.5.34
+PyQt5==5.14.1
+PyQtWebEngine==5.14.0

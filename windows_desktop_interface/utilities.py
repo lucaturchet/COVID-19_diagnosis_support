@@ -15,11 +15,11 @@ from PyQt5.QtWidgets import QDialog, QVBoxLayout, QCalendarWidget, QWidget, QPus
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 
 COLORS = {
-    1: "white",
-    2: "yellow",
-    3: "orange",
-    4: "red",
-    5: "grey", 
+    0: "white",
+    1: "yellow",
+    2: "orange",
+    3: "red",
+    4: "grey", 
 }
 
 KEYS = [
@@ -106,10 +106,33 @@ def customize_report(json_dict):
     
     return html
     
+def generate_output_html(base_html, name, surname, dob, doe, pathological_areas, totals, notes):
+    html = base_html[:]
+    html = html.replace("_name", name)
+    html = html.replace("_surname", surname)
+    html = html.replace("_dob", dob)
+    html = html.replace("_doe", doe)
+    html = html.replace("_pathological_areas", pathological_areas)
+    html = html.replace("_n_white", totals[0])
+    html = html.replace("_n_yellow", totals[1])
+    html = html.replace("_n_orange", totals[2])
+    html = html.replace("_n_red", totals[3])
+    html = html.replace("_notes", notes)
 
-def export_to_pdf(html, output_name):
+    html = html.replace("<!--EDITME", "")
+    html = html.replace("EDITME-->", "")
+    
+    return html
+
+
+def export_html(html, output_name):
+    with open(output_name, "w") as file:
+        file.write(html)
+
+
+def export_pdf(html, output_name):
     """ This function exports a customized HTML to PDF """
     # FIXME: pdfkit does not support editable textareas
     # Also, it needs wkhtmltopdf and it must be added to PATH
-    # pdfkit.from_string(html, output_name)
+    pdfkit.from_string(html, output_name)
 
