@@ -78,7 +78,7 @@ class Calendar(QDialog):
         print(f'Day Number of the week: {qDate.dayOfWeek()}')
 
     def setDate(self, qDate):
-        self.selectedDate = '{0}/{1}/{2}'.format(qDate.day(), qDate.month(), qDate.year())
+        self.selectedDate = '{0} {1} {2}'.format(qDate.day(), qDate.longMonthName(qDate.month())[:3].capitalize(), qDate.year())
 
     def getDate(self):
         return self.selectedDate
@@ -112,7 +112,7 @@ def generate_output_html(base_html, name, surname, dob, doe, pathological_areas,
     html = html.replace("_surname", surname)
     html = html.replace("_dob", dob)
     html = html.replace("_doe", doe)
-    html = html.replace("_pathological_areas", pathological_areas)
+    html = html.replace("_pathological_areas", pathological_areas.split(":")[1])
     html = html.replace("_n_white", totals[0])
     html = html.replace("_n_yellow", totals[1])
     html = html.replace("_n_orange", totals[2])

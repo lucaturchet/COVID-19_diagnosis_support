@@ -16,7 +16,7 @@ from classifiers import TFClassifier
 from utilities import customize_report, export_pdf, export_html, generate_output_html, Calendar
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QFileDialog, QLabel, QDialog, QGridLayout, QFrame, QLineEdit, QTextEdit
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtCore import pyqtSlot, QThreadPool, QRunnable, QObject, pyqtSignal, Qt
+from PyQt5.QtCore import pyqtSlot, QThreadPool, QRunnable, QObject, pyqtSignal, Qt, QSize
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 
 
@@ -56,7 +56,7 @@ class App(QWidget):
         self.left = 50
         self.top = 50
         self.width = 1024
-        self.height = 900
+        self.height = 600
         self.init_ui()
 
         self.threadpool = QThreadPool()
@@ -77,7 +77,7 @@ class App(QWidget):
         yellow = "#ff0"
         orange = "#fa0"
         red = "#f00"
-        grey = "#555"
+        grey = "#7c7c7c"
 
         layout = QGridLayout()
 
@@ -104,8 +104,12 @@ class App(QWidget):
         dob_grid = QGridLayout()
         dob_btn = QPushButton(icon=QIcon("resources/calendar_icon.png"))
         dob_btn.clicked.connect(self.set_date_of_birth)
+        dob_btn.setFixedWidth(35)
+        dob_btn.setFixedHeight(35)
+        dob_btn.setIconSize(QSize(30, 30))
         dob_grid.addWidget(dob_btn, 0, 0)
         self.date_of_birth = QLabel("")
+        self.date_of_birth.setFixedHeight(self.surname.sizeHint().height())
         self.date_of_birth.setStyleSheet("background-color:#ffffff;");
         dob_grid.addWidget(self.date_of_birth, 0, 1)
         dob_frame = QFrame()
@@ -116,8 +120,13 @@ class App(QWidget):
         doa_grid = QGridLayout()
         doa = QPushButton(icon=QIcon("resources/calendar_icon.png"))
         doa.clicked.connect(self.set_date_of_acquisition)
+        doa.setFixedWidth(35)
+        doa.setFixedHeight(35)
+        doa.setIconSize(QSize(30, 30))
+
         doa_grid.addWidget(doa, 0, 0)
         self.date_of_examination = QLabel("")
+        self.date_of_examination.setFixedHeight(self.surname.sizeHint().height())
         self.date_of_examination.setStyleSheet("background-color:#ffffff;");
         doa_grid.addWidget(self.date_of_examination, 0, 1)
         doa_frame = QFrame()
@@ -158,9 +167,10 @@ class App(QWidget):
         left_column_frame = QFrame()
         left_column_frame.setLayout(left_column)
         layout.addWidget(left_column_frame, 0, 0)
-        layout.setColumnMinimumWidth(0, 100)
-        layout.setColumnMinimumWidth(1, 900)
-        layout.setRowStretch(0, 3)
+        layout.setColumnMinimumWidth(0, 300)
+        layout.setColumnMinimumWidth(1, 700)
+        layout.setRowStretch(0, 5)
+        layout.setRowStretch(1, 3)
         
         self.webview = QWebEngineView(None)
         # self.webview.setHtml(self.html)
@@ -284,6 +294,8 @@ class App(QWidget):
         """ Returns a label of the color specified (in HTML) """
         tmp = QLabel()
         tmp.setStyleSheet("border: 1px solid #444;background-color:{};".format(color))
+        tmp.setFixedWidth(50)
+        tmp.setFixedHeight(20)
         return tmp
 
     def generate_report(self):
