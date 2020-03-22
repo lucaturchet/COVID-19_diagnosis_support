@@ -10,7 +10,7 @@ import UIKit
 import Macaw
 import PDFKit
 
-class MainViewController: UIViewController, PDFDocumentDelegate {
+class MainViewController: UIViewController, UIDocumentInteractionControllerDelegate {
     
     let viewToRenderAsPDF = PDFTemplateView()
     
@@ -31,6 +31,8 @@ class MainViewController: UIViewController, PDFDocumentDelegate {
         button.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         return button
     }()
+    
+    let documentInteractionController = UIDocumentInteractionController()
     
     // colors for the SVG fill
     static let red = Color.init(val: 0xBA170D)
@@ -78,6 +80,8 @@ class MainViewController: UIViewController, PDFDocumentDelegate {
                                                name: UIResponder.keyboardWillHideNotification,
                                                object: nil)
         
+        self.documentInteractionController.delegate = self
+        
         self.randomizeButton.addTarget(self, action: #selector(generateNewReport), for: .touchUpInside)
         self.shareButton.addTarget(self, action: #selector(renderPDF), for: .touchUpInside)
         
@@ -120,9 +124,18 @@ class MainViewController: UIViewController, PDFDocumentDelegate {
         let filePath = self.viewToRenderAsPDF.exportAsPdfFromView()
         
         // view pdf
-        let pdfVC = PDFViewerViewController()
-        pdfVC.viewSetup(pdfPath: filePath)
-        self.present(pdfVC, animated: true, completion: nil)
+        let url = URL(fileURLWithPath: filePath)
+        self.documentInteractionController.url = url
+        self.documentInteractionController.name = "Preview"//url.localizedName ?? url.lastPathComponent
+        self.documentInteractionController.presentPreview(animated: true)
+    }
+    
+    // MARK: document interaction controller delegate
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+        guard let navVC = self.navigationController else {
+            return self
+        }
+        return navVC
     }
     
     // MARK: Keyboard management
