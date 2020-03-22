@@ -53,6 +53,7 @@ class PDFTemplateView: UIView {
         super.init(frame: frame)
         
         self.translatesAutoresizingMaskIntoConstraints = false
+        self.backgroundColor = UIColor.DynamicColors.whiteBlack
         
         self.addSubview(self.titleLabel)
         self.titleLabel.anchorViewTop(top: self.topAnchor, topC: 40,
