@@ -44,7 +44,7 @@ class PDFTemplateView: UIView {
     let notesTextView: UITextView = {
         let view = UITextView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.borderColor = UIColor.DynamicColors.blackWhite.cgColor
+        view.layer.borderColor = UIColor.systemGray3.cgColor
         view.layer.borderWidth = 1
         return view
     }()
