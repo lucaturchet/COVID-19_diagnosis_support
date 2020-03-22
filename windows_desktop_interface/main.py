@@ -2,7 +2,9 @@
 """
 This file contains the implementation of the main interface for the program
 
-Author: Leonardo Lucio Custode
+Authors: Leonardo Lucio Custode and Luca Turchet
+Copyright: University of Trento
+
 Date: 13/3/2020
 """
 import os
@@ -13,7 +15,7 @@ import threading
 import traceback
 from reportlab.pdfgen import canvas
 from classifiers import TFClassifier
-from utilities import customize_report, export_pdf, export_html, generate_output_html, Calendar
+from utilities import customize_report, export_pdf, export_html, generate_output_html, Calendar, ClickableQLabel
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QFileDialog, QLabel, QDialog, QGridLayout, QFrame, QLineEdit, QTextEdit
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import pyqtSlot, QThreadPool, QRunnable, QObject, pyqtSignal, Qt, QSize
@@ -46,6 +48,10 @@ class Worker(QRunnable):
             traceback.print_exc()
             exctype, value = sys.exc_info()[:2]
             self.signals.result.emit(json.dumps({'exception type': str(exctype), 'value': str(value), 'traceback': str(traceback.format_exc())}))
+
+
+
+        
 
 
 class App(QWidget):
@@ -108,7 +114,8 @@ class App(QWidget):
         dob_btn.setFixedHeight(35)
         dob_btn.setIconSize(QSize(30, 30))
         dob_grid.addWidget(dob_btn, 0, 0)
-        self.date_of_birth = QLabel("")
+        self.date_of_birth = ClickableQLabel(self)
+        self.date_of_birth.clicked.connect(self.set_date_of_birth)
         self.date_of_birth.setFixedHeight(self.surname.sizeHint().height())
         self.date_of_birth.setStyleSheet("background-color:#ffffff;");
         dob_grid.addWidget(self.date_of_birth, 0, 1)
@@ -125,7 +132,8 @@ class App(QWidget):
         doa.setIconSize(QSize(30, 30))
 
         doa_grid.addWidget(doa, 0, 0)
-        self.date_of_examination = QLabel("")
+        self.date_of_examination = ClickableQLabel(self)
+        self.date_of_examination.clicked.connect(self.set_date_of_acquisition)
         self.date_of_examination.setFixedHeight(self.surname.sizeHint().height())
         self.date_of_examination.setStyleSheet("background-color:#ffffff;");
         doa_grid.addWidget(self.date_of_examination, 0, 1)

@@ -2,7 +2,9 @@
 """
 This file contains some utilities for the application
 
-Author: Leonardo Lucio Custode
+Author: Leonardo Lucio Custode and Luca Turchet
+Copyright: University of Trento
+
 Date: 17/3/2020
 """
 import re
@@ -10,8 +12,8 @@ import json
 import pdfkit
 import sys
 from datetime import datetime
-from PyQt5.QtCore import QEventLoop, QDate
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QCalendarWidget, QWidget, QPushButton
+from PyQt5.QtCore import QEventLoop, QDate, pyqtSignal
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QCalendarWidget, QWidget, QPushButton, QLabel
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 
 COLORS = {
@@ -38,6 +40,20 @@ KEYS = [
     'right-posterior-medial',
     'right-posterior-basal',
 ]
+
+
+
+
+class ClickableQLabel(QLabel):
+    clicked = pyqtSignal()
+
+    def __init__(self, parent=None):
+        QLabel.__init__(self, parent=parent)
+        
+    def mousePressEvent(self, event):
+        self.clicked.emit()
+
+
 
 
 class Calendar(QDialog):
