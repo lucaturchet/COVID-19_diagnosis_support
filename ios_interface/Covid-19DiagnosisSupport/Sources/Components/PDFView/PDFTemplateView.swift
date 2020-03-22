@@ -83,6 +83,7 @@ class PDFTemplateView: UIView {
                                      leading: self.leadingAnchor, leadingC: 40,
                                      trailing: self.trailingAnchor, trailingC: -40,
                                      bottom: self.notesTitle.topAnchor, bottomC: -40)
+        self.lungsSVGView.heightAnchor.constraint(equalToConstant: 400).isActive = true
     }
     
     required init?(coder: NSCoder) {

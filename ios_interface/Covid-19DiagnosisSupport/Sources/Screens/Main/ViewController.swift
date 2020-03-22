@@ -12,6 +12,13 @@ import PDFKit
 
 class MainViewController: UIViewController, UIDocumentInteractionControllerDelegate {
     
+    let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
+        return scrollView
+    }()
+    
     let viewToRenderAsPDF = PDFTemplateView()
     
     let randomizeButton: UIButton = {
@@ -85,22 +92,26 @@ class MainViewController: UIViewController, UIDocumentInteractionControllerDeleg
         self.randomizeButton.addTarget(self, action: #selector(generateNewReport), for: .touchUpInside)
         self.shareButton.addTarget(self, action: #selector(renderPDF), for: .touchUpInside)
         
-        self.view.addSubview(self.randomizeButton)
-        self.randomizeButton.anchorViewBottomCenter(bottom: self.view.bottomAnchor, bottomC: -40,
-                                                    centerX: self.view.centerXAnchor, centerY: nil,
+        self.view.addSubview(self.scrollView)
+        self.scrollView.anchorViewTo(superView: self.view)
+        
+        self.scrollView.addSubview(self.randomizeButton)
+        self.randomizeButton.anchorViewBottomCenter(bottom: self.scrollView.bottomAnchor, bottomC: -40,
+                                                    centerX: self.scrollView.centerXAnchor, centerY: nil,
                                                     width: 200, height: 50)
         
-        self.view.addSubview(self.shareButton)
+        self.scrollView.addSubview(self.shareButton)
         self.shareButton.anchorViewLeft(centerY: self.randomizeButton.centerYAnchor,
                                         leading: self.randomizeButton.trailingAnchor, leadingC: 50,
                                         trailing: nil, trailingC: nil,
                                         width: 50, height: 50)
         
-        self.view.addSubview(self.viewToRenderAsPDF)
-        self.viewToRenderAsPDF.anchorView(top: self.view.topAnchor, topC: 0,
-                                          leading: self.view.leadingAnchor, leadingC: 0,
-                                          trailing: self.view.trailingAnchor, trailingC: 0,
+        self.scrollView.addSubview(self.viewToRenderAsPDF)
+        self.viewToRenderAsPDF.anchorView(top: self.scrollView.topAnchor, topC: 0,
+                                          leading: self.scrollView.leadingAnchor, leadingC: 0,
+                                          trailing: self.scrollView.trailingAnchor, trailingC: 0,
                                           bottom: self.randomizeButton.topAnchor, bottomC: 0)
+        self.viewToRenderAsPDF.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
     }
 
     // MARK: Actions
@@ -146,12 +157,12 @@ class MainViewController: UIViewController, UIDocumentInteractionControllerDeleg
         let keyboardViewEndFrame = keyboardScreenEndFrame
         
         if notification.name == UIResponder.keyboardWillShowNotification {
-            UIView.animate(withDuration: 0.3) {
-                self.view.transform = CGAffineTransform(translationX: 0, y: -keyboardViewEndFrame.size.height)
-            }
+            self.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.size.height, right: 0)
+            let bottomOffset = CGPoint(x: 0, y: keyboardViewEndFrame.size.height - (self.view.frame.maxY - self.randomizeButton.frame.maxY))
+            self.scrollView.setContentOffset(bottomOffset, animated: true)
         }else{
             UIView.animate(withDuration: 0.3) {
-                self.view.transform = .identity
+                self.scrollView.contentInset = .zero
             }
         }
     }
