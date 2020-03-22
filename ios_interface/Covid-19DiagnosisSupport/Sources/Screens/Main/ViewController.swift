@@ -163,7 +163,7 @@ class MainViewController: UIViewController, UIDocumentInteractionControllerDeleg
         
         if notification.name == UIResponder.keyboardWillShowNotification {
             self.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.size.height, right: 0)
-            let bottomOffset = CGPoint(x: 0, y: keyboardViewEndFrame.size.height - (self.view.frame.maxY - self.randomizeButton.frame.maxY))
+            let bottomOffset = CGPoint(x: 0, y: keyboardViewEndFrame.size.height - (self.view.frame.maxY - (self.randomizeButton.frame.maxY + 40)))
             self.scrollView.setContentOffset(bottomOffset, animated: true)
         }else{
             UIView.animate(withDuration: 0.3) {
