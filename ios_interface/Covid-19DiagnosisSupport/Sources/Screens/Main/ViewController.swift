@@ -12,25 +12,7 @@ import PDFKit
 
 class MainViewController: UIViewController, PDFDocumentDelegate {
     
-    let titleLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = UIColor.DynamicColors.blackWhite
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 24)
-        label.text = "COVID-19 Diagnosis Support"
-        
-        return label
-    }()
-    
-    let lungsSVGView: SVGView = {
-        let view = SVGView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor.systemGray6
-        view.fileName = "lungs_areas"
-        
-        return view
-    }()
+    let viewToRenderAsPDF = PDFTemplateView()
     
     let randomizeButton: UIButton = {
         let button = UIButton()
@@ -86,14 +68,18 @@ class MainViewController: UIViewController, PDFDocumentDelegate {
         // Do any additional setup after loading the view.
         self.view.backgroundColor = UIColor.systemGray6
         
+        // keyboard management
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(adjustForKeyboard(notification:)),
+                                               name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(adjustForKeyboard(notification:)),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
+        
         self.randomizeButton.addTarget(self, action: #selector(generateNewReport), for: .touchUpInside)
         self.shareButton.addTarget(self, action: #selector(renderPDF), for: .touchUpInside)
-        
-        self.view.addSubview(self.titleLabel)
-        self.titleLabel.anchorViewTop(top: self.view.topAnchor, topC: 40,
-                                      leading: self.view.leadingAnchor, leadingC: 40,
-                                      trailing: self.view.trailingAnchor, trailingC: -40,
-                                      height: nil)
         
         self.view.addSubview(self.randomizeButton)
         self.randomizeButton.anchorViewBottomCenter(bottom: self.view.bottomAnchor, bottomC: -40,
@@ -106,11 +92,11 @@ class MainViewController: UIViewController, PDFDocumentDelegate {
                                         trailing: nil, trailingC: nil,
                                         width: 50, height: 50)
         
-        self.view.addSubview(self.lungsSVGView)
-        self.lungsSVGView.anchorView(top: self.titleLabel.bottomAnchor, topC: 40,
-                                     leading: self.view.leadingAnchor, leadingC: 40,
-                                     trailing: self.view.trailingAnchor, trailingC: -40,
-                                     bottom: self.randomizeButton.topAnchor, bottomC: -40)
+        self.view.addSubview(self.viewToRenderAsPDF)
+        self.viewToRenderAsPDF.anchorView(top: self.view.topAnchor, topC: 0,
+                                          leading: self.view.leadingAnchor, leadingC: 0,
+                                          trailing: self.view.trailingAnchor, trailingC: 0,
+                                          bottom: self.randomizeButton.topAnchor, bottomC: 0)
     }
 
     // MARK: Actions
@@ -131,76 +117,65 @@ class MainViewController: UIViewController, PDFDocumentDelegate {
     
     @objc func renderPDF(){
         // create pdf
-        let filePath = self.createPDF()
+        let filePath = self.viewToRenderAsPDF.exportAsPdfFromView()
         
         // view pdf
-        let pdfVC = PDFViewController()
+        let pdfVC = PDFViewerViewController()
         pdfVC.viewSetup(pdfPath: filePath)
         self.present(pdfVC, animated: true, completion: nil)
     }
     
-    // MARK: Utils
-    func changeNodeColor(nodeTag : String, nodeColor: Color) {
-        let nodeShape = self.lungsSVGView.node.nodeBy(tag: nodeTag) as! Shape
-        nodeShape.fill = nodeColor
+    // MARK: Keyboard management
+    @objc func adjustForKeyboard(notification: Notification) {
+        guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+        
+        let keyboardScreenEndFrame = keyboardValue.cgRectValue
+        let keyboardViewEndFrame = keyboardScreenEndFrame
+        
+        if notification.name == UIResponder.keyboardWillShowNotification {
+            UIView.animate(withDuration: 0.3) {
+                self.view.transform = CGAffineTransform(translationX: 0, y: -keyboardViewEndFrame.size.height)
+            }
+        }else{
+            UIView.animate(withDuration: 0.3) {
+                self.view.transform = .identity
+            }
+        }
     }
     
-//    func createPDF() -> String? {
-//        guard let filePath = Bundle.main.path(forResource: self.pdfTemplate, ofType: "pdf") else { return nil }
-//
-//        let pdf = PDFDocument(url: URL(fileURLWithPath: filePath))
-//        guard let contents = pdf?.string else {
-//            print("could not get string from pdf: \(String(describing: pdf))")
-//            exit(1)
-//        }
-//
-//        let footNote = contents.components(separatedBy: "Name: ")[1] // get all the text after the first foot note
-//
-//        print(footNote.components(separatedBy: "\n")[0])
-//
-//        return ""
-//    }
-    
-    func createPDF() -> String {
-        let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-        let filePath = (documentsDirectory as NSString).appendingPathComponent("foo.pdf") as String
-        print(filePath) // TODO:: remove
-        
-        let pdfTitle = "Covid-19 Diagnosis Support"
-        let pdfMetadata = [
-            // The name of the application creating the PDF.
-            kCGPDFContextCreator: "Covid-19 Diagnosis Support",
-
-            // The name of the PDF's author.
-            kCGPDFContextAuthor: "Covid-19 Diagnosis Support",
-
-            // The title of the PDF.
-            kCGPDFContextTitle: "Covid-19 Diagnosis Support",
-
-            // Encrypts the document with the value as the owner password. Used to enable/disable different permissions.
-//            kCGPDFContextOwnerPassword: "myPassword123"
-        ]
-
-        // Creates a new PDF file at the specified path.
-        UIGraphicsBeginPDFContextToFile(filePath, CGRect.zero, pdfMetadata)
-        
-        // Creates a new page in the current PDF context.
-        UIGraphicsBeginPDFPage()
-
-        // Default size of the page is 612x72.
-        let pageSize = UIGraphicsGetPDFContextBounds().size
-        let font = UIFont.preferredFont(forTextStyle: .largeTitle)
-
-        // Let's draw the title of the PDF on top of the page.
-        let attributedPDFTitle = NSAttributedString(string: pdfTitle, attributes: [NSAttributedString.Key.font: font])
-        let stringSize = attributedPDFTitle.size()
-        let stringRect = CGRect(x: (pageSize.width / 2 - stringSize.width / 2), y: 20, width: stringSize.width, height: stringSize.height)
-        attributedPDFTitle.draw(in: stringRect)
-        
-        // Closes the current PDF context and ends writing to the file.
-        UIGraphicsEndPDFContext()
-        
-        return filePath
+    // MARK: Utils
+    func changeNodeColor(nodeTag : String, nodeColor: Color) {
+        let nodeShape = self.viewToRenderAsPDF.lungsSVGView.node.nodeBy(tag: nodeTag) as! Shape
+        nodeShape.fill = nodeColor
     }
 }
 
+extension UIView {
+    
+    // Export pdf from Save pdf in drectory and return pdf file path
+    func exportAsPdfFromView() -> String {
+        
+        let pdfPageFrame = self.bounds
+        let pdfData = NSMutableData()
+        UIGraphicsBeginPDFContextToData(pdfData, pdfPageFrame, nil)
+        UIGraphicsBeginPDFPageWithInfo(pdfPageFrame, nil)
+        guard let pdfContext = UIGraphicsGetCurrentContext() else { return "" }
+        self.layer.render(in: pdfContext)
+        UIGraphicsEndPDFContext()
+        return self.saveViewPdf(data: pdfData)
+        
+    }
+    
+    // Save pdf file in document directory
+    func saveViewPdf(data: NSMutableData) -> String {
+        
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let docDirectoryPath = paths[0]
+        let pdfPath = docDirectoryPath.appendingPathComponent("foo.pdf")
+        if data.write(to: pdfPath, atomically: true) {
+            return pdfPath.path
+        } else {
+            return ""
+        }
+    }
+}

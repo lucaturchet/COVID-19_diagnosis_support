@@ -16,8 +16,9 @@
 		81A03B53242778090079CA53 /* AnchorsExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A03B52242778090079CA53 /* AnchorsExtensions.swift */; };
 		81A03B5824277B160079CA53 /* ColorsExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A03B5724277B160079CA53 /* ColorsExtensions.swift */; };
 		81A03B5C24277FCC0079CA53 /* lungs_areas.svg in Resources */ = {isa = PBXBuildFile; fileRef = 81A03B5B24277FCC0079CA53 /* lungs_areas.svg */; };
-		81E712AC2427BD67009BF466 /* PDFViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E712AB2427BD67009BF466 /* PDFViewController.swift */; };
-		81E712AE2427C535009BF466 /* report_template.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 81E712AD2427C535009BF466 /* report_template.pdf */; };
+		81E712AC2427BD67009BF466 /* PDFViewerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E712AB2427BD67009BF466 /* PDFViewerViewController.swift */; };
+		81E712B02427DA1C009BF466 /* PDFTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E712AF2427DA1C009BF466 /* PDFTemplateView.swift */; };
+		81E712B32427DB4C009BF466 /* UserForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E712B22427DB4C009BF466 /* UserForm.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,8 +33,9 @@
 		81A03B52242778090079CA53 /* AnchorsExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnchorsExtensions.swift; sourceTree = "<group>"; };
 		81A03B5724277B160079CA53 /* ColorsExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsExtensions.swift; sourceTree = "<group>"; };
 		81A03B5B24277FCC0079CA53 /* lungs_areas.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = lungs_areas.svg; sourceTree = "<group>"; };
-		81E712AB2427BD67009BF466 /* PDFViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFViewController.swift; sourceTree = "<group>"; };
-		81E712AD2427C535009BF466 /* report_template.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = report_template.pdf; sourceTree = "<group>"; };
+		81E712AB2427BD67009BF466 /* PDFViewerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFViewerViewController.swift; sourceTree = "<group>"; };
+		81E712AF2427DA1C009BF466 /* PDFTemplateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFTemplateView.swift; sourceTree = "<group>"; };
+		81E712B22427DB4C009BF466 /* UserForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserForm.swift; sourceTree = "<group>"; };
 		9340542819C71B5EF35DE149 /* Pods-Covid-19DiagnosisSupport.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Covid-19DiagnosisSupport.debug.xcconfig"; path = "Target Support Files/Pods-Covid-19DiagnosisSupport/Pods-Covid-19DiagnosisSupport.debug.xcconfig"; sourceTree = "<group>"; };
 		C5C870E98A84CD7566366DC9 /* libPods-Covid-19DiagnosisSupport.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Covid-19DiagnosisSupport.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -120,6 +122,7 @@
 		81A03B562427787A0079CA53 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				81E712B12427DB3A009BF466 /* UserForm */,
 				81E712AA2427BD41009BF466 /* PDFView */,
 			);
 			path = Components;
@@ -128,7 +131,6 @@
 		81A03B5924277F910079CA53 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				81E712AD2427C535009BF466 /* report_template.pdf */,
 				81A03B5B24277FCC0079CA53 /* lungs_areas.svg */,
 			);
 			path = Resources;
@@ -145,9 +147,18 @@
 		81E712AA2427BD41009BF466 /* PDFView */ = {
 			isa = PBXGroup;
 			children = (
-				81E712AB2427BD67009BF466 /* PDFViewController.swift */,
+				81E712AF2427DA1C009BF466 /* PDFTemplateView.swift */,
+				81E712AB2427BD67009BF466 /* PDFViewerViewController.swift */,
 			);
 			path = PDFView;
+			sourceTree = "<group>";
+		};
+		81E712B12427DB3A009BF466 /* UserForm */ = {
+			isa = PBXGroup;
+			children = (
+				81E712B22427DB4C009BF466 /* UserForm.swift */,
+			);
+			path = UserForm;
 			sourceTree = "<group>";
 		};
 		86D435FCFE8787A108E2DD6A /* Pods */ = {
@@ -220,7 +231,6 @@
 			files = (
 				81A03B5C24277FCC0079CA53 /* lungs_areas.svg in Resources */,
 				81A03B4A24276F540079CA53 /* LaunchScreen.storyboard in Resources */,
-				81E712AE2427C535009BF466 /* report_template.pdf in Resources */,
 				81A03B4724276F540079CA53 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -259,8 +269,10 @@
 			files = (
 				81A03B53242778090079CA53 /* AnchorsExtensions.swift in Sources */,
 				81A03B5824277B160079CA53 /* ColorsExtensions.swift in Sources */,
+				81E712B02427DA1C009BF466 /* PDFTemplateView.swift in Sources */,
 				81A03B4224276F520079CA53 /* ViewController.swift in Sources */,
-				81E712AC2427BD67009BF466 /* PDFViewController.swift in Sources */,
+				81E712B32427DB4C009BF466 /* UserForm.swift in Sources */,
+				81E712AC2427BD67009BF466 /* PDFViewerViewController.swift in Sources */,
 				81A03B3E24276F520079CA53 /* AppDelegate.swift in Sources */,
 				81A03B4024276F520079CA53 /* SceneDelegate.swift in Sources */,
 			);

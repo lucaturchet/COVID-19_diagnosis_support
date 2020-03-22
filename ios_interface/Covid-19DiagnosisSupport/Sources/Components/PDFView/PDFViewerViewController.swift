@@ -9,7 +9,7 @@
 import UIKit
 import PDFKit
 
-class PDFViewController: UIViewController {
+class PDFViewerViewController: UIViewController {
 
     let pdfView: PDFView = {
         let view = PDFView()
