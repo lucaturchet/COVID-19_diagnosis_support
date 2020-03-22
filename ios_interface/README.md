@@ -5,7 +5,7 @@ Support COVID-19 diagnosis with this iPad app.
 ### Installing
 Run
 ```
-Pod install
+pod install
 ```
 Open XCode and Run the App.
 

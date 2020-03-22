@@ -15,7 +15,7 @@ class MainViewController: UIViewController, UIDocumentInteractionControllerDeleg
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        
+        scrollView.clipsToBounds = false
         return scrollView
     }()
     
@@ -93,25 +93,30 @@ class MainViewController: UIViewController, UIDocumentInteractionControllerDeleg
         self.shareButton.addTarget(self, action: #selector(renderPDF), for: .touchUpInside)
         
         self.view.addSubview(self.scrollView)
-        self.scrollView.anchorViewTo(superView: self.view)
+        self.scrollView.anchorView(top: self.view.safeAreaLayoutGuide.topAnchor, topC: 0,
+                                   leading: self.view.leadingAnchor, leadingC: 0,
+                                   trailing: self.view.trailingAnchor, trailingC: 0,
+                                   bottom: self.view.safeAreaLayoutGuide.bottomAnchor, bottomC: 0)
+        
+        self.scrollView.addSubview(self.viewToRenderAsPDF)
+        self.viewToRenderAsPDF.anchorViewTop(top: self.scrollView.topAnchor, topC: 0,
+                                             leading: self.scrollView.leadingAnchor, leadingC: 0,
+                                             trailing: self.scrollView.trailingAnchor, trailingC: 0,
+                                             height: nil)
+        self.viewToRenderAsPDF.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
         
         self.scrollView.addSubview(self.randomizeButton)
-        self.randomizeButton.anchorViewBottomCenter(bottom: self.scrollView.bottomAnchor, bottomC: -40,
-                                                    centerX: self.scrollView.centerXAnchor, centerY: nil,
-                                                    width: 200, height: 50)
+        self.randomizeButton.anchorViewTopCenter(top: self.viewToRenderAsPDF.bottomAnchor, topC: 40,
+                                                 centerX: self.scrollView.centerXAnchor,
+                                                 centerY: nil,
+                                                 width: 200, height: 50)
+        self.randomizeButton.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor, constant: -40).isActive = true
         
         self.scrollView.addSubview(self.shareButton)
         self.shareButton.anchorViewLeft(centerY: self.randomizeButton.centerYAnchor,
                                         leading: self.randomizeButton.trailingAnchor, leadingC: 50,
                                         trailing: nil, trailingC: nil,
                                         width: 50, height: 50)
-        
-        self.scrollView.addSubview(self.viewToRenderAsPDF)
-        self.viewToRenderAsPDF.anchorView(top: self.scrollView.topAnchor, topC: 0,
-                                          leading: self.scrollView.leadingAnchor, leadingC: 0,
-                                          trailing: self.scrollView.trailingAnchor, trailingC: 0,
-                                          bottom: self.randomizeButton.topAnchor, bottomC: 0)
-        self.viewToRenderAsPDF.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
     }
 
     // MARK: Actions

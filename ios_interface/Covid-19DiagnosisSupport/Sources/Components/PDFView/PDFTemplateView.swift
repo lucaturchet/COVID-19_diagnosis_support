@@ -44,6 +44,7 @@ class PDFTemplateView: UIView {
     let notesTextView: UITextView = {
         let view = UITextView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.systemGray6
         view.layer.borderColor = UIColor.systemGray3.cgColor
         view.layer.borderWidth = 1
         return view
@@ -53,7 +54,7 @@ class PDFTemplateView: UIView {
         super.init(frame: frame)
         
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.backgroundColor = UIColor.DynamicColors.whiteBlack
+        self.backgroundColor = UIColor.systemGray6
         
         self.addSubview(self.titleLabel)
         self.titleLabel.anchorViewTop(top: self.topAnchor, topC: 40,
@@ -67,24 +68,24 @@ class PDFTemplateView: UIView {
                                     trailing: self.trailingAnchor, trailingC: -40,
                                     height: 120)
         
-        self.addSubview(self.notesTextView)
-        self.notesTextView.anchorViewBottom(bottom: self.bottomAnchor, bottomC: -40,
-                                            leading: self.leadingAnchor, leadingC: 40,
-                                            trailing: self.trailingAnchor, trailingC: -40,
-                                            height: 120)
+        self.addSubview(self.lungsSVGView)
+        self.lungsSVGView.anchorViewTop(top: self.userForm.bottomAnchor, topC: 40,
+                                        leading: self.leadingAnchor, leadingC: 40,
+                                        trailing: self.trailingAnchor, trailingC: -40,
+                                        height: 450)
         
         self.addSubview(self.notesTitle)
-        self.notesTitle.anchorViewBottom(bottom: self.notesTextView.topAnchor, bottomC: -20,
+        self.notesTitle.anchorViewTop(top: self.lungsSVGView.bottomAnchor, topC: 40,
+                                      leading: self.leadingAnchor, leadingC: 40,
+                                      trailing: self.trailingAnchor, trailingC: -40,
+                                      height: nil)
+        
+        self.addSubview(self.notesTextView)
+        self.notesTextView.anchorViewTop(top: self.notesTitle.bottomAnchor, topC: 20,
                                          leading: self.leadingAnchor, leadingC: 40,
                                          trailing: self.trailingAnchor, trailingC: -40,
-                                         height: nil)
-        
-        self.addSubview(self.lungsSVGView)
-        self.lungsSVGView.anchorView(top: self.userForm.bottomAnchor, topC: 40,
-                                     leading: self.leadingAnchor, leadingC: 40,
-                                     trailing: self.trailingAnchor, trailingC: -40,
-                                     bottom: self.notesTitle.topAnchor, bottomC: -40)
-        self.lungsSVGView.heightAnchor.constraint(equalToConstant: 400).isActive = true
+                                         height: 120)
+        self.notesTextView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -40).isActive = true
     }
     
     required init?(coder: NSCoder) {
