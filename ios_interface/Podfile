@@ -3,7 +3,7 @@
 
 target 'Covid-19DiagnosisSupport' do
   # Comment the next line if you don't want to use dynamic frameworks
-  use_frameworks!
+  # Xcode 11.2.1 BUG do not permit this without dev account  #use_frameworks!
 
   # Pods for Covid-19DiagnosisSupport
   pod "Macaw", "0.9.5"

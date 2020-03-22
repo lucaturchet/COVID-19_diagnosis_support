@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		12E7A755E955CF6264189DE2 /* libPods-Covid-19DiagnosisSupport.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5C870E98A84CD7566366DC9 /* libPods-Covid-19DiagnosisSupport.a */; };
 		81A03B3E24276F520079CA53 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A03B3D24276F520079CA53 /* AppDelegate.swift */; };
 		81A03B4024276F520079CA53 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A03B3F24276F520079CA53 /* SceneDelegate.swift */; };
 		81A03B4224276F520079CA53 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A03B4124276F520079CA53 /* ViewController.swift */; };
@@ -15,11 +16,11 @@
 		81A03B53242778090079CA53 /* AnchorsExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A03B52242778090079CA53 /* AnchorsExtensions.swift */; };
 		81A03B5824277B160079CA53 /* ColorsExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A03B5724277B160079CA53 /* ColorsExtensions.swift */; };
 		81A03B5C24277FCC0079CA53 /* lungs_areas.svg in Resources */ = {isa = PBXBuildFile; fileRef = 81A03B5B24277FCC0079CA53 /* lungs_areas.svg */; };
-		BF590DFDF328FE00FFF67E5D /* Pods_Covid_19DiagnosisSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FA60E17AA3BC45B1CBDB18E /* Pods_Covid_19DiagnosisSupport.framework */; };
+		81E712AC2427BD67009BF466 /* PDFViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E712AB2427BD67009BF466 /* PDFViewController.swift */; };
+		81E712AE2427C535009BF466 /* report_template.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 81E712AD2427C535009BF466 /* report_template.pdf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4FA60E17AA3BC45B1CBDB18E /* Pods_Covid_19DiagnosisSupport.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Covid_19DiagnosisSupport.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		551DD2ED014710A425A7845B /* Pods-Covid-19DiagnosisSupport.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Covid-19DiagnosisSupport.release.xcconfig"; path = "Target Support Files/Pods-Covid-19DiagnosisSupport/Pods-Covid-19DiagnosisSupport.release.xcconfig"; sourceTree = "<group>"; };
 		81A03B3A24276F520079CA53 /* Covid-19DiagnosisSupport.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Covid-19DiagnosisSupport.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81A03B3D24276F520079CA53 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -31,7 +32,10 @@
 		81A03B52242778090079CA53 /* AnchorsExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnchorsExtensions.swift; sourceTree = "<group>"; };
 		81A03B5724277B160079CA53 /* ColorsExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsExtensions.swift; sourceTree = "<group>"; };
 		81A03B5B24277FCC0079CA53 /* lungs_areas.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = lungs_areas.svg; sourceTree = "<group>"; };
+		81E712AB2427BD67009BF466 /* PDFViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFViewController.swift; sourceTree = "<group>"; };
+		81E712AD2427C535009BF466 /* report_template.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = report_template.pdf; sourceTree = "<group>"; };
 		9340542819C71B5EF35DE149 /* Pods-Covid-19DiagnosisSupport.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Covid-19DiagnosisSupport.debug.xcconfig"; path = "Target Support Files/Pods-Covid-19DiagnosisSupport/Pods-Covid-19DiagnosisSupport.debug.xcconfig"; sourceTree = "<group>"; };
+		C5C870E98A84CD7566366DC9 /* libPods-Covid-19DiagnosisSupport.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Covid-19DiagnosisSupport.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,7 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BF590DFDF328FE00FFF67E5D /* Pods_Covid_19DiagnosisSupport.framework in Frameworks */,
+				12E7A755E955CF6264189DE2 /* libPods-Covid-19DiagnosisSupport.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -49,7 +53,7 @@
 		453E7EF15BE97A7A666563D5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4FA60E17AA3BC45B1CBDB18E /* Pods_Covid_19DiagnosisSupport.framework */,
+				C5C870E98A84CD7566366DC9 /* libPods-Covid-19DiagnosisSupport.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -116,6 +120,7 @@
 		81A03B562427787A0079CA53 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				81E712AA2427BD41009BF466 /* PDFView */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -123,6 +128,7 @@
 		81A03B5924277F910079CA53 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				81E712AD2427C535009BF466 /* report_template.pdf */,
 				81A03B5B24277FCC0079CA53 /* lungs_areas.svg */,
 			);
 			path = Resources;
@@ -134,6 +140,14 @@
 				81A03B4124276F520079CA53 /* ViewController.swift */,
 			);
 			path = Main;
+			sourceTree = "<group>";
+		};
+		81E712AA2427BD41009BF466 /* PDFView */ = {
+			isa = PBXGroup;
+			children = (
+				81E712AB2427BD67009BF466 /* PDFViewController.swift */,
+			);
+			path = PDFView;
 			sourceTree = "<group>";
 		};
 		86D435FCFE8787A108E2DD6A /* Pods */ = {
@@ -156,7 +170,6 @@
 				81A03B3624276F520079CA53 /* Sources */,
 				81A03B3724276F520079CA53 /* Frameworks */,
 				81A03B3824276F520079CA53 /* Resources */,
-				09848130599DEB65D76D712E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -207,6 +220,7 @@
 			files = (
 				81A03B5C24277FCC0079CA53 /* lungs_areas.svg in Resources */,
 				81A03B4A24276F540079CA53 /* LaunchScreen.storyboard in Resources */,
+				81E712AE2427C535009BF466 /* report_template.pdf in Resources */,
 				81A03B4724276F540079CA53 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -214,23 +228,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		09848130599DEB65D76D712E /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Covid-19DiagnosisSupport/Pods-Covid-19DiagnosisSupport-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Covid-19DiagnosisSupport/Pods-Covid-19DiagnosisSupport-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Covid-19DiagnosisSupport/Pods-Covid-19DiagnosisSupport-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		A183FE2188E4DB54012C4296 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -263,6 +260,7 @@
 				81A03B53242778090079CA53 /* AnchorsExtensions.swift in Sources */,
 				81A03B5824277B160079CA53 /* ColorsExtensions.swift in Sources */,
 				81A03B4224276F520079CA53 /* ViewController.swift in Sources */,
+				81E712AC2427BD67009BF466 /* PDFViewController.swift in Sources */,
 				81A03B3E24276F520079CA53 /* AppDelegate.swift in Sources */,
 				81A03B4024276F520079CA53 /* SceneDelegate.swift in Sources */,
 			);
