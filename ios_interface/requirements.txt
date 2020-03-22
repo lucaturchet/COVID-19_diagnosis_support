@@ -1,0 +1,5 @@
+# Requirements
+Please refer to Podfile to a complete and updated list of requirements for the iOS App.
+
+## External libs
+1. [Macaw](https://github.com/exyte/Macaw) -> SVG Management
