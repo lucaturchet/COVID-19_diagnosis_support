@@ -71,7 +71,7 @@ class PDFTemplateView: UIView {
         self.addSubview(self.lungsSVGView)
         self.lungsSVGView.anchorViewTop(top: self.userForm.bottomAnchor, topC: 40,
                                         leading: self.leadingAnchor, leadingC: 40,
-                                        trailing: self.trailingAnchor, trailingC: -40,
+                                        trailing: self.trailingAnchor, trailingC: -240,
                                         height: 450)
         
         self.addSubview(self.notesTitle)

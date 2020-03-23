@@ -1,55 +1,66 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600.89 492.73">
-    <defs>
-        <style>.cls-1{fill:#7d7c7c;}.cls-2{fill:#00ff06;}.cls-3{fill:none;stroke:#000;stroke-miterlimit:10;}</style>
-    </defs>
-    <title>lungs_areas_with_extended_lines_v5_grey_areas</title>
-    <g id="Layer_1_copy" data-name="Layer 1 copy">
-        <path id="lung_area_1" class="cls-1" d="M206.3,330.31h69.37V87.5q-2.46,1.05-5,2.32c-24.61,9.62-46.21,28.84-64.49,51.94h.16Z" transform="translate(-108.71 -80.9)"/>
-        <path id="lung_area_2" class="cls-1" d="M206.3,330.81V500.34c22.48.08,48.71.17,69.37.19V330.81Z" transform="translate(-108.71 -80.9)"/>
-        <path id="lung_area_3" class="cls-1" d="M276.17,500.53h11c40.87,0,49.33-49.81,49.33-49.81s0-16.3,0-41.7H276.17Z" transform="translate(-108.71 -80.9)"/>
-        <path id="lung_area_4" class="cls-1" d="M336.61,267.19c0-76,.07-147.48.07-150.56,0-6.44-9.56-51-60.51-29.34v179.9Z" transform="translate(-108.71 -80.9)"/>
-        <path id="lung_area_5" class="cls-1" d="M276.17,267.69V408.53h60.38c0-35.77,0-89.32.06-140.84Z" transform="translate(-108.71 -80.9)"/>
-        <path id="lung_area_6" class="cls-1" d="M481.76,409v2.55c0,2.13,0,39.15,0,39.15s8.46,49.81,49.33,49.81h13.06V409Z" transform="translate(-108.71 -80.9)"/>
-        <path id="lung_area_7" class="cls-1" d="M544.17,88.16c-52.73-23.69-62.54,21.94-62.54,28.47,0,40.34,0,96.88,0,150.56h62.5Z" transform="translate(-108.71 -80.9)"/>
-        <path id="lung_area_8" class="cls-1" d="M544.67,330.81V500.53c21,0,47.17-.12,69.37-.2V330.81Z" transform="translate(-108.71 -80.9)"/>
-        <path id="lung_area_9" class="cls-1" d="M481.76,408.53h62.41V267.69h-62.5C481.69,326.55,481.72,381.88,481.76,408.53Z" transform="translate(-108.71 -80.9)"/>
-        <path id="lung_area_10" class="cls-1" d="M614,330.31V144.14C595.38,120,573.13,99.76,547.69,89.81c-1-.5-2-1-3-1.42V330.31Z" transform="translate(-108.71 -80.9)"/>
-        <path id="lung_area_11" class="cls-1" d="M675.73,268c-9.49-32.55-30.45-83.18-61.19-123.22V330.31h77.94C686.93,307.54,680.86,285.69,675.73,268Z" transform="translate(-108.71 -80.9)"/>
-        <path id="lung_area_12" class="cls-1" d="M707.42,408.26c-2.73-23.67-8.42-51.15-14.82-77.45H614.54V500.33c22.72-.08,41.14-.16,45.25-.16,9.08,0,42.21-7.39,48.31-49.77C709.73,439.06,709.27,424.51,707.42,408.26Z" transform="translate(-108.71 -80.9)"/>
-        <path id="lung_area_13" class="cls-1" d="M111,407.76c-1.85,16.25-2.37,31.3-.74,42.64,6.1,42.38,39.23,49.77,48.31,49.77,4.24,0,23.64.08,47.28.17V330.81H125.67C119.32,356.88,113.67,384.12,111,407.76Z" transform="translate(-108.71 -80.9)"/>
-        <path id="lung_area_14" class="cls-1" d="M142.58,268c-5.15,17.75-11.23,39.57-16.78,62.3h80V142.19C174,182.62,152.27,234.74,142.58,268Z" transform="translate(-108.71 -80.9)"/>
-    </g>
-    <g id="Layer_3" data-name="Layer 3">
-        <path d="M276.17,86.86h-.5v.64l.5-.21Z" transform="translate(-108.71 -80.9)"/>
-        <path d="M275.92,409v-.5h.25V267.69h-.25v-.5h.25V87.29l-.5.21V330.31h.25v.5h-.25V500.53h.5V409Z" transform="translate(-108.71 -80.9)"/>
-        <path d="M205.8,141.76v.43l.34-.43Z" transform="translate(-108.71 -80.9)"/>
-        <path d="M206.05,330.81v-.5h.25V141.76h-.16l-.34.43V407.76h.25v.5h-.25v92.08h.5V330.81Z" transform="translate(-108.71 -80.9)"/>
-        <path class="cls-2" d="M142.51,268.26" transform="translate(-108.71 -80.9)"/>
-        <path class="cls-2" d="M142.58,268" transform="translate(-108.71 -80.9)"/>
-        <path class="cls-2" d="M205.8,268" transform="translate(-108.71 -80.9)"/>
-        <rect class="cls-2" x="97.09" y="326.86" width="0.25" height="0.5"/>
-        <rect class="cls-2" x="166.96" y="249.41" width="0.25" height="0.5"/>
-        <rect class="cls-2" x="97.34" y="249.41" width="0.25" height="0.5"/>
-        <rect class="cls-2" x="167.21" y="186.29" width="0.25" height="0.5"/>
-        <rect class="cls-2" x="167.21" y="327.63" width="0.25" height="0.5"/>
-        <polygon points="435.71 252.8 435.71 252.3 435.96 252.3 435.96 10.38 435.96 7.49 435.46 7.27 435.46 10.15 435.46 189.18 435.46 189.68 435.46 330.52 435.46 331.02 435.46 422.52 435.46 492.73 435.96 492.73 435.96 422.52 435.96 252.8 435.71 252.8"/>
-        <rect x="505.58" y="249.41" width="0.25" height="0.5"/>
-        <path d="M692.48,330.31H614.54v.5H692.6Z" transform="translate(-108.71 -80.9)"/>
-        <polygon points="435.71 249.41 435.71 249.91 435.96 249.91 505.33 249.91 505.58 249.91 505.58 249.41 505.33 249.41 435.96 249.41 435.71 249.41"/>
-        <path d="M275.67,573.62h.5V500.53h-.5Z" transform="translate(-108.71 -80.9)"/>
-        <path d="M205.8,573.62h.5V500.34h-.5Z" transform="translate(-108.71 -80.9)"/>
-        <path d="M125.67,330.81H205.8v-.5h-80C125.76,330.48,125.71,330.64,125.67,330.81Z" transform="translate(-108.71 -80.9)"/>
-        <rect x="97.59" y="249.41" width="69.37" height="0.5"/>
-        <path d="M509.92,268.18h34.25v-1H430.43v1Z" transform="translate(-108.71 -80.9)"/>
-        <path d="M276.17,267.68H383v-.49H276.17Z" transform="translate(-108.71 -80.9)"/>
-        <path d="M544.17,408.53H430.43V409H544.17Z" transform="translate(-108.71 -80.9)"/>
-        <path d="M276.17,408.53v.56H383v-.56Z" transform="translate(-108.71 -80.9)"/>
-        <polygon points="505.83 63.89 505.83 63.89 505.33 63.24 505.33 63.24 505.33 249.41 505.58 249.41 505.58 249.91 505.33 249.91 505.33 419.43 505.33 492.73 505.83 492.73 505.83 419.43 505.83 63.89"/>
-    </g>
-    <g id="Layer_2" data-name="Layer 2">
+<svg xmlns="http://www.w3.org/2000/svg" width="571.749" height="508.234" viewBox="0 0 571.749 508.234">
+  <g id="Component_1_1" data-name="Component 1 – 1" transform="translate(0.51)">
+    <g id="lungs_areas_old" transform="translate(-0.501 39.432)">
+      <g id="Layer_1_copy" data-name="Layer 1 copy" transform="translate(0.569 0.496)">
+        <path id="lung_area_1" d="M206.294,318.507h66V87.5q-2.34,1-4.757,2.207c-23.414,9.152-43.964,27.438-61.355,49.415h.152Z" transform="translate(-113.993 -81.692)" fill="#7d7c7c"/>
+        <path id="lung_area_2" d="M206.3,330.81V492.1c21.387.076,46.342.162,66,.181V330.81Z" transform="translate(-113.999 -93.52)" fill="#7d7c7c"/>
+        <path id="lung_area_3" d="M276.17,496.082h10.465c38.883,0,46.932-47.389,46.932-47.389V409.02h-57.4Z" transform="translate(-117.395 -97.322)" fill="#7d7c7c"/>
+        <path id="lung_area_4" d="M333.672,258.158c0-72.306.067-140.311.067-143.241,0-6.127-9.1-48.521-57.569-27.914V258.158Z" transform="translate(-117.395 -81.396)" fill="#7d7c7c"/>
+        <path id="lung_area_5" d="M276.17,267.69V401.684h57.445c0-34.031,0-84.978.057-133.994Z" transform="translate(-117.395 -90.452)" fill="#7d7c7c"/>
+        <path id="lung_area_6" d="M481.76,409v39.673s8.049,47.389,46.932,47.389h12.425V409Z" transform="translate(-127.389 -97.321)" fill="#7d7c7c"/>
+        <path id="lung_area_7" d="M541.13,87.831c-50.167-22.538-59.5,20.873-59.5,27.086V258.158h59.462Z" transform="translate(-127.383 -81.396)" fill="#7d7c7c"/>
+        <path id="lung_area_8" d="M544.67,330.81V492.28c19.979,0,44.877-.114,66-.19V330.81Z" transform="translate(-130.447 -93.52)" fill="#7d7c7c"/>
+        <path id="lung_area_9" d="M481.756,401.684h59.376V267.69H481.67C481.689,323.689,481.718,376.329,481.756,401.684Z" transform="translate(-127.385 -90.452)" fill="#7d7c7c"/>
+        <path id="lung_area_10" d="M610.631,318.55V141.43c-17.715-22.967-38.883-42.223-63.087-51.689-.951-.476-1.9-.951-2.854-1.351V318.55Z" transform="translate(-130.448 -81.736)" fill="#7d7c7c"/>
+        <path id="lung_area_11" d="M672.755,262.01c-9.029-30.968-28.97-79.137-58.215-117.23V321.291h74.151C683.411,299.628,677.636,278.84,672.755,262.01Z" transform="translate(-133.844 -84.477)" fill="#7d7c7c"/>
+        <path id="lung_area_12" d="M702.905,404.5c-2.6-22.519-8.011-48.664-14.1-73.685H614.54V492.089c21.616-.076,39.14-.152,43.05-.152,8.639,0,40.158-7.031,45.962-47.351C705.1,433.8,704.665,419.955,702.905,404.5Z" transform="translate(-133.844 -93.52)" fill="#7d7c7c"/>
+        <path id="lung_area_13" d="M110.917,404.019c-1.76,15.46-2.255,29.778-.7,40.567,5.8,40.32,37.323,47.351,45.962,47.351,4.034,0,22.491.076,44.982.162V330.81H124.873C118.832,355.613,113.457,381.529,110.917,404.019Z" transform="translate(-109.283 -93.52)" fill="#7d7c7c"/>
+        <path id="lung_area_14" d="M141.764,261.884c-4.9,16.887-10.684,37.646-15.964,59.272h76.111V142.19C171.657,180.655,150.983,230.241,141.764,261.884Z" transform="translate(-110.086 -84.351)" fill="#7d7c7c"/>
+      </g>
+      <g id="Layer_3" data-name="Layer 3" transform="translate(16.16 5.694)">
+        <path id="Path_1" data-name="Path 1" d="M276.146,86.86h-.476v.609l.476-.2Z" transform="translate(-132.962 -86.86)"/>
+        <path id="Path_2" data-name="Path 2" d="M275.908,393.361v-.476h.238V258.921h-.238v-.476h.238V87.29l-.476.2V318.5h.238v.476h-.238v161.47h.476V393.361Z" transform="translate(-132.962 -86.881)"/>
+        <path id="Path_3" data-name="Path 3" d="M205.8,141.76v.409l.323-.409Z" transform="translate(-129.565 -89.529)"/>
+        <path id="Path_4" data-name="Path 4" d="M206.038,321.62v-.476h.238V141.76h-.152l-.323.409v252.66h.238v.476H205.8v87.6h.476V321.62Z" transform="translate(-129.565 -89.529)"/>
+        <path id="Path_5" data-name="Path 5" d="M142.51,268.26" transform="translate(-126.489 -95.678)" fill="#00ff06"/>
+        <path id="Path_6" data-name="Path 6" d="M142.58,268" transform="translate(-126.492 -95.665)" fill="#00ff06"/>
+        <path id="Path_7" data-name="Path 7" d="M205.8,268" transform="translate(-129.565 -95.665)" fill="#00ff06"/>
+        <rect id="Rectangle_1" data-name="Rectangle 1" width="0.238" height="0.476" transform="translate(76.235 305.301)" fill="#00ff06"/>
+        <rect id="Rectangle_2" data-name="Rectangle 2" width="0.238" height="0.476" transform="translate(142.708 231.616)" fill="#00ff06"/>
+        <rect id="Rectangle_3" data-name="Rectangle 3" width="0.238" height="0.476" transform="translate(76.473 231.616)" fill="#00ff06"/>
+        <rect id="Rectangle_4" data-name="Rectangle 4" width="0.238" height="0.476" transform="translate(142.946 171.564)" fill="#00ff06"/>
+        <rect id="Rectangle_5" data-name="Rectangle 5" width="0.238" height="0.476" transform="translate(142.946 306.033)" fill="#00ff06"/>
+        <path id="Path_8" data-name="Path 8" d="M435.7,240.865v-.476h.238V7.479l-.476-.209V469.131h.476V240.865Z" transform="translate(-37.304 -6.024)"/>
+        <rect id="Rectangle_6" data-name="Rectangle 6" width="0.238" height="0.476" transform="translate(464.868 231.616)"/>
+        <path id="Path_9" data-name="Path 9" d="M688.691,330.31H614.54v.476h74.265Z" transform="translate(-149.435 -98.694)"/>
+        <path id="Path_10" data-name="Path 10" d="M435.71,249.41v.476h66.474v-.476H435.71Z" transform="translate(-37.316 -17.794)"/>
+        <path id="Path_11" data-name="Path 11" d="M275.67,570.067h.476V500.53h-.476Z" transform="translate(-132.962 -106.969)"/>
+        <path id="Path_12" data-name="Path 12" d="M205.8,570.058h.476V500.34H205.8Z" transform="translate(-129.565 -106.96)"/>
+        <path id="Path_13" data-name="Path 13" d="M125.67,330.786H201.9v-.476H125.794C125.756,330.472,125.708,330.624,125.67,330.786Z" transform="translate(-125.67 -98.694)"/>
+        <rect id="Rectangle_7" data-name="Rectangle 7" width="65.998" height="0.476" transform="translate(76.71 231.616)"/>
+        <path id="Path_14" data-name="Path 14" d="M506.056,268.131h32.585v-.951H430.43v.951Z" transform="translate(-140.485 -95.626)"/>
+        <path id="Path_15" data-name="Path 15" d="M276.17,267.656H377.807v-.466H276.17Z" transform="translate(-132.986 -95.626)"/>
+        <path id="Path_16" data-name="Path 16" d="M538.641,408.53H430.43v.447H538.641Z" transform="translate(-140.485 -102.497)"/>
+        <path id="Path_17" data-name="Path 17" d="M276.17,408.53v.533H377.807v-.533Z" transform="translate(-132.986 -102.497)"/>
+        <path id="Path_18" data-name="Path 18" d="M505.806,63.858h0l-.476-.618h0V240.36h.238v.476h-.238V471.852h.476V63.858Z" transform="translate(-40.7 -8.744)"/>
+      </g>
+      <g id="Layer_2" data-name="Layer 2" transform="translate(0.501 0.501)">
         <g id="Layer_2-2" data-name="Layer 2">
-            <path class="cls-3" d="M336.68,116.64c0,6.67-.15,334.1-.15,334.1s-8.46,49.81-49.33,49.81-119.6-.37-128.68-.37-42.21-7.39-48.31-49.77,17.1-129.77,32.3-182.14S202.78,116.35,270.63,89.83C326.44,62.45,336.68,110,336.68,116.64Z" transform="translate(-108.71 -80.9)"/>
-            <path class="cls-3" d="M481.63,116.64c0,6.67.15,334.1.15,334.1s8.46,49.81,49.33,49.81,119.6-.37,128.68-.37,42.21-7.39,48.31-49.77S691,320.63,675.8,268.27,615.53,116.34,547.69,89.82C491.87,62.45,481.63,110,481.63,116.64Z" transform="translate(-108.71 -80.9)"/>
+          <path id="Path_19" data-name="Path 19" d="M325.622,114.927c0,6.346-.143,317.859-.143,317.859s-8.049,47.389-46.932,47.389-113.786-.352-122.425-.352-40.158-7.031-45.962-47.351,16.269-123.462,30.73-173.286S198.232,114.651,262.783,89.42C315.88,63.371,325.622,108.61,325.622,114.927Z" transform="translate(-109.211 -81.401)" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="1"/>
+          <path id="Path_20" data-name="Path 20" d="M481.63,114.927c0,6.346.143,317.859.143,317.859s8.049,47.389,46.932,47.389,113.786-.352,122.425-.352,40.158-7.031,45.962-47.351S680.822,309,666.361,259.186,609.021,114.642,544.479,89.411C491.372,63.371,481.63,108.61,481.63,114.927Z" transform="translate(-127.314 -81.401)" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="1"/>
         </g>
+      </g>
     </g>
+    <text id="Left" transform="translate(124.839 23)" font-size="24" font-family="HelveticaNeue, Helvetica Neue"><tspan x="0" y="0">Left</tspan></text>
+    <text id="Apical" transform="translate(260.839 166)" font-size="18" font-family="HelveticaNeue, Helvetica Neue"><tspan x="0" y="0">Apical</tspan></text>
+    <text id="Right" transform="translate(397.839 23)" font-size="24" font-family="HelveticaNeue, Helvetica Neue"><tspan x="0" y="0">Right</tspan></text>
+    <text id="Medial" transform="translate(258.839 291)" font-size="18" font-family="HelveticaNeue, Helvetica Neue"><tspan x="0" y="0">Medial</tspan></text>
+    <text id="Basal" transform="translate(263.839 416)" font-size="18" font-family="HelveticaNeue, Helvetica Neue"><tspan x="0" y="0">Basal</tspan></text>
+    <text id="Anterior" transform="translate(20.839 481)" font-size="18" font-family="HelveticaNeue, Helvetica Neue"><tspan x="0" y="0">Anterior</tspan></text>
+    <text id="Anterior-2" data-name="Anterior" transform="translate(488.839 481)" font-size="18" font-family="HelveticaNeue, Helvetica Neue"><tspan x="0" y="0">Anterior</tspan></text>
+    <text id="Lateral" transform="translate(98.839 481)" font-size="18" font-family="HelveticaNeue, Helvetica Neue"><tspan x="0" y="0">Lateral</tspan></text>
+    <text id="Posterior" transform="translate(168.839 481)" font-size="18" font-family="HelveticaNeue, Helvetica Neue"><tspan x="0" y="0">Posterior</tspan></text>
+    <text id="Lateral-2" data-name="Lateral" transform="translate(418.839 481)" font-size="18" font-family="HelveticaNeue, Helvetica Neue"><tspan x="0" y="0">Lateral</tspan></text>
+    <text id="Posterior-2" data-name="Posterior" transform="translate(330.839 481)" font-size="18" font-family="HelveticaNeue, Helvetica Neue"><tspan x="0" y="0">Posterior</tspan></text>
+  </g>
 </svg>

@@ -15,9 +15,9 @@
 		81A03B4A24276F540079CA53 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81A03B4824276F540079CA53 /* LaunchScreen.storyboard */; };
 		81A03B53242778090079CA53 /* AnchorsExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A03B52242778090079CA53 /* AnchorsExtensions.swift */; };
 		81A03B5824277B160079CA53 /* ColorsExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A03B5724277B160079CA53 /* ColorsExtensions.swift */; };
-		81A03B5C24277FCC0079CA53 /* lungs_areas.svg in Resources */ = {isa = PBXBuildFile; fileRef = 81A03B5B24277FCC0079CA53 /* lungs_areas.svg */; };
 		81E712B02427DA1C009BF466 /* PDFTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E712AF2427DA1C009BF466 /* PDFTemplateView.swift */; };
 		81E712B32427DB4C009BF466 /* UserForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E712B22427DB4C009BF466 /* UserForm.swift */; };
+		81E712BE24294E1B009BF466 /* lungs_areas.svg in Resources */ = {isa = PBXBuildFile; fileRef = 81E712BD24294E1B009BF466 /* lungs_areas.svg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,9 +31,9 @@
 		81A03B4B24276F540079CA53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		81A03B52242778090079CA53 /* AnchorsExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnchorsExtensions.swift; sourceTree = "<group>"; };
 		81A03B5724277B160079CA53 /* ColorsExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsExtensions.swift; sourceTree = "<group>"; };
-		81A03B5B24277FCC0079CA53 /* lungs_areas.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = lungs_areas.svg; sourceTree = "<group>"; };
 		81E712AF2427DA1C009BF466 /* PDFTemplateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFTemplateView.swift; sourceTree = "<group>"; };
 		81E712B22427DB4C009BF466 /* UserForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserForm.swift; sourceTree = "<group>"; };
+		81E712BD24294E1B009BF466 /* lungs_areas.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = lungs_areas.svg; sourceTree = "<group>"; };
 		9340542819C71B5EF35DE149 /* Pods-Covid-19DiagnosisSupport.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Covid-19DiagnosisSupport.debug.xcconfig"; path = "Target Support Files/Pods-Covid-19DiagnosisSupport/Pods-Covid-19DiagnosisSupport.debug.xcconfig"; sourceTree = "<group>"; };
 		C5C870E98A84CD7566366DC9 /* libPods-Covid-19DiagnosisSupport.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Covid-19DiagnosisSupport.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -129,7 +129,7 @@
 		81A03B5924277F910079CA53 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				81A03B5B24277FCC0079CA53 /* lungs_areas.svg */,
+				81E712BD24294E1B009BF466 /* lungs_areas.svg */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -226,7 +226,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				81A03B5C24277FCC0079CA53 /* lungs_areas.svg in Resources */,
+				81E712BE24294E1B009BF466 /* lungs_areas.svg in Resources */,
 				81A03B4A24276F540079CA53 /* LaunchScreen.storyboard in Resources */,
 				81A03B4724276F540079CA53 /* Assets.xcassets in Resources */,
 			);
