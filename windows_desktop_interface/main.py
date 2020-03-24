@@ -132,11 +132,11 @@ class App(QWidget):
         doa.setIconSize(QSize(30, 30))
 
         doa_grid.addWidget(doa, 0, 0)
-        self.date_of_examination = ClickableQLabel(self)
-        self.date_of_examination.clicked.connect(self.set_date_of_acquisition)
-        self.date_of_examination.setFixedHeight(self.surname.sizeHint().height())
-        self.date_of_examination.setStyleSheet("background-color:#ffffff;");
-        doa_grid.addWidget(self.date_of_examination, 0, 1)
+        self.date_of_acquisition = ClickableQLabel(self)
+        self.date_of_acquisition.clicked.connect(self.set_date_of_acquisition)
+        self.date_of_acquisition.setFixedHeight(self.surname.sizeHint().height())
+        self.date_of_acquisition.setStyleSheet("background-color:#ffffff;");
+        doa_grid.addWidget(self.date_of_acquisition, 0, 1)
         doa_frame = QFrame()
         doa_frame.setLayout(doa_grid)
         registry.addWidget(doa_frame)
@@ -221,10 +221,10 @@ class App(QWidget):
         layout.addWidget(totals_frame, 1, 0)
 
         note_layout = QVBoxLayout()
-        n_header = QLabel("Note of the clinician")
+        n_header = QLabel("Notes of the clinician")
         n_header.setStyleSheet(bold)
         self.clinician_notes = QTextEdit()
-        self.clinician_notes.setPlainText("Here the clinician can add a general comment on the findings")
+        self.clinician_notes.setPlainText("")
         note_layout.addWidget(n_header)
         note_layout.addWidget(self.clinician_notes)
         note_frame = QFrame()
@@ -245,7 +245,7 @@ class App(QWidget):
         self.select_date(self.date_of_birth)
 
     def set_date_of_acquisition(self):
-        self.select_date(self.date_of_examination)
+        self.select_date(self.date_of_acquisition)
 
     @pyqtSlot()
     def choose_file(self):
@@ -314,7 +314,7 @@ class App(QWidget):
         totals = [k.text() for k in [self.number_whites, self.number_yellow, self.number_orange, self.number_red]]
 
         html = generate_output_html(html, self.name.text(), self.surname.text(), self.date_of_birth.text(), 
-                self.date_of_examination.text(), self.pathological_areas.text(), totals, self.clinician_notes.toPlainText())
+                self.date_of_acquisition.text(), self.pathological_areas.text(), totals, self.clinician_notes.toPlainText())
         
         export_html(html, os.path.join(output_dir, "Report.html"))
         export_pdf(html, os.path.join(output_dir, "Report.pdf"))

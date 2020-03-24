@@ -122,12 +122,12 @@ def customize_report(json_dict):
     
     return html
     
-def generate_output_html(base_html, name, surname, dob, doe, pathological_areas, totals, notes):
+def generate_output_html(base_html, name, surname, dob, doa, pathological_areas, totals, notes):
     html = base_html[:]
     html = html.replace("_name", name)
     html = html.replace("_surname", surname)
     html = html.replace("_dob", dob)
-    html = html.replace("_doe", doe)
+    html = html.replace("_doa", doa)
     html = html.replace("_pathological_areas", pathological_areas.split(":")[1])
     html = html.replace("_n_white", totals[0])
     html = html.replace("_n_yellow", totals[1])
