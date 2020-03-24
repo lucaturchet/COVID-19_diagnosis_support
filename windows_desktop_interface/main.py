@@ -78,12 +78,16 @@ class App(QWidget):
         self.setGeometry(self.left, self.top, self.width, self.height)
 
         # Style
-        bold = "font-weight: bold"
         white = "#fff"
         yellow = "#ff0"
         orange = "#fa0"
         red = "#f00"
         grey = "#7c7c7c"
+        button_style = "background-color: #D7D7D7; border-style: solid; border-width: 2px; border-color: black; border-radius: 5px; font: bold; font-size: 17px"
+        text_style = "font-size: 17px; color: black"
+        header_style = "font-size: 17px; color: black; font-weight: bold"
+        clickable_label_style = "font-size: 17px; color: black; background-color:#ffffff; padding-left: 20px"
+
 
         layout = QGridLayout()
 
@@ -91,6 +95,8 @@ class App(QWidget):
         left_column = QVBoxLayout()
 
         self.open_btn = QPushButton(text="OPEN")
+        self.open_btn.setFixedHeight(40)
+        self.open_btn.setStyleSheet(button_style)
         self.open_btn.clicked.connect(self.choose_file)
 
         left_column.addWidget(self.open_btn)
@@ -98,15 +104,24 @@ class App(QWidget):
         registry_frame = QFrame()
         registry = QVBoxLayout()
 
-        registry.addWidget(QLabel("Name"))
+        name_label = QLabel("Name")
+        name_label.setStyleSheet(text_style)	
+        registry.addWidget(name_label)
         self.name = QLineEdit()
+        self.name.setStyleSheet(text_style)
         registry.addWidget(self.name)
         
-        registry.addWidget(QLabel("Last name"))
+        surname_label = QLabel("Last name")
+        surname_label.setStyleSheet(text_style)
+        registry.addWidget(surname_label)
         self.surname = QLineEdit()
+        self.surname.setStyleSheet(text_style)
         registry.addWidget(self.surname)
 
-        registry.addWidget(QLabel("Date of birth"))
+
+        dob_label = QLabel("Date of birth")
+        dob_label.setStyleSheet(text_style)
+        registry.addWidget(dob_label)
         dob_grid = QGridLayout()
         dob_btn = QPushButton(icon=QIcon("resources/calendar_icon.png"))
         dob_btn.clicked.connect(self.set_date_of_birth)
@@ -117,13 +132,15 @@ class App(QWidget):
         self.date_of_birth = ClickableQLabel(self)
         self.date_of_birth.clicked.connect(self.set_date_of_birth)
         self.date_of_birth.setFixedHeight(self.surname.sizeHint().height())
-        self.date_of_birth.setStyleSheet("background-color:#ffffff;");
+        self.date_of_birth.setStyleSheet(clickable_label_style)
         dob_grid.addWidget(self.date_of_birth, 0, 1)
         dob_frame = QFrame()
         dob_frame.setLayout(dob_grid)
         registry.addWidget(dob_frame)
 
-        registry.addWidget(QLabel("Date of acquisition"))
+        doa_label = QLabel("Date of acquisition")
+        doa_label.setStyleSheet(text_style)
+        registry.addWidget(doa_label)
         doa_grid = QGridLayout()
         doa = QPushButton(icon=QIcon("resources/calendar_icon.png"))
         doa.clicked.connect(self.set_date_of_acquisition)
@@ -135,7 +152,7 @@ class App(QWidget):
         self.date_of_acquisition = ClickableQLabel(self)
         self.date_of_acquisition.clicked.connect(self.set_date_of_acquisition)
         self.date_of_acquisition.setFixedHeight(self.surname.sizeHint().height())
-        self.date_of_acquisition.setStyleSheet("background-color:#ffffff;");
+        self.date_of_acquisition.setStyleSheet(clickable_label_style)
         doa_grid.addWidget(self.date_of_acquisition, 0, 1)
         doa_frame = QFrame()
         doa_frame.setLayout(doa_grid)
@@ -148,29 +165,92 @@ class App(QWidget):
         
         legend = QGridLayout()
         header = QLabel("Legend")
-        header.setStyleSheet(bold)
+        header.setStyleSheet(header_style)
+
         legend.addWidget(header)
         whitelabel = self.get_label(white)
         legend.addWidget(whitelabel, 1, 0)
-        legend.addWidget(QLabel("Score 0"), 1, 1)
+        score0_label = QLabel("Score 0");
+        score0_label.setStyleSheet(text_style)
+        legend.addWidget(score0_label, 1, 1)
         yellowlabel = self.get_label(yellow)
         legend.addWidget(yellowlabel, 2, 0)
-        legend.addWidget(QLabel("Score 1"), 2, 1)
+        score1_label = QLabel("Score 1");
+        score1_label.setStyleSheet(text_style)
+        legend.addWidget(score1_label, 2, 1)
         orangelabel = self.get_label(orange)
         legend.addWidget(orangelabel, 3, 0)
-        legend.addWidget(QLabel("Score 2"), 3, 1)
+        score2_label = QLabel("Score 2");
+        score2_label.setStyleSheet(text_style)
+        legend.addWidget(score2_label, 3, 1)
         redlabel = self.get_label(red)
         legend.addWidget(redlabel, 4, 0)
-        legend.addWidget(QLabel("Score 3"), 4, 1)
+        score3_label = QLabel("Score 3");
+        score3_label.setStyleSheet(text_style)
+        legend.addWidget(score3_label, 4, 1)
         greylabel = self.get_label(grey)
         legend.addWidget(greylabel, 5, 0)
-        legend.addWidget(QLabel("Not measured"), 5, 1)
+        score_nm_label = QLabel("Not measured");
+        score_nm_label.setStyleSheet(text_style)
+        legend.addWidget(score_nm_label, 5, 1)
 
         legend_frame = QFrame()
         legend_frame.setFrameShape(QFrame.StyledPanel) 
         legend_frame.setLineWidth(0.6)
         legend_frame.setLayout(legend)
         left_column.addWidget(legend_frame)
+
+        
+
+        totals_box_layout = QVBoxLayout()
+        t_header = QLabel("Totals")
+        t_header.setStyleSheet(header_style)
+        self.pathological_areas = QLabel("Pathological areas: ")
+        self.pathological_areas.setStyleSheet(text_style)
+        totals_box_layout.addWidget(t_header)
+        totals_box_layout.addWidget(self.pathological_areas)
+        totals = QGridLayout()
+        totals.addWidget(self.get_label(white), 0, 0)
+        self.number_whites = QLabel("")
+        self.number_whites.setStyleSheet(header_style)
+        totals.addWidget(self.number_whites, 0, 1)
+        totals.addWidget(self.get_label(yellow), 1, 0)
+        self.number_yellow = QLabel("")
+        self.number_yellow.setStyleSheet(header_style)
+        totals.addWidget(self.number_yellow, 1, 1)
+        totals.addWidget(self.get_label(orange), 2, 0)
+        self.number_orange = QLabel("")
+        self.number_orange.setStyleSheet(header_style)
+        totals.addWidget(self.number_orange, 2, 1)
+        totals.addWidget(self.get_label(red), 3, 0)
+        self.number_red = QLabel("")
+        self.number_red.setStyleSheet(header_style)
+        totals.addWidget(self.number_red, 3, 1)
+        temp_frame = QFrame()
+        temp_frame.setLayout(totals)
+        totals_box_layout.addWidget(temp_frame)
+    
+        totals_frame = QFrame()
+        totals_frame.setFrameShape(QFrame.StyledPanel)
+        totals_frame.setLineWidth(0.6)
+        totals_frame.setLayout(totals_box_layout)
+        #layout.addWidget(totals_frame, 1, 0)
+        left_column.addWidget(totals_frame)
+
+
+        self.generate_report_btn = QPushButton(text="GENERATE REPORT")
+        self.generate_report_btn.setFixedHeight(40)
+        self.generate_report_btn.setStyleSheet(button_style)
+        self.generate_report_btn.clicked.connect(self.generate_report)
+        left_column.addWidget(self.generate_report_btn)
+
+
+
+
+
+
+
+
 
         left_column_frame = QFrame()
         left_column_frame.setLayout(left_column)
@@ -184,45 +264,14 @@ class App(QWidget):
         # self.webview.setHtml(self.html)
         layout.addWidget(self.webview, 0, 1)
  
-        totals_box_layout = QVBoxLayout()
-        t_header = QLabel("Totals")
-        t_header.setStyleSheet(bold)
-        self.pathological_areas = QLabel("Pathological areas: ")
-        totals_box_layout.addWidget(t_header)
-        totals_box_layout.addWidget(self.pathological_areas)
-        totals = QGridLayout()
-        totals.addWidget(self.get_label(white), 0, 0)
-        self.number_whites = QLabel("")
-        self.number_whites.setStyleSheet(bold)
-        totals.addWidget(self.number_whites, 0, 1)
-        totals.addWidget(self.get_label(yellow), 1, 0)
-        self.number_yellow = QLabel("")
-        self.number_yellow.setStyleSheet(bold)
-        totals.addWidget(self.number_yellow, 1, 1)
-        totals.addWidget(self.get_label(orange), 2, 0)
-        self.number_orange = QLabel("")
-        self.number_orange.setStyleSheet(bold)
-        totals.addWidget(self.number_orange, 2, 1)
-        totals.addWidget(self.get_label(red), 3, 0)
-        self.number_red = QLabel("")
-        self.number_red.setStyleSheet(bold)
-        totals.addWidget(self.number_red, 3, 1)
-        temp_frame = QFrame()
-        temp_frame.setLayout(totals)
-        totals_box_layout.addWidget(temp_frame)
-        self.generate_report_btn = QPushButton(text="GENERATE REPORT")
-        self.generate_report_btn.clicked.connect(self.generate_report)
-        totals_box_layout.addWidget(self.generate_report_btn)
-    
-        totals_frame = QFrame()
-        totals_frame.setFrameShape(QFrame.StyledPanel)
-        totals_frame.setLineWidth(0.6)
-        totals_frame.setLayout(totals_box_layout)
-        layout.addWidget(totals_frame, 1, 0)
+
+
+
+
 
         note_layout = QVBoxLayout()
         n_header = QLabel("Notes of the clinician")
-        n_header.setStyleSheet(bold)
+        n_header.setStyleSheet(header_style)
         self.clinician_notes = QTextEdit()
         self.clinician_notes.setPlainText("")
         note_layout.addWidget(n_header)
