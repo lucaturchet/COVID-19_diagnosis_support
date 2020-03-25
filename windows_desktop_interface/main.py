@@ -62,7 +62,7 @@ class App(QWidget):
         self.left = 50
         self.top = 50
         self.width = 1024
-        self.height = 600
+        self.height = 800
         self.init_ui()
 
         self.threadpool = QThreadPool()
@@ -78,28 +78,28 @@ class App(QWidget):
         self.setGeometry(self.left, self.top, self.width, self.height)
 
         # Style
-        white = "#fff"
+        white  = "#fff"
         yellow = "#ff0"
         orange = "#fa0"
-        red = "#f00"
-        grey = "#7c7c7c"
-        button_style = "background-color: #D7D7D7; border-style: solid; border-width: 2px; border-color: black; border-radius: 5px; font: bold; font-size: 17px"
-        text_style = "font-size: 17px; color: black"
-        header_style = "font-size: 17px; color: black; font-weight: bold"
+        red    = "#f00"
+        grey   = "#7c7c7c"
+        button_style          = "background-color: #D7D7D7; border-style: solid; border-width: 2px; border-color: black; border-radius: 5px; font: bold; font-size: 17px"
+        text_style            = "font-size: 17px; color: black"
+        header_style          = "font-size: 17px; color: black; font-weight: bold"
         clickable_label_style = "font-size: 17px; color: black; background-color:#ffffff; padding-left: 20px"
+        button_height = 40
 
 
         layout = QGridLayout()
 
-        # Add elements to the ui
-        left_column = QVBoxLayout()
+        panel_top_left = QVBoxLayout()
 
         self.open_btn = QPushButton(text="OPEN")
-        self.open_btn.setFixedHeight(40)
+        self.open_btn.setFixedHeight(button_height)
         self.open_btn.setStyleSheet(button_style)
         self.open_btn.clicked.connect(self.choose_file)
 
-        left_column.addWidget(self.open_btn)
+        panel_top_left.addWidget(self.open_btn)
         
         registry_frame = QFrame()
         registry = QVBoxLayout()
@@ -125,9 +125,9 @@ class App(QWidget):
         dob_grid = QGridLayout()
         dob_btn = QPushButton(icon=QIcon("resources/calendar_icon.png"))
         dob_btn.clicked.connect(self.set_date_of_birth)
-        dob_btn.setFixedWidth(35)
-        dob_btn.setFixedHeight(35)
-        dob_btn.setIconSize(QSize(30, 30))
+        dob_btn.setFixedWidth(button_height + 5)
+        dob_btn.setFixedHeight(button_height + 5)
+        dob_btn.setIconSize(QSize(button_height, button_height))
         dob_grid.addWidget(dob_btn, 0, 0)
         self.date_of_birth = ClickableQLabel(self)
         self.date_of_birth.clicked.connect(self.set_date_of_birth)
@@ -144,9 +144,9 @@ class App(QWidget):
         doa_grid = QGridLayout()
         doa = QPushButton(icon=QIcon("resources/calendar_icon.png"))
         doa.clicked.connect(self.set_date_of_acquisition)
-        doa.setFixedWidth(35)
-        doa.setFixedHeight(35)
-        doa.setIconSize(QSize(30, 30))
+        doa.setFixedWidth(button_height + 5)
+        doa.setFixedHeight(button_height + 5)
+        doa.setIconSize(QSize(button_height, button_height))
 
         doa_grid.addWidget(doa, 0, 0)
         self.date_of_acquisition = ClickableQLabel(self)
@@ -161,13 +161,13 @@ class App(QWidget):
         registry_frame.setFrameShape(QFrame.StyledPanel)
         registry_frame.setLineWidth(0.6)
         registry_frame.setLayout(registry)
-        left_column.addWidget(registry_frame)
+        panel_top_left.addWidget(registry_frame)
         
         legend = QGridLayout()
-        header = QLabel("Legend")
-        header.setStyleSheet(header_style)
+        header_legend = QLabel("Legend")
+        header_legend.setStyleSheet(header_style)
 
-        legend.addWidget(header)
+        legend.addWidget(header_legend)
         whitelabel = self.get_label(white)
         legend.addWidget(whitelabel, 1, 0)
         score0_label = QLabel("Score 0");
@@ -198,64 +198,62 @@ class App(QWidget):
         legend_frame.setFrameShape(QFrame.StyledPanel) 
         legend_frame.setLineWidth(0.6)
         legend_frame.setLayout(legend)
-        left_column.addWidget(legend_frame)
+        panel_top_left.addWidget(legend_frame)
 
         
 
-        totals_box_layout = QVBoxLayout()
-        t_header = QLabel("Totals")
-        t_header.setStyleSheet(header_style)
+        panel_bottom_left = QVBoxLayout()
+
+        totals = QGridLayout()
+        header_totals = QLabel("Totals")
+        header_totals.setStyleSheet(header_style)
+
         self.pathological_areas = QLabel("Pathological areas: ")
         self.pathological_areas.setStyleSheet(text_style)
-        totals_box_layout.addWidget(t_header)
-        totals_box_layout.addWidget(self.pathological_areas)
-        totals = QGridLayout()
-        totals.addWidget(self.get_label(white), 0, 0)
+        totals.addWidget(header_totals)
+        totals.addWidget(self.pathological_areas)
+        
+        totals.addWidget(self.get_label(white), 2, 0)
         self.number_whites = QLabel("")
         self.number_whites.setStyleSheet(header_style)
-        totals.addWidget(self.number_whites, 0, 1)
-        totals.addWidget(self.get_label(yellow), 1, 0)
+        totals.addWidget(self.number_whites, 2, 1)
+        totals.addWidget(self.get_label(yellow), 3, 0)
         self.number_yellow = QLabel("")
         self.number_yellow.setStyleSheet(header_style)
-        totals.addWidget(self.number_yellow, 1, 1)
-        totals.addWidget(self.get_label(orange), 2, 0)
+        totals.addWidget(self.number_yellow, 3, 1)
+        totals.addWidget(self.get_label(orange), 4, 0)
         self.number_orange = QLabel("")
         self.number_orange.setStyleSheet(header_style)
-        totals.addWidget(self.number_orange, 2, 1)
-        totals.addWidget(self.get_label(red), 3, 0)
+        totals.addWidget(self.number_orange, 4, 1)
+        totals.addWidget(self.get_label(red), 5, 0)
         self.number_red = QLabel("")
         self.number_red.setStyleSheet(header_style)
-        totals.addWidget(self.number_red, 3, 1)
-        temp_frame = QFrame()
-        temp_frame.setLayout(totals)
-        totals_box_layout.addWidget(temp_frame)
-    
+        totals.addWidget(self.number_red, 5, 1)
+        
+        
+
         totals_frame = QFrame()
         totals_frame.setFrameShape(QFrame.StyledPanel)
         totals_frame.setLineWidth(0.6)
-        totals_frame.setLayout(totals_box_layout)
-        #layout.addWidget(totals_frame, 1, 0)
-        left_column.addWidget(totals_frame)
-
+        totals_frame.setLayout(totals)
+        panel_bottom_left.addWidget(totals_frame)
 
         self.generate_report_btn = QPushButton(text="GENERATE REPORT")
-        self.generate_report_btn.setFixedHeight(40)
+        self.generate_report_btn.setFixedHeight(button_height)
         self.generate_report_btn.setStyleSheet(button_style)
         self.generate_report_btn.clicked.connect(self.generate_report)
-        left_column.addWidget(self.generate_report_btn)
+        panel_bottom_left.addWidget(self.generate_report_btn)
 
 
+        panel_top_left_frame = QFrame()
+        panel_top_left_frame.setLayout(panel_top_left)
+        panel_bottom_left_frame = QFrame()
+        panel_bottom_left_frame.setLayout(panel_bottom_left)
 
 
-
-
-
-
-
-        left_column_frame = QFrame()
-        left_column_frame.setLayout(left_column)
-        layout.addWidget(left_column_frame, 0, 0)
-        layout.setColumnMinimumWidth(0, 300)
+        layout.addWidget(panel_top_left_frame, 0, 0)
+        layout.addWidget(panel_bottom_left_frame, 1, 0)
+        layout.setColumnMinimumWidth(0, 250)
         layout.setColumnMinimumWidth(1, 700)
         layout.setRowStretch(0, 5)
         layout.setRowStretch(1, 3)
@@ -263,11 +261,6 @@ class App(QWidget):
         self.webview = QWebEngineView(None)
         # self.webview.setHtml(self.html)
         layout.addWidget(self.webview, 0, 1)
- 
-
-
-
-
 
         note_layout = QVBoxLayout()
         n_header = QLabel("Notes of the clinician")
