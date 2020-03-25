@@ -58,11 +58,15 @@ class App(QWidget):
     """ GUI """
     def __init__(self):
         super().__init__()
-        self.title = 'Application'
-        self.left = 50
-        self.top = 50
-        self.width = 1024
-        self.height = 800
+        self.title 				= 'Lung areas scoring'
+        self.left 				= 50
+        self.top 				= 50
+        self.top_row_height		= 600
+        self.bottom_row_height	= 250
+        self.left_column_width  = 250
+        self.right_column_width = 800
+        self.width 				= self.left_column_width + self.right_column_width
+        self.height 			= self.top_row_height + self.bottom_row_height
         self.init_ui()
 
         self.threadpool = QThreadPool()
@@ -73,9 +77,10 @@ class App(QWidget):
         """
         Initialize the window and add content
         """
-
+        self.setFixedSize(self.width, self.height)
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
+        
 
         # Style
         white  = "#fff"
@@ -92,6 +97,8 @@ class App(QWidget):
 
         layout = QGridLayout()
 
+
+
         panel_top_left = QVBoxLayout()
 
         self.open_btn = QPushButton(text="OPEN")
@@ -100,8 +107,7 @@ class App(QWidget):
         self.open_btn.clicked.connect(self.choose_file)
 
         panel_top_left.addWidget(self.open_btn)
-        
-        registry_frame = QFrame()
+       
         registry = QVBoxLayout()
 
         name_label = QLabel("Name")
@@ -158,41 +164,46 @@ class App(QWidget):
         doa_frame.setLayout(doa_grid)
         registry.addWidget(doa_frame)
 
+        registry_frame = QFrame()
         registry_frame.setFrameShape(QFrame.StyledPanel)
         registry_frame.setLineWidth(0.6)
         registry_frame.setLayout(registry)
         panel_top_left.addWidget(registry_frame)
         
-        legend = QGridLayout()
+
+        legend = QVBoxLayout()
         header_legend = QLabel("Legend")
         header_legend.setStyleSheet(header_style)
-
         legend.addWidget(header_legend)
+
+        legend_grid = QGridLayout()
+        legend_grid.addWidget(header_legend)
         whitelabel = self.get_label(white)
-        legend.addWidget(whitelabel, 1, 0)
+        legend_grid.addWidget(whitelabel, 0, 0)
         score0_label = QLabel("Score 0");
         score0_label.setStyleSheet(text_style)
-        legend.addWidget(score0_label, 1, 1)
+        legend_grid.addWidget(score0_label, 0, 1)
         yellowlabel = self.get_label(yellow)
-        legend.addWidget(yellowlabel, 2, 0)
+        legend_grid.addWidget(yellowlabel, 1, 0)
         score1_label = QLabel("Score 1");
         score1_label.setStyleSheet(text_style)
-        legend.addWidget(score1_label, 2, 1)
+        legend_grid.addWidget(score1_label, 1, 1)
         orangelabel = self.get_label(orange)
-        legend.addWidget(orangelabel, 3, 0)
+        legend_grid.addWidget(orangelabel, 2, 0)
         score2_label = QLabel("Score 2");
         score2_label.setStyleSheet(text_style)
-        legend.addWidget(score2_label, 3, 1)
+        legend_grid.addWidget(score2_label, 2, 1)
         redlabel = self.get_label(red)
-        legend.addWidget(redlabel, 4, 0)
+        legend_grid.addWidget(redlabel, 3, 0)
         score3_label = QLabel("Score 3");
         score3_label.setStyleSheet(text_style)
-        legend.addWidget(score3_label, 4, 1)
+        legend_grid.addWidget(score3_label, 3, 1)
         greylabel = self.get_label(grey)
-        legend.addWidget(greylabel, 5, 0)
+        legend_grid.addWidget(greylabel, 4, 0)
         score_nm_label = QLabel("Not measured");
         score_nm_label.setStyleSheet(text_style)
-        legend.addWidget(score_nm_label, 5, 1)
+        legend_grid.addWidget(score_nm_label, 4, 1)
+        legend.addLayout(legend_grid)
 
         legend_frame = QFrame()
         legend_frame.setFrameShape(QFrame.StyledPanel) 
@@ -200,11 +211,10 @@ class App(QWidget):
         legend_frame.setLayout(legend)
         panel_top_left.addWidget(legend_frame)
 
-        
 
         panel_bottom_left = QVBoxLayout()
 
-        totals = QGridLayout()
+        totals = QVBoxLayout()
         header_totals = QLabel("Totals")
         header_totals.setStyleSheet(header_style)
 
@@ -212,26 +222,27 @@ class App(QWidget):
         self.pathological_areas.setStyleSheet(text_style)
         totals.addWidget(header_totals)
         totals.addWidget(self.pathological_areas)
-        
-        totals.addWidget(self.get_label(white), 2, 0)
+
+        totals_grid = QGridLayout()
+        totals_grid.addWidget(self.get_label(white), 0, 0)
         self.number_whites = QLabel("")
         self.number_whites.setStyleSheet(header_style)
-        totals.addWidget(self.number_whites, 2, 1)
-        totals.addWidget(self.get_label(yellow), 3, 0)
+        totals_grid.addWidget(self.number_whites, 0, 1)
+        totals_grid.addWidget(self.get_label(yellow), 1, 0)
         self.number_yellow = QLabel("")
         self.number_yellow.setStyleSheet(header_style)
-        totals.addWidget(self.number_yellow, 3, 1)
-        totals.addWidget(self.get_label(orange), 4, 0)
+        totals_grid.addWidget(self.number_yellow, 1, 1)
+        totals_grid.addWidget(self.get_label(orange), 2, 0)
         self.number_orange = QLabel("")
         self.number_orange.setStyleSheet(header_style)
-        totals.addWidget(self.number_orange, 4, 1)
-        totals.addWidget(self.get_label(red), 5, 0)
+        totals_grid.addWidget(self.number_orange, 2, 1)
+        totals_grid.addWidget(self.get_label(red), 3, 0)
         self.number_red = QLabel("")
         self.number_red.setStyleSheet(header_style)
-        totals.addWidget(self.number_red, 5, 1)
-        
-        
-
+        totals_grid.addWidget(self.number_red, 3, 1)
+        totals.addLayout(totals_grid)
+       
+         
         totals_frame = QFrame()
         totals_frame.setFrameShape(QFrame.StyledPanel)
         totals_frame.setLineWidth(0.6)
@@ -250,13 +261,9 @@ class App(QWidget):
         panel_bottom_left_frame = QFrame()
         panel_bottom_left_frame.setLayout(panel_bottom_left)
 
-
         layout.addWidget(panel_top_left_frame, 0, 0)
         layout.addWidget(panel_bottom_left_frame, 1, 0)
-        layout.setColumnMinimumWidth(0, 250)
-        layout.setColumnMinimumWidth(1, 700)
-        layout.setRowStretch(0, 5)
-        layout.setRowStretch(1, 3)
+
         
         self.webview = QWebEngineView(None)
         # self.webview.setHtml(self.html)
@@ -267,12 +274,21 @@ class App(QWidget):
         n_header.setStyleSheet(header_style)
         self.clinician_notes = QTextEdit()
         self.clinician_notes.setPlainText("")
+        self.clinician_notes.setStyleSheet(text_style)
         note_layout.addWidget(n_header)
         note_layout.addWidget(self.clinician_notes)
         note_frame = QFrame()
         note_frame.setLayout(note_layout)
         layout.addWidget(note_frame, 1, 1)
 
+        layout.setRowStretch
+
+        layout.setRowMinimumHeight(0, self.top_row_height)
+        layout.setRowMinimumHeight(1, self.bottom_row_height)
+        layout.setColumnMinimumWidth(0, self.left_column_width)
+        layout.setColumnMinimumWidth(1, self.right_column_width)
+        layout.setRowStretch(0, 5)
+        layout.setRowStretch(1, 3)
         self.setLayout(layout)
         self.show()
 
