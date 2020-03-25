@@ -126,15 +126,14 @@ class App(QWidget):
         self.surname.setStyleSheet(text_style)
         registry.addWidget(self.surname)
 
-
         dob_label = QLabel("Date of birth")
         dob_label.setStyleSheet(text_style)
         registry.addWidget(dob_label)
         dob_grid = QGridLayout()
         dob_btn = QPushButton(icon=QIcon("resources/calendar_icon.png"))
         dob_btn.clicked.connect(self.set_date_of_birth)
-        dob_btn.setFixedWidth(button_height + 5)
-        dob_btn.setFixedHeight(button_height + 5)
+        dob_btn.setFixedWidth(button_height)
+        dob_btn.setFixedHeight(button_height)
         dob_btn.setIconSize(QSize(button_height, button_height))
         dob_btn.setStyleSheet("border:none")
         dob_grid.addWidget(dob_btn, 0, 0)
@@ -153,8 +152,8 @@ class App(QWidget):
         doa_grid = QGridLayout()
         doa_btn = QPushButton(icon=QIcon("resources/calendar_icon.png"))
         doa_btn.clicked.connect(self.set_date_of_acquisition)
-        doa_btn.setFixedWidth(button_height + 5)
-        doa_btn.setFixedHeight(button_height + 5)
+        doa_btn.setFixedWidth(button_height)
+        doa_btn.setFixedHeight(button_height)
         doa_btn.setIconSize(QSize(button_height, button_height))
         doa_btn.setStyleSheet("border:none")
 
