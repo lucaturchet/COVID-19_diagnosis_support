@@ -90,6 +90,8 @@ class App(QWidget):
         grey   = "#7c7c7c"
         button_style          = "background-color: #D7D7D7; border-style: solid; border-width: 2px; border-color: black; border-radius: 5px; font: bold; font-size: 17px"
         text_style            = "font-size: 17px; color: black"
+        text_bold_style       = "font-size: 17px; color: black; font-weight: bold"
+        text_totals_style     = "font-size: 17px; color: black; font-weight: bold; margin-left: 10px"
         header_style          = "font-size: 17px; color: black; font-weight: bold"
         clickable_label_style = "font-size: 17px; color: black; background-color:#ffffff; padding-left: 20px"
         button_height = 40
@@ -134,6 +136,7 @@ class App(QWidget):
         dob_btn.setFixedWidth(button_height + 5)
         dob_btn.setFixedHeight(button_height + 5)
         dob_btn.setIconSize(QSize(button_height, button_height))
+        dob_btn.setStyleSheet("border:none")
         dob_grid.addWidget(dob_btn, 0, 0)
         self.date_of_birth = ClickableQLabel(self)
         self.date_of_birth.clicked.connect(self.set_date_of_birth)
@@ -148,13 +151,14 @@ class App(QWidget):
         doa_label.setStyleSheet(text_style)
         registry.addWidget(doa_label)
         doa_grid = QGridLayout()
-        doa = QPushButton(icon=QIcon("resources/calendar_icon.png"))
-        doa.clicked.connect(self.set_date_of_acquisition)
-        doa.setFixedWidth(button_height + 5)
-        doa.setFixedHeight(button_height + 5)
-        doa.setIconSize(QSize(button_height, button_height))
+        doa_btn = QPushButton(icon=QIcon("resources/calendar_icon.png"))
+        doa_btn.clicked.connect(self.set_date_of_acquisition)
+        doa_btn.setFixedWidth(button_height + 5)
+        doa_btn.setFixedHeight(button_height + 5)
+        doa_btn.setIconSize(QSize(button_height, button_height))
+        doa_btn.setStyleSheet("border:none")
 
-        doa_grid.addWidget(doa, 0, 0)
+        doa_grid.addWidget(doa_btn, 0, 0)
         self.date_of_acquisition = ClickableQLabel(self)
         self.date_of_acquisition.clicked.connect(self.set_date_of_acquisition)
         self.date_of_acquisition.setFixedHeight(self.surname.sizeHint().height())
@@ -226,19 +230,19 @@ class App(QWidget):
         totals_grid = QGridLayout()
         totals_grid.addWidget(self.get_label(white), 0, 0)
         self.number_whites = QLabel("")
-        self.number_whites.setStyleSheet(header_style)
+        self.number_whites.setStyleSheet(text_totals_style)
         totals_grid.addWidget(self.number_whites, 0, 1)
         totals_grid.addWidget(self.get_label(yellow), 1, 0)
         self.number_yellow = QLabel("")
-        self.number_yellow.setStyleSheet(header_style)
+        self.number_yellow.setStyleSheet(text_totals_style)
         totals_grid.addWidget(self.number_yellow, 1, 1)
         totals_grid.addWidget(self.get_label(orange), 2, 0)
         self.number_orange = QLabel("")
-        self.number_orange.setStyleSheet(header_style)
+        self.number_orange.setStyleSheet(text_totals_style)
         totals_grid.addWidget(self.number_orange, 2, 1)
         totals_grid.addWidget(self.get_label(red), 3, 0)
         self.number_red = QLabel("")
-        self.number_red.setStyleSheet(header_style)
+        self.number_red.setStyleSheet(text_totals_style)
         totals_grid.addWidget(self.number_red, 3, 1)
         totals.addLayout(totals_grid)
        
@@ -324,7 +328,7 @@ class App(QWidget):
         # Show output
         self.html = html
         self.webview.setHtml(self.html)
-        self.pathological_areas.setText("Pathological areas: {}/14".format(task_dict['pathological_areas']))
+        self.pathological_areas.setText("Pathological areas: <b>{}/14</b>".format(task_dict['pathological_areas']))
         self.number_whites.setText(str(task_dict['n_score_0']))
         self.number_yellow.setText(str(task_dict['n_score_1']))
         self.number_orange.setText(str(task_dict['n_score_2']))
