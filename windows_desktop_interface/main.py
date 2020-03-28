@@ -80,7 +80,11 @@ class App(QWidget):
         self.setFixedSize(self.width, self.height)
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
-        
+
+        # Set background color for Mac compatibility
+        p = self.palette()
+        p.setColor(self.backgroundRole(), Qt.white)
+        self.setPalette(p)
 
         # Style
         white  = "#fff"
@@ -88,8 +92,12 @@ class App(QWidget):
         orange = "#fa0"
         red    = "#f00"
         grey   = "#7c7c7c"
-        button_style          = "background-color: #D7D7D7; border-style: solid; border-width: 2px; border-color: black; border-radius: 5px; font: bold; font-size: 17px"
-        text_style            = "font-size: 17px; color: black"
+        #button_style          = "background-color: #D7D7D7; border-style: solid; border-width: 2px; border-color: black; border-radius: 5px; font: bold; font-size: 17px"
+        # Mac compatibility
+        button_style          = "color: black; background-color: #D7D7D7; border-style: solid; border-width: 2px; border-color: black; border-radius: 5px; font: bold; font-size: 17px"
+        #text_style            = "font-size: 17px; color: black"
+        # Mac compatibility
+        text_style            = "font-size: 17px; color: black; background-color: rgb(255, 255, 255);"
         text_bold_style       = "font-size: 17px; color: black; font-weight: bold"
         text_totals_style     = "font-size: 17px; color: black; font-weight: bold; margin-left: 10px"
         header_style          = "font-size: 17px; color: black; font-weight: bold"
@@ -278,6 +286,7 @@ class App(QWidget):
         self.clinician_notes = QTextEdit()
         self.clinician_notes.setPlainText("")
         self.clinician_notes.setStyleSheet(text_style)
+
         note_layout.addWidget(n_header)
         note_layout.addWidget(self.clinician_notes)
         note_frame = QFrame()
