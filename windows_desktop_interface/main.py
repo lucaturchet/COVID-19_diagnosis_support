@@ -50,10 +50,6 @@ class Worker(QRunnable):
             self.signals.result.emit(json.dumps({'exception type': str(exctype), 'value': str(value), 'traceback': str(traceback.format_exc())}))
 
 
-
-        
-
-
 class App(QWidget):
     """ GUI """
     def __init__(self):
@@ -374,11 +370,16 @@ class App(QWidget):
         html = self.html
         totals = [k.text() for k in [self.number_whites, self.number_yellow, self.number_orange, self.number_red]]
 
-        html = generate_output_html(html, self.name.text(), self.surname.text(), self.date_of_birth.text(), 
-                self.date_of_acquisition.text(), self.pathological_areas.text(), totals, self.clinician_notes.toPlainText())
+        name = self.name.text()
+        surname = self.surname.text()
+        dob = self.date_of_birth.text()
+        doa = self.date_of_acquisition.text()
+
+        html = generate_output_html(html, name, surname, dob, 
+                doa, self.pathological_areas.text(), totals, self.clinician_notes.toPlainText())
         
         export_html(html, os.path.join(output_dir, "Report.html"))
-        export_pdf(html, os.path.join(output_dir, "Report.pdf"))
+        export_pdf(html, os.path.join(output_dir, "{}{}_{}_{}".format(surname, name, dob, doa)))
 
 
 if __name__ == '__main__':
