@@ -13,6 +13,8 @@ import time
 import json
 import threading
 import traceback
+import subprocess
+import re
 from reportlab.pdfgen import canvas
 from classifiers import TFClassifier
 from utilities import customize_report, export_pdf, export_html, generate_output_html, Calendar, ClickableQLabel
@@ -21,6 +23,10 @@ from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import pyqtSlot, QThreadPool, QRunnable, QObject, pyqtSignal, Qt, QSize
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 
+#TODO:pass as arg
+ffmpeg_bin="/Users/Fabio/Downloads/ffmpeg"
+output_dir = "/Users/Fabio/Development/COVID-19_diagnosis_support/windows_desktop_interface/"
+video_file_name = "/Users/Fabio/Downloads/Esempio_Video/2.MOV"
 
 class WorkerSignals(QObject):
     result = pyqtSignal(str)
@@ -106,8 +112,6 @@ class App(QWidget):
 
 
         layout = QGridLayout()
-
-
 
         panel_top_left = QVBoxLayout()
 
@@ -304,6 +308,9 @@ class App(QWidget):
         self.setLayout(layout)
         self.show()
 
+        self.get_video_frame(video_file_name)
+
+
     def select_date(self, label):
         widget = Calendar()
         widget.setWindowModality(Qt.ApplicationModal)
@@ -389,6 +396,37 @@ class App(QWidget):
         export_html(html, os.path.join(output_dir, "Report.html"))
         export_pdf(html, os.path.join(output_dir, "Report.pdf"))
 
+
+    def get_video_frame(self, file_name):
+        """ Open video with ffmpeg and get file_number frame. Not efficient for multiple calls"""
+        # Extract video frames
+
+        #output_frames_dir = 
+        #output_dir = get_parent_directory(output_frames_dir)
+        #create_directory(output_dir)
+        tmp_dir = os.path.join(output_dir, 'tmp')
+        self.create_directory(tmp_dir)
+
+
+        subprocess.call([
+            ffmpeg_bin, '-i', file_name, '-vframes', '1' ,'-f','image2',
+            tmp_dir + '/frame%03d.jpeg'
+        ])
+
+        frame_basenames = sorted(
+            list(filter(re.compile(r'frame').search, os.listdir(tmp_dir))))
+
+        print(frame_basenames)
+        #frame_image = parse_image(os.path.join(tmp_dir, frame_basenames[0]))
+
+
+    def show_video_frame(self):
+        """ Get first frame from video and show it for cropping"""
+
+    #TODO put in utils    
+    def create_directory(self, directory):
+        if not os.path.exists(directory):
+            os.makedirs(directory)
 
 if __name__ == '__main__':
     app = QApplication([""])
