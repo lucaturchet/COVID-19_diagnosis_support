@@ -381,7 +381,7 @@ class App(QWidget):
                 doa, self.pathological_areas.text(), totals, self.clinician_notes.toPlainText())
         
         export_html(html, os.path.join(output_dir, "Report.html"))
-        export_pdf(html, os.path.join(output_dir, "{}{}_{}_{}".format(surname, name, dob, doa)))
+        export_pdf(html, os.path.join(output_dir, "{}{}_{}_{}.pdf".format(surname, name, dob, doa)))
 
 
 if __name__ == '__main__':
