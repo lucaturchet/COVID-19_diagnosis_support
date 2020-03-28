@@ -68,6 +68,7 @@ class App(QWidget):
         self.threadpool = QThreadPool()
         self._dialogs = []
         self.html = ""
+        self.task = ""
 
     def init_ui(self):
         """
@@ -318,7 +319,8 @@ class App(QWidget):
     def process_result(self, task):
         """ Retrieves the output of a task """
         task_dict = json.loads(task)
-        html = customize_report(task)
+        self.task = task
+        html = customize_report("resources/image.html", task)
 
         # Show output
         self.html = html
@@ -367,7 +369,7 @@ class App(QWidget):
         output_dir = QFileDialog.getExistingDirectory(self, "Select folder")
         if len(output_dir) == 0:
             return
-        html = self.html
+        html = customize_report("resources/report.html", self.task)
         totals = [k.text() for k in [self.number_whites, self.number_yellow, self.number_orange, self.number_red]]
 
         name = self.name.text()
