@@ -133,6 +133,7 @@ def generate_output_html(base_html, name, surname, dob, doa, pathological_areas,
     html = html.replace("_n_yellow", totals[1])
     html = html.replace("_n_orange", totals[2])
     html = html.replace("_n_red", totals[3])
+    html = html.replace("_n_grey", totals[4])
     html = html.replace("_notes", notes)
 
     html = html.replace("<!--EDITME", "")

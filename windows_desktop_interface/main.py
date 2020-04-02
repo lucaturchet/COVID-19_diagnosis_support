@@ -242,6 +242,7 @@ class App(QWidget):
         totals_grid.addWidget(self.number_red, 3, 1)
         totals.addLayout(totals_grid)
        
+        self.number_grey = QLabel("")
          
         totals_frame = QFrame()
         totals_frame.setFrameShape(QFrame.StyledPanel)
@@ -330,6 +331,7 @@ class App(QWidget):
         self.number_yellow.setText(str(task_dict['n_score_1']))
         self.number_orange.setText(str(task_dict['n_score_2']))
         self.number_red.setText(str(task_dict['n_score_3']))
+        self.number_grey.setText(str(task_dict['n_not_measured']))
         # Save to PDF
 
     def show_alert(self, task_dict, fields):
@@ -370,7 +372,7 @@ class App(QWidget):
         if len(output_dir) == 0:
             return
         html = customize_report("resources/report.html", self.task)
-        totals = [k.text() for k in [self.number_whites, self.number_yellow, self.number_orange, self.number_red]]
+        totals = [k.text() for k in [self.number_whites, self.number_yellow, self.number_orange, self.number_red, self.number_grey]]
 
         name = self.name.text()
         surname = self.surname.text()

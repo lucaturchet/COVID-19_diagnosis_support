@@ -84,7 +84,8 @@ class TFClassifier(Classifier):
                 'n_score_0': 4,
                 'n_score_1': 3,
                 'n_score_2': 2,
-                'n_score_3': 1                
+                'n_score_3': 1,
+                'n_not_measured': 10,
             }
         )
 
