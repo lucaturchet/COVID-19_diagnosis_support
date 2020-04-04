@@ -100,14 +100,14 @@ class Calendar(QDialog):
         return self.selectedDate
 
 
-def customize_report(json_dict):
+def customize_report(filename, json_dict):
     """
     This function customizes the report with the values specified in the passed JSON.
     Returns a string containing the customized HTML source
     """
     html = ""
 
-    with open("resources/report.html") as file:
+    with open(filename) as file:
         html = "".join(file.readlines())
 
     if len(html) == 0:
@@ -133,6 +133,7 @@ def generate_output_html(base_html, name, surname, dob, doa, pathological_areas,
     html = html.replace("_n_yellow", totals[1])
     html = html.replace("_n_orange", totals[2])
     html = html.replace("_n_red", totals[3])
+    html = html.replace("_n_grey", totals[4])
     html = html.replace("_notes", notes)
 
     html = html.replace("<!--EDITME", "")

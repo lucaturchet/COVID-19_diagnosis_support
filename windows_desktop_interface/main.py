@@ -55,13 +55,9 @@ class VideoView(QLabel):
             width = abs(newPoint.x() - self.origin.x())
             height = abs(newPoint.y() - self.origin.y())
             side = max(self.minSquareSide,min(width,height))
-            #squarePoint = QPoint(side,side) 
 
             self.rubberBand.setGeometry(QRect(self.origin, QPoint(self.origin.x()+side, self.origin.y()+side)).normalized())
 
-            #self.rubberBand.setGeometry(self.origin.x(), self.origin.y(), side, side)
-            #self.rubberBand.setGeometry(QRect(self.origin, squarePoint).normalized())
-            #self.rubberBand.setGeometry(QRect(self.origin, event.pos()).normalized())
     
     def mouseReleaseEvent(self, event):
         print("end selection")
@@ -145,6 +141,7 @@ class App(QWidget):
         self.threadpool = QThreadPool()
         self._dialogs = []
         self.html = ""
+        self.task = ""
 
         self.create_directory(self.tmp_dir)
 
@@ -327,6 +324,7 @@ class App(QWidget):
         totals_grid.addWidget(self.number_red, 3, 1)
         totals.addLayout(totals_grid)
        
+        self.number_grey = QLabel("")
          
         totals_frame = QFrame()
         totals_frame.setFrameShape(QFrame.StyledPanel)
@@ -429,7 +427,6 @@ class App(QWidget):
         self.show()
 
 
-
     def select_date(self, label):
         widget = Calendar()
         widget.setWindowModality(Qt.ApplicationModal)
@@ -472,11 +469,11 @@ class App(QWidget):
         self.extract_video_frame(self.video_file_path)
 
 
-
     def process_result(self, task):
         """ Retrieves the output of a task """
         task_dict = json.loads(task)
-        html = customize_report(task)
+        self.task = task
+        html = customize_report("resources/image.html", task)
 
         # Show output
         self.html = html
@@ -486,6 +483,7 @@ class App(QWidget):
         self.number_yellow.setText(str(task_dict['n_score_1']))
         self.number_orange.setText(str(task_dict['n_score_2']))
         self.number_red.setText(str(task_dict['n_score_3']))
+        self.number_grey.setText(str(task_dict['n_not_measured']))
         # Save to PDF
 
     def show_alert(self, task_dict, fields):
@@ -525,14 +523,19 @@ class App(QWidget):
         output_dir = QFileDialog.getExistingDirectory(self, "Select folder")
         if len(output_dir) == 0:
             return
-        html = self.html
-        totals = [k.text() for k in [self.number_whites, self.number_yellow, self.number_orange, self.number_red]]
+        html = customize_report("resources/report.html", self.task)
+        totals = [k.text() for k in [self.number_whites, self.number_yellow, self.number_orange, self.number_red, self.number_grey]]
 
-        html = generate_output_html(html, self.name.text(), self.surname.text(), self.date_of_birth.text(), 
-                self.date_of_acquisition.text(), self.pathological_areas.text(), totals, self.clinician_notes.toPlainText())
+        name = self.name.text()
+        surname = self.surname.text()
+        dob = self.date_of_birth.text()
+        doa = self.date_of_acquisition.text()
+
+        html = generate_output_html(html, name, surname, dob, 
+                doa, self.pathological_areas.text(), totals, self.clinician_notes.toPlainText())
         
         export_html(html, os.path.join(output_dir, "Report.html"))
-        export_pdf(html, os.path.join(output_dir, "Report.pdf"))
+        export_pdf(html, os.path.join(output_dir, "{}{}_{}_{}.pdf".format(surname, name, dob, doa)))
 
 
     def extract_video_frame(self, file_name):
@@ -549,8 +552,9 @@ class App(QWidget):
         self.threadpool.start(videoworker)
 
 
-
     def process_video_frame_result(self, task):
+        """ Async call to process frame extraction result """
+
         task_dict = json.loads(task)
 
 
@@ -586,14 +590,6 @@ class App(QWidget):
 
     def crop_video(self):
         """Crop from ffmpeg using scaled pixels of rubber band"""
-        #self.rubberBand.getGeometry
-        # print("Label width:"+str(self.video_label.width()))
-        # print("Label height:"+str(self.video_label.height()))
-        # print("Rect in label:")
-        # print(self.video_label.rubberBand.geometry().x())
-        # print(self.video_label.rubberBand.geometry().y())
-        # print(self.video_label.rubberBand.geometry().x()+self.video_label.rubberBand.geometry().width())
-        # print(self.video_label.rubberBand.geometry().y()+self.video_label.rubberBand.geometry().height())
 
         labelX = self.video_label.rubberBand.geometry().x()
         labelY = self.video_label.rubberBand.geometry().y()
@@ -602,33 +598,25 @@ class App(QWidget):
         labelWidth = self.video_label.width
         labelHeight = self.video_label.height
         # need to compensate in case video view has aspect ratio different than the original video, for UI reasons
-        #normX = self.video_label.rubberBand.geometry().x() / self.video_label.width()        
-        #normY = self.video_label.rubberBand.geometry().y() / self.video_label.height()
-        #normRight = (self.video_label.rubberBand.geometry().x() + self.video_label.rubberBand.geometry().width()) / self.video_label.width()
-        #normBottom = (self.video_label.rubberBand.geometry().y() + self.video_label.rubberBand.geometry().height()) / self.video_label.height()
- 
-        #print("Normalized in label space:")
-        #print(normX)
-        #print(normY)
-        #print(normRight)
-        #print(normBottom)
-
-        #labelX : labelwidth = x : videoWidth
-        #x = (videoWidth*labelX) / labelWidth
-
         # a scale factor has to be applied from label space to video space, asuming
         # that the aspect ratio of the label was the same of the video
         labelToVideoScaleWidth = self.video_label.pixmap().width() / self.video_label.width()
         labelToVideoScaleHeight = self.video_label.pixmap().height() / self.video_label.height()
-        # print("scale factors:")
-        # print(labelToVideoScaleWidth)
-        # print(labelToVideoScaleHeight)
         videoWidth = self.video_label.pixmap().width()
         videoHeight = self.video_label.pixmap().height()
         videoFrameSpaceX = int((labelToVideoScaleWidth*labelX))
         videoFrameSpaceY = int((labelToVideoScaleHeight*labelY))
         videoFrameSpaceRight = int((labelToVideoScaleWidth*labelRight))
         videoFrameSpaceBottom = int((labelToVideoScaleHeight*labelBottom))
+
+        # DEBUG:
+        # print("Label width:"+str(self.video_label.width()))
+        # print("Label height:"+str(self.video_label.height()))
+        # print("Rect in label:")
+        # print(self.video_label.rubberBand.geometry().x())
+        # print(self.video_label.rubberBand.geometry().y())
+        # print(self.video_label.rubberBand.geometry().x()+self.video_label.rubberBand.geometry().width())
+        # print(self.video_label.rubberBand.geometry().y()+self.video_label.rubberBand.geometry().height())
 
         # print("Video width:"+str(self.video_label.pixmap().width()))
         # print("Video height:"+str(self.video_label.pixmap().height()))
@@ -638,10 +626,10 @@ class App(QWidget):
         # print(videoFrameSpaceRight)
         # print(videoFrameSpaceBottom)
 
-
         pre, ext = os.path.splitext(self.video_file_path)
         new_video_name = pre+"_cropped"+ext
 
+        #note: -crf 15 is the quality of exported video. See ffmpeg doc
         commandStringList = [
             self.ffmpeg_bin, '-y','-i', self.video_file_path, 
             '-filter:v',
@@ -654,6 +642,7 @@ class App(QWidget):
         videoworker = VideoWorker(commandStringList, "Cropped video exported", "Error exporting cropped video")
         videoworker.signals.result.connect(self.process_video_crop_result)
         self.threadpool.start(videoworker)
+
 
     def process_video_crop_result(self, task):
         """ Retrieves the output of a task """
@@ -669,10 +658,12 @@ class App(QWidget):
         self.panel_lungs_frame.setFocus()
         self.lungs_image_label.show()
 
+
     #TODO put in utils    
     def create_directory(self, directory):
         if not os.path.exists(directory):
             os.makedirs(directory)
+
 
     def delete_folder_contents(self, directory):
         for filename in os.listdir(directory):
