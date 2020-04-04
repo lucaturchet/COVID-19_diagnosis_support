@@ -10,28 +10,30 @@ import UIKit
 import Macaw
 
 class PDFTemplateView: UIView {
-
-    let titleLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = UIColor.DynamicColors.blackWhite
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 24, weight: UIFont.Weight.semibold)
-        label.text = "COVID-19 Diagnosis Support"
-        
-        return label
-    }()
     
     let userForm = UserForm()
+    
+    let grayContainer: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.borderWidth = 1
+        view.layer.borderColor = UIColor.FlatColors.borderGray.cgColor
+        view.backgroundColor = UIColor.FlatColors.containerGray
+        return view
+    }()
 
     let lungsSVGView: SVGView = {
         let view = SVGView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor.systemGray6
+        view.backgroundColor = .clear
         view.fileName = "lungs_areas"
         
         return view
     }()
+    
+    let legenda = LegendaView()
+    
+    let totals = TotalsView()
     
     let notesTitle: UILabel = {
         let label = UILabel()
@@ -44,8 +46,8 @@ class PDFTemplateView: UIView {
     let notesTextView: UITextView = {
         let view = UITextView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor.systemGray6
-        view.layer.borderColor = UIColor.systemGray3.cgColor
+        view.backgroundColor = .white
+        view.layer.borderColor = UIColor.FlatColors.borderGray.cgColor
         view.layer.borderWidth = 1
         return view
     }()
@@ -54,25 +56,35 @@ class PDFTemplateView: UIView {
         super.init(frame: frame)
         
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.backgroundColor = UIColor.systemGray6
-        
-        self.addSubview(self.titleLabel)
-        self.titleLabel.anchorViewTop(top: self.topAnchor, topC: 40,
-                                      leading: self.leadingAnchor, leadingC: 40,
-                                      trailing: self.trailingAnchor, trailingC: -40,
-                                      height: nil)
+        self.backgroundColor = .white
         
         self.addSubview(self.userForm)
-        self.userForm.anchorViewTop(top: self.titleLabel.bottomAnchor, topC: 40,
+        self.userForm.anchorViewTop(top: self.topAnchor, topC: 40,
                                     leading: self.leadingAnchor, leadingC: 40,
                                     trailing: self.trailingAnchor, trailingC: -40,
                                     height: 120)
         
-        self.addSubview(self.lungsSVGView)
-        self.lungsSVGView.anchorViewTop(top: self.userForm.bottomAnchor, topC: 40,
-                                        leading: self.leadingAnchor, leadingC: 40,
-                                        trailing: self.trailingAnchor, trailingC: -240,
+        self.addSubview(self.grayContainer)
+        self.grayContainer.anchorViewTop(top: self.userForm.bottomAnchor, topC: 40,
+                                         leading: self.leadingAnchor, leadingC: 40,
+                                         trailing: self.trailingAnchor, trailingC: -40,
+                                         height: 470)
+        
+        self.grayContainer.addSubview(self.lungsSVGView)
+        self.lungsSVGView.anchorViewTop(top: self.grayContainer.topAnchor, topC: 10,
+                                        leading: self.grayContainer.leadingAnchor, leadingC: 20,
+                                        trailing: self.grayContainer.trailingAnchor, trailingC: -260,
                                         height: 450)
+        
+        self.grayContainer.addSubview(self.legenda)
+        self.legenda.anchorViewTopRight(top: self.grayContainer.topAnchor, topC: 5,
+                                        trailing: self.grayContainer.trailingAnchor, trailingC: -5,
+                                        width: 180, height: 220)
+        
+        self.grayContainer.addSubview(self.totals)
+        self.totals.anchorViewBottomRight(bottom: self.grayContainer.bottomAnchor, bottomC: -5,
+                                          trailing: self.grayContainer.trailingAnchor, trailingC: -5,
+                                          height: 190, width: 180)
         
         self.addSubview(self.notesTitle)
         self.notesTitle.anchorViewTop(top: self.lungsSVGView.bottomAnchor, topC: 40,
@@ -85,7 +97,7 @@ class PDFTemplateView: UIView {
                                          leading: self.leadingAnchor, leadingC: 40,
                                          trailing: self.trailingAnchor, trailingC: -40,
                                          height: 120)
-        self.notesTextView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -40).isActive = true
+//        self.notesTextView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -40).isActive = true
     }
     
     required init?(coder: NSCoder) {

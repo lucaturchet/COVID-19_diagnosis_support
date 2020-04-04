@@ -92,31 +92,39 @@ class MainViewController: UIViewController, UIDocumentInteractionControllerDeleg
         self.randomizeButton.addTarget(self, action: #selector(generateNewReport), for: .touchUpInside)
         self.shareButton.addTarget(self, action: #selector(renderPDF), for: .touchUpInside)
         
-        self.view.addSubview(self.scrollView)
-        self.scrollView.anchorView(top: self.view.safeAreaLayoutGuide.topAnchor, topC: 0,
-                                   leading: self.view.leadingAnchor, leadingC: 0,
-                                   trailing: self.view.trailingAnchor, trailingC: 0,
-                                   bottom: self.view.safeAreaLayoutGuide.bottomAnchor, bottomC: 0)
+        // creating the view to render on the pdf with paper sheet proportions
+        self.view.addSubview(self.viewToRenderAsPDF)
+        self.viewToRenderAsPDF.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+        // using the width as device is in potrait (not landscape) position
+        let screenWidth = UIScreen.main.bounds.width
+        let screenHeight = UIScreen.main.bounds.height
+        self.viewToRenderAsPDF.widthAnchor.constraint(
+            equalToConstant: screenWidth < screenHeight ? screenWidth : screenHeight
+        ).isActive = true
+        self.viewToRenderAsPDF.heightAnchor.constraint(equalTo: self.viewToRenderAsPDF.widthAnchor,
+                                                       multiplier: 1.5).isActive = true
         
-        self.scrollView.addSubview(self.viewToRenderAsPDF)
-        self.viewToRenderAsPDF.anchorViewTop(top: self.scrollView.topAnchor, topC: 0,
-                                             leading: self.scrollView.leadingAnchor, leadingC: 0,
-                                             trailing: self.scrollView.trailingAnchor, trailingC: 0,
-                                             height: nil)
-        self.viewToRenderAsPDF.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
+        // now add the actual UI
+//        self.view.addSubview(self.scrollView)
+//        self.scrollView.anchorView(top: self.view.safeAreaLayoutGuide.topAnchor, topC: 0,
+//                                   leading: self.view.leadingAnchor, leadingC: 0,
+//                                   trailing: self.view.trailingAnchor, trailingC: 0,
+//                                   bottom: self.view.safeAreaLayoutGuide.bottomAnchor, bottomC: 0)
         
-        self.scrollView.addSubview(self.randomizeButton)
-        self.randomizeButton.anchorViewTopCenter(top: self.viewToRenderAsPDF.bottomAnchor, topC: 40,
-                                                 centerX: self.scrollView.centerXAnchor,
-                                                 centerY: nil,
-                                                 width: 200, height: 50)
-        self.randomizeButton.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor, constant: -40).isActive = true
         
-        self.scrollView.addSubview(self.shareButton)
-        self.shareButton.anchorViewLeft(centerY: self.randomizeButton.centerYAnchor,
-                                        leading: self.randomizeButton.trailingAnchor, leadingC: 50,
-                                        trailing: nil, trailingC: nil,
-                                        width: 50, height: 50)
+        
+//        self.scrollView.addSubview(self.randomizeButton)
+//        self.randomizeButton.anchorViewTopCenter(top: self.viewToRenderAsPDF.bottomAnchor, topC: 40,
+//                                                 centerX: self.scrollView.centerXAnchor,
+//                                                 centerY: nil,
+//                                                 width: 200, height: 50)
+//        self.randomizeButton.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor, constant: -40).isActive = true
+//
+//        self.scrollView.addSubview(self.shareButton)
+//        self.shareButton.anchorViewLeft(centerY: self.randomizeButton.centerYAnchor,
+//                                        leading: self.randomizeButton.trailingAnchor, leadingC: 50,
+//                                        trailing: nil, trailingC: nil,
+//                                        width: 50, height: 50)
     }
 
     // MARK: Actions

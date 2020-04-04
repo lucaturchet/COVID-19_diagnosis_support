@@ -31,4 +31,15 @@ extension UIColor {
             }
         }
     }
+    
+    struct FlatColors {
+        static let borderGray = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1)
+        static let totalsGray = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1)
+        static let containerGray = UIColor(red: 242/255, green: 242/255, blue: 242/255, alpha: 1)
+        
+        static let yellow = UIColor(red: 242/255, green: 226/255, blue: 59/255, alpha: 1)
+        static let brown = UIColor(red: 182/255, green: 103/255, blue: 38/255, alpha: 1)
+        static let red = UIColor(red: 186/255, green: 23/255, blue: 13/255, alpha: 1)
+        static let darkGray = UIColor(red: 125/255, green: 124/255, blue: 124/255, alpha: 1)
+    }
 }
