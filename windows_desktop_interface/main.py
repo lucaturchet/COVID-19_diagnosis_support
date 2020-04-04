@@ -7,7 +7,7 @@ Copyright: University of Trento
 
 Date: 13/3/2020
 """
-import os
+import os, shutil
 import sys
 import time
 import json
@@ -18,19 +18,55 @@ import re
 from reportlab.pdfgen import canvas
 from classifiers import TFClassifier
 from utilities import customize_report, export_pdf, export_html, generate_output_html, Calendar, ClickableQLabel
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QFileDialog, QLabel, QDialog, QGridLayout, QFrame, QLineEdit, QTextEdit
+from PyQt5.QtWidgets import QApplication, QSizePolicy, QWidget, QVBoxLayout, QPushButton, QFileDialog, QLabel, QDialog, QGridLayout, QFrame, QLineEdit, QTextEdit, QRubberBand, QMessageBox
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtCore import pyqtSlot, QThreadPool, QRunnable, QObject, pyqtSignal, Qt, QSize
+from PyQt5.QtCore import pyqtSlot, QThreadPool, QRunnable, QObject, pyqtSignal, Qt, QSize, QPoint, QRect
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 
-#TODO:pass as arg
-ffmpeg_bin="/Users/Fabio/Downloads/ffmpeg"
-output_dir = "/Users/Fabio/Development/COVID-19_diagnosis_support/windows_desktop_interface/"
-video_file_name = "/Users/Fabio/Downloads/Esempio_Video/2.MOV"
+
 
 class WorkerSignals(QObject):
     result = pyqtSignal(str)
 
+class VideoView(QLabel):
+
+    def __init__(self, parent = None):
+    
+        QLabel.__init__(self, parent)
+        self.rubberBand = QRubberBand(QRubberBand.Rectangle, self)
+        self.origin = QPoint()
+        self.minSquareSide = 100
+    
+    def mousePressEvent(self, event):
+    
+        if event.button() == Qt.LeftButton:
+            self.rubberBand.hide()
+
+            self.origin = QPoint(event.pos())
+            print(self.origin)
+            self.rubberBand.setGeometry(QRect(self.origin, QSize()))
+            self.rubberBand.show()
+    
+    def mouseMoveEvent(self, event):
+    
+        if not self.origin.isNull():
+            newPoint = QPoint(event.pos())
+            # get minimum side of selection to make square
+            width = abs(newPoint.x() - self.origin.x())
+            height = abs(newPoint.y() - self.origin.y())
+            side = max(self.minSquareSide,min(width,height))
+            #squarePoint = QPoint(side,side) 
+
+            self.rubberBand.setGeometry(QRect(self.origin, QPoint(self.origin.x()+side, self.origin.y()+side)).normalized())
+
+            #self.rubberBand.setGeometry(self.origin.x(), self.origin.y(), side, side)
+            #self.rubberBand.setGeometry(QRect(self.origin, squarePoint).normalized())
+            #self.rubberBand.setGeometry(QRect(self.origin, event.pos()).normalized())
+    
+    def mouseReleaseEvent(self, event):
+        print("end selection")
+        #if event.button() == Qt.LeftButton:
+        #    self.rubberBand.hide()
 
 class Worker(QRunnable):
     '''
@@ -56,8 +92,29 @@ class Worker(QRunnable):
             self.signals.result.emit(json.dumps({'exception type': str(exctype), 'value': str(value), 'traceback': str(traceback.format_exc())}))
 
 
+class VideoWorker(QRunnable):
+    '''
+    Worker thread, used for the parallelization
+    '''
+    def __init__(self, commandStringList, successMessage, failureMessage):
+        super(VideoWorker, self).__init__()
+        self.commandStringList = commandStringList
+        self.signals = WorkerSignals()
+        self.failureMessage = failureMessage
+        self.successMessage = successMessage
 
-        
+    @pyqtSlot()
+    def run(self):
+        """ Runs the thread """
+        try:
+            subprocess.call(self.commandStringList)
+            self.signals.result.emit(json.dumps({'value': self.successMessage}))
+        except:
+            traceback.print_exc()
+            exctype, value = sys.exc_info()[:2]
+            #print(str(exctype))
+            #print(str(value))
+            self.signals.result.emit(json.dumps({'value': self.failureMessage}))
 
 
 class App(QWidget):
@@ -67,17 +124,30 @@ class App(QWidget):
         self.title 				= 'Lung areas scoring'
         self.left 				= 50
         self.top 				= 50
-        self.top_row_height		= 600
+        self.top_row_height		= 600 
         self.bottom_row_height	= 250
         self.left_column_width  = 250
-        self.right_column_width = 800
+        self.right_column_width = 800 
         self.width 				= self.left_column_width + self.right_column_width
         self.height 			= self.top_row_height + self.bottom_row_height
+        self.video_label_width  = 600 # height computed automatically to preserve aspect ratio
+        self.minImageCropSize   = 256 # min input size for neural network 
+
+        self.tmp_dir = os.getcwd()+"/tmp"
+        self.lungs_image = os.getcwd()+"/resources/lungs.svg"
+        # Mac
+        self.ffmpeg_bin = os.getcwd()+"/bin/ffmpeg"
+        # Windows
+        #self.ffmpeg_bin = os.getcwd()+"/bin/ffmpeg.exe"
+
         self.init_ui()
 
         self.threadpool = QThreadPool()
         self._dialogs = []
         self.html = ""
+
+        self.create_directory(self.tmp_dir)
+
 
     def init_ui(self):
         """
@@ -283,6 +353,56 @@ class App(QWidget):
         self.webview = QWebEngineView(None)
         # self.webview.setHtml(self.html)
         layout.addWidget(self.webview, 0, 1)
+        self.webview.hide()
+
+
+
+        # show video frame for cropping
+        panel_video = QVBoxLayout()
+        self.panel_video_frame = QFrame()
+        self.panel_video_frame.setLayout(panel_video)
+
+        layout.addWidget(self.panel_video_frame, 0, 1)
+
+        self.video_label = VideoView()
+        #self.video_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        #self.video_label.setAlignment(Qt.AlignCenter)
+        #self.video_label.setGeometry(200, 0, 300, 200)
+
+
+        #self.video_label.setAlignment(Qt.AlignCenter)
+        self.video_label.setScaledContents(True)
+        self.video_label.setMinimumSize(1,1)
+        panel_video.addWidget(self.video_label)
+
+        self.crop_btn = QPushButton(text="CROP VIDEO")
+        self.crop_btn.setFixedWidth(self.video_label_width)
+        self.crop_btn.setFixedHeight(button_height)
+        self.crop_btn.setStyleSheet(button_style)
+        self.crop_btn.clicked.connect(self.crop_video)
+
+        panel_video.addWidget(self.crop_btn)
+        
+        self.panel_video_frame.hide()
+
+
+        panel_lungs = QVBoxLayout()
+        self.panel_lungs_frame = QFrame()
+        self.panel_lungs_frame.setLayout(panel_lungs)
+        # create view to show lung clickable areas
+        self.lungs_image_label = ClickableQLabel()
+        #TODO load from relative path
+        pixmap = QPixmap(self.lungs_image)
+        self.lungs_image_label.setPixmap(pixmap)
+        self.lungs_image_label.setScaledContents(True)
+        self.lungs_image_label.setMinimumSize(1,1)
+
+        self.lungs_image_label.clicked.connect(self.choose_video_file)
+
+        panel_lungs.addWidget(self.lungs_image_label)
+        layout.addWidget(self.panel_lungs_frame, 0, 1)
+
+        self.panel_lungs_frame.show()
 
         note_layout = QVBoxLayout()
         n_header = QLabel("Notes of the clinician")
@@ -308,7 +428,6 @@ class App(QWidget):
         self.setLayout(layout)
         self.show()
 
-        self.get_video_frame(video_file_name)
 
 
     def select_date(self, label):
@@ -334,6 +453,25 @@ class App(QWidget):
         worker = Worker(data_path, TFClassifier)
         worker.signals.result.connect(self.process_result)
         self.threadpool.start(worker)
+
+    @pyqtSlot()
+    def choose_video_file(self):
+        """ Opens the file chooser and starts processing in a separate thread """
+        dialogResult = QFileDialog.getOpenFileName(self,"Open Video", ".", "Video Files (*.MOV *.mov *.AVI *.avi)")
+
+        print("DIALOG RESULT")
+        print(dialogResult[0])
+        if len(dialogResult[0]) == 0:
+            return
+
+
+        self.video_file_path = dialogResult[0]
+        self.frame_path = ""
+        print("video_file_path")
+        print(self.video_file_path)
+        self.extract_video_frame(self.video_file_path)
+
+
 
     def process_result(self, task):
         """ Retrieves the output of a task """
@@ -397,36 +535,156 @@ class App(QWidget):
         export_pdf(html, os.path.join(output_dir, "Report.pdf"))
 
 
-    def get_video_frame(self, file_name):
+    def extract_video_frame(self, file_name):
         """ Open video with ffmpeg and get file_number frame. Not efficient for multiple calls"""
-        # Extract video frames
+        self.delete_folder_contents(self.tmp_dir)
 
-        #output_frames_dir = 
-        #output_dir = get_parent_directory(output_frames_dir)
-        #create_directory(output_dir)
-        tmp_dir = os.path.join(output_dir, 'tmp')
-        self.create_directory(tmp_dir)
+        commandStringList = [
+            self.ffmpeg_bin, '-i', file_name, '-vframes', '1' ,'-f','image2',
+            self.tmp_dir + '/frame%03d.jpeg'
+        ]
 
-
-        subprocess.call([
-            ffmpeg_bin, '-i', file_name, '-vframes', '1' ,'-f','image2',
-            tmp_dir + '/frame%03d.jpeg'
-        ])
-
-        frame_basenames = sorted(
-            list(filter(re.compile(r'frame').search, os.listdir(tmp_dir))))
-
-        print(frame_basenames)
-        #frame_image = parse_image(os.path.join(tmp_dir, frame_basenames[0]))
+        videoworker = VideoWorker(commandStringList, "success", "fail")
+        videoworker.signals.result.connect(self.process_video_frame_result)
+        self.threadpool.start(videoworker)
 
 
-    def show_video_frame(self):
-        """ Get first frame from video and show it for cropping"""
+
+    def process_video_frame_result(self, task):
+        task_dict = json.loads(task)
+
+
+        if(task_dict["value"] == "success"):
+            frame_basenames = sorted(
+                list(filter(re.compile(r'frame').search, os.listdir(self.tmp_dir))))
+
+            self.frame_path = os.path.join(self.tmp_dir, frame_basenames[0])
+        else:
+            self.frame_path = ""
+            QMessageBox.about(self, "Extraction Result", "Could not extract frame from video")
+
+
+        if(self.frame_path != ""):
+            self.lungs_image_label.hide()
+
+            pixmap = QPixmap(self.frame_path)
+            # calculate a view that preserves aspect ratio of video frame
+            video_aspect_ratio = pixmap.height() / pixmap.width()
+            #video_label_width = self.right_column_width - (self.left / 2)
+            video_label_height = int((video_aspect_ratio*self.video_label_width))
+
+            self.video_label.setFixedWidth(self.video_label_width)
+            self.video_label.setFixedHeight(video_label_height)
+            self.video_label.minSquareSide = int(self.video_label_width/(pixmap.width())*self.minImageCropSize)
+
+            self.panel_lungs_frame.hide()
+            self.video_label.setPixmap(pixmap)
+            self.panel_video_frame.show()
+            self.panel_video_frame.raise_()
+            self.panel_video_frame.setFocus()
+
+
+    def crop_video(self):
+        """Crop from ffmpeg using scaled pixels of rubber band"""
+        #self.rubberBand.getGeometry
+        # print("Label width:"+str(self.video_label.width()))
+        # print("Label height:"+str(self.video_label.height()))
+        # print("Rect in label:")
+        # print(self.video_label.rubberBand.geometry().x())
+        # print(self.video_label.rubberBand.geometry().y())
+        # print(self.video_label.rubberBand.geometry().x()+self.video_label.rubberBand.geometry().width())
+        # print(self.video_label.rubberBand.geometry().y()+self.video_label.rubberBand.geometry().height())
+
+        labelX = self.video_label.rubberBand.geometry().x()
+        labelY = self.video_label.rubberBand.geometry().y()
+        labelRight = self.video_label.rubberBand.geometry().x()+self.video_label.rubberBand.geometry().width()
+        labelBottom = self.video_label.rubberBand.geometry().y()+self.video_label.rubberBand.geometry().height()
+        labelWidth = self.video_label.width
+        labelHeight = self.video_label.height
+        # need to compensate in case video view has aspect ratio different than the original video, for UI reasons
+        #normX = self.video_label.rubberBand.geometry().x() / self.video_label.width()        
+        #normY = self.video_label.rubberBand.geometry().y() / self.video_label.height()
+        #normRight = (self.video_label.rubberBand.geometry().x() + self.video_label.rubberBand.geometry().width()) / self.video_label.width()
+        #normBottom = (self.video_label.rubberBand.geometry().y() + self.video_label.rubberBand.geometry().height()) / self.video_label.height()
+ 
+        #print("Normalized in label space:")
+        #print(normX)
+        #print(normY)
+        #print(normRight)
+        #print(normBottom)
+
+        #labelX : labelwidth = x : videoWidth
+        #x = (videoWidth*labelX) / labelWidth
+
+        # a scale factor has to be applied from label space to video space, asuming
+        # that the aspect ratio of the label was the same of the video
+        labelToVideoScaleWidth = self.video_label.pixmap().width() / self.video_label.width()
+        labelToVideoScaleHeight = self.video_label.pixmap().height() / self.video_label.height()
+        # print("scale factors:")
+        # print(labelToVideoScaleWidth)
+        # print(labelToVideoScaleHeight)
+        videoWidth = self.video_label.pixmap().width()
+        videoHeight = self.video_label.pixmap().height()
+        videoFrameSpaceX = int((labelToVideoScaleWidth*labelX))
+        videoFrameSpaceY = int((labelToVideoScaleHeight*labelY))
+        videoFrameSpaceRight = int((labelToVideoScaleWidth*labelRight))
+        videoFrameSpaceBottom = int((labelToVideoScaleHeight*labelBottom))
+
+        # print("Video width:"+str(self.video_label.pixmap().width()))
+        # print("Video height:"+str(self.video_label.pixmap().height()))
+        # print("Rect in Video frame:")
+        # print(videoFrameSpaceX)
+        # print(videoFrameSpaceY)
+        # print(videoFrameSpaceRight)
+        # print(videoFrameSpaceBottom)
+
+
+        pre, ext = os.path.splitext(self.video_file_path)
+        new_video_name = pre+"_cropped"+ext
+
+        commandStringList = [
+            self.ffmpeg_bin, '-y','-i', self.video_file_path, 
+            '-filter:v',
+            'crop='+str(videoFrameSpaceRight-videoFrameSpaceX)+':'+str(videoFrameSpaceBottom-videoFrameSpaceY)+':'+str(videoFrameSpaceX)+':'+str(videoFrameSpaceY)+'' ,
+            '-crf',
+            '15', 
+            new_video_name
+        ]
+
+        videoworker = VideoWorker(commandStringList, "Cropped video exported", "Error exporting cropped video")
+        videoworker.signals.result.connect(self.process_video_crop_result)
+        self.threadpool.start(videoworker)
+
+    def process_video_crop_result(self, task):
+        """ Retrieves the output of a task """
+        task_dict = json.loads(task)
+        QMessageBox.about(self, "Crop Result", task_dict["value"])
+
+        # clean tmp folder 
+        self.delete_folder_contents(self.tmp_dir)
+
+        self.panel_video_frame.hide()
+        self.panel_lungs_frame.show()
+        self.panel_lungs_frame.raise_()
+        self.panel_lungs_frame.setFocus()
+        self.lungs_image_label.show()
 
     #TODO put in utils    
     def create_directory(self, directory):
         if not os.path.exists(directory):
             os.makedirs(directory)
+
+    def delete_folder_contents(self, directory):
+        for filename in os.listdir(directory):
+            file_path = os.path.join(directory, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print('Failed to delete %s. Reason: %s' % (file_path, e))
+
 
 if __name__ == '__main__':
     app = QApplication([""])
