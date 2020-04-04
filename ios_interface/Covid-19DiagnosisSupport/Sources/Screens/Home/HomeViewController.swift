@@ -9,7 +9,7 @@
 import UIKit
 import Macaw
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate {
 
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -45,25 +45,40 @@ class HomeViewController: UIViewController {
         return view
     }()
     
+    let form = FillableUserForm()
     let legenda = LegendaView()
     let totals = TotalsView()
     
-    let randomizeButton: UIButton = {
+    let generateReportButton:UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Generate New", for: .normal)
+        button.setTitle("GENERATE REPORT", for: .normal)
+        button.backgroundColor = UIColor.systemGray4
+        button.layer.cornerRadius = 4
+        button.layer.borderWidth = 2
+        button.layer.borderColor = UIColor.black.cgColor
         button.setTitleColor(UIColor.DynamicColors.blackWhite, for: .normal)
+        
         return button
     }()
     
-    let shareButton:UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(named: "icon-share"), for: .normal)
-        button.alpha = 0
-        button.imageView?.tintColor = UIColor.DynamicColors.blackWhite
-        button.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-        return button
+    let notesTitle: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 17, weight: UIFont.Weight.bold)
+        label.text = "Notes of the clinician"
+        return label
+    }()
+    
+    let notesTextView: UITextView = {
+        let view = UITextView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .white
+        view.layer.borderColor = UIColor.FlatColors.borderGray.cgColor
+        view.layer.borderWidth = 1
+        view.text = "Here the clinician can add a general comment on the findings..."
+        
+        return view
     }()
     
     var colors: [Color] = []
@@ -76,6 +91,10 @@ class HomeViewController: UIViewController {
         
         self.view.backgroundColor = UIColor.systemGray6
         
+        self.form.dateOfBirthTextField.delegate = self
+        self.form.dateOfAcquisitionTextField.delegate = self
+        self.notesTextView.delegate = self
+        
         // keyboard management
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(adjustForKeyboard(notification:)),
@@ -86,8 +105,7 @@ class HomeViewController: UIViewController {
                                                name: UIResponder.keyboardWillHideNotification,
                                                object: nil)
 
-        self.randomizeButton.addTarget(self, action: #selector(generateNewReport), for: .touchUpInside)
-        self.shareButton.addTarget(self, action: #selector(openPDF), for: .touchUpInside)
+        self.generateReportButton.addTarget(self, action: #selector(generateNewReport), for: .touchUpInside)
         
         self.view.addSubview(self.scrollView)
         self.scrollView.anchorView(top: self.view.safeAreaLayoutGuide.topAnchor, topC: 0,
@@ -95,8 +113,13 @@ class HomeViewController: UIViewController {
                                    trailing: self.view.trailingAnchor, trailingC: -40,
                                    bottom: self.view.safeAreaLayoutGuide.bottomAnchor, bottomC: 0)
         
+        self.scrollView.addSubview(self.form)
+        self.form.anchorViewTopLeft(top: self.scrollView.topAnchor, topC: 0,
+                                    leading: self.scrollView.leadingAnchor, leadingC: 0,
+                                    width: 180, height: 260)
+        
         self.scrollView.addSubview(self.legenda)
-        self.legenda.anchorViewTopLeft(top: self.scrollView.topAnchor, topC: 0,
+        self.legenda.anchorViewTopLeft(top: self.form.bottomAnchor, topC: 10,
                                        leading: self.scrollView.leadingAnchor, leadingC: 0,
                                        width: 180, height: 220)
         
@@ -109,7 +132,7 @@ class HomeViewController: UIViewController {
         self.container.anchorViewTop(top: self.scrollView.topAnchor, topC: 0,
                                      leading: self.legenda.trailingAnchor, leadingC: 10,
                                      trailing: self.scrollView.trailingAnchor, trailingC: 0,
-                                     height: 450)
+                                     height: 490)
         self.container.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor, constant: -190).isActive = true
         
         self.container.addSubview(self.grayContainer)
@@ -123,26 +146,28 @@ class HomeViewController: UIViewController {
                                      leading: self.grayContainer.leadingAnchor, leadingC: 40,
                                      trailing: self.grayContainer.trailingAnchor, trailingC: -40,
                                      bottom: self.grayContainer.bottomAnchor, bottomC: -5)
-        
-        self.scrollView.addSubview(self.randomizeButton)
-        self.randomizeButton.anchorViewTopCenter(top: self.grayContainer.bottomAnchor, topC: 40,
-                                                 centerX: self.scrollView.centerXAnchor,
-                                                 centerY: nil,
-                                                 width: 200, height: 50)
-        self.randomizeButton.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor, constant: -40).isActive = true
 
-        self.scrollView.addSubview(self.shareButton)
-        self.shareButton.anchorViewLeft(centerY: self.randomizeButton.centerYAnchor,
-                                        leading: self.randomizeButton.trailingAnchor, leadingC: 50,
-                                        trailing: nil, trailingC: nil,
-                                        width: 50, height: 50)
+        self.scrollView.addSubview(self.generateReportButton)
+        self.generateReportButton.anchorViewTopLeft(top: self.totals.bottomAnchor, topC: 10,
+                                                    leading: self.scrollView.leadingAnchor, leadingC: 0,
+                                                    width: 180, height: 40)
+        
+        self.scrollView.addSubview(self.notesTitle)
+        self.notesTitle.anchorViewTop(top: self.totals.topAnchor, topC: 0,
+                                      leading: self.totals.trailingAnchor, leadingC: 10,
+                                      trailing: self.scrollView.trailingAnchor, trailingC: -10,
+                                      height: nil)
+        
+        self.scrollView.addSubview(self.notesTextView)
+        self.notesTextView.anchorView(top: self.notesTitle.bottomAnchor, topC: 5,
+                                      leading: self.totals.trailingAnchor, leadingC: 10,
+                                      trailing: self.grayContainer.trailingAnchor, trailingC: 0,
+                                      bottom: self.generateReportButton.bottomAnchor, bottomC: 0)
+        
+        self.generateReportButton.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
     }
 
     // MARK: Actions
-    @objc func openPDF(){
-        self.onOpenPDF?()
-    }
-    
     @objc func generateNewReport(){
         for node in self.nodes {
             let color = self.colors[Int.random(in: 0..<self.colors.count)]
@@ -151,14 +176,24 @@ class HomeViewController: UIViewController {
             self.onColorDecided?(node, color)
         }
         
-        if self.shareButton.alpha == 0 {
-            // once first generation is completed show the share button to render PDF
-            UIView.animate(withDuration: 0.3) {
-                self.shareButton.alpha = 1
-            }
-        }
+        self.onOpenPDF?()
     }
     
+    // MARK: TextFieldDelegate
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        self.activeTextView = nil
+        
+        return true
+    }
+    
+    // MARK: TextViewDelegate
+    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+        self.activeTextView = textView
+        
+        return true
+    }
+    
+    var activeTextView: UITextView?
     // MARK: Keyboard management
     @objc func adjustForKeyboard(notification: Notification) {
         guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
@@ -167,12 +202,15 @@ class HomeViewController: UIViewController {
         let keyboardViewEndFrame = keyboardScreenEndFrame
         
         if notification.name == UIResponder.keyboardWillShowNotification {
-            self.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.size.height, right: 0)
-            let bottomOffset = CGPoint(x: 0, y: keyboardViewEndFrame.size.height - (self.view.frame.maxY - (self.randomizeButton.frame.maxY + 40)))
-            self.scrollView.setContentOffset(bottomOffset, animated: true)
+            if activeTextView == self.notesTextView {
+                let heightToAdd = keyboardViewEndFrame.size.height - (self.view.frame.maxY - self.notesTextView.frame.maxY) + 40
+                self.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: heightToAdd, right: 0)
+                let bottomOffset = CGPoint(x: 0, y: heightToAdd)
+                self.scrollView.setContentOffset(bottomOffset, animated: true)
+            }
         }else{
             UIView.animate(withDuration: 0.3) {
-                self.scrollView.contentInset = .zero
+                self.scrollView.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
             }
         }
     }
