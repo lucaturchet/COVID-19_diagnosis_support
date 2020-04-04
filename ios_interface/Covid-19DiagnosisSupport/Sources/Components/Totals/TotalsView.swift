@@ -41,7 +41,7 @@ class TotalsView: UIView {
         super.init(frame: frame)
         
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.backgroundColor = UIColor.FlatColors.totalsGray
+        self.backgroundColor = UIColor.DynamicColors.whiteBlack
         self.layer.borderWidth = 1
         self.layer.borderColor = UIColor.FlatColors.borderGray.cgColor
         
@@ -61,14 +61,14 @@ class TotalsView: UIView {
                                   trailing: self.trailingAnchor, trailingC: -5,
                                   bottom: self.bottomAnchor, bottomC: -5)
         
-        self.legendaSetup()
+        self.totalsSetup()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func legendaSetup(){
+    private func totalsSetup(){
         let colors: [UIColor] = [.white,
                                  UIColor.FlatColors.yellow,
                                  UIColor.FlatColors.brown,
@@ -76,9 +76,19 @@ class TotalsView: UIView {
                                  UIColor.FlatColors.darkGray]
         for i in 0...3 {
             let row = LegendaRowView()
-            row.viewSetup(color: colors[i], text: "Score \(i)")
+            row.viewSetup(color: colors[i], text: "\(i)")
+            row.label.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.bold)
             self.stackView.addArrangedSubview(row)
         }
     }
 
+    func blockColors(){
+        self.backgroundColor = UIColor.FlatColors.totalsGray
+        self.label.textColor = .black
+        self.subLabel.textColor = .black
+        
+        for view in self.stackView.arrangedSubviews {
+            (view as! LegendaRowView).blockColors()
+        }
+    }
 }

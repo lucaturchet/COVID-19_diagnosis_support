@@ -33,7 +33,8 @@ class LegendaView: UIView {
         super.init(frame: frame)
         
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.backgroundColor = .white
+        self.backgroundColor = UIColor.systemGray4
+        
         self.layer.borderWidth = 1
         self.layer.borderColor = UIColor.FlatColors.borderGray.cgColor
         
@@ -69,6 +70,15 @@ class LegendaView: UIView {
         let last = LegendaRowView()
         last.viewSetup(color: colors.last!, text: "Not measured")
         self.stackView.addArrangedSubview(last)
+    }
+    
+    func blockColors(){
+        self.backgroundColor = .white
+        self.label.textColor = .black
+        
+        for view in self.stackView.arrangedSubviews {
+            (view as! LegendaRowView).blockColors()
+        }
     }
 }
 
@@ -115,4 +125,7 @@ class LegendaRowView: UIView {
         self.label.text = text
     }
     
+    func blockColors(){
+        self.label.textColor = .black
+    }
 }

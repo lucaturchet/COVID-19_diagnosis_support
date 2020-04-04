@@ -109,4 +109,15 @@ class UserForm: UIView {
         currentLabel.text = "21 Oct 1962"
         self.fieldStackView.addArrangedSubview(currentLabel)
     }
+    
+    func blockColors(){
+        self.dateTitle.textColor = .black
+        self.dateField.textColor = .black
+        for view in self.titleStackView.arrangedSubviews {
+            (view as! UILabel).textColor = .black
+        }
+        for view in self.fieldStackView.arrangedSubviews {
+            (view as! UILabel).textColor = .black
+        }
+    }
 }

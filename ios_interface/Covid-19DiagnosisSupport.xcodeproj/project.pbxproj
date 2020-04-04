@@ -10,9 +10,10 @@
 		12E7A755E955CF6264189DE2 /* libPods-Covid-19DiagnosisSupport.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5C870E98A84CD7566366DC9 /* libPods-Covid-19DiagnosisSupport.a */; };
 		815E4B8B2438E09F009379E2 /* LegendaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815E4B8A2438E09F009379E2 /* LegendaView.swift */; };
 		815E4B8D2438E809009379E2 /* TotalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815E4B8C2438E809009379E2 /* TotalsView.swift */; };
+		815E4B912438F1B1009379E2 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815E4B902438F1B1009379E2 /* HomeViewController.swift */; };
 		81A03B3E24276F520079CA53 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A03B3D24276F520079CA53 /* AppDelegate.swift */; };
 		81A03B4024276F520079CA53 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A03B3F24276F520079CA53 /* SceneDelegate.swift */; };
-		81A03B4224276F520079CA53 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A03B4124276F520079CA53 /* ViewController.swift */; };
+		81A03B4224276F520079CA53 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A03B4124276F520079CA53 /* MainViewController.swift */; };
 		81A03B4724276F540079CA53 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81A03B4624276F540079CA53 /* Assets.xcassets */; };
 		81A03B4A24276F540079CA53 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81A03B4824276F540079CA53 /* LaunchScreen.storyboard */; };
 		81A03B53242778090079CA53 /* AnchorsExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A03B52242778090079CA53 /* AnchorsExtensions.swift */; };
@@ -26,10 +27,11 @@
 		551DD2ED014710A425A7845B /* Pods-Covid-19DiagnosisSupport.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Covid-19DiagnosisSupport.release.xcconfig"; path = "Target Support Files/Pods-Covid-19DiagnosisSupport/Pods-Covid-19DiagnosisSupport.release.xcconfig"; sourceTree = "<group>"; };
 		815E4B8A2438E09F009379E2 /* LegendaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegendaView.swift; sourceTree = "<group>"; };
 		815E4B8C2438E809009379E2 /* TotalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalsView.swift; sourceTree = "<group>"; };
+		815E4B902438F1B1009379E2 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		81A03B3A24276F520079CA53 /* Covid-19DiagnosisSupport.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Covid-19DiagnosisSupport.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81A03B3D24276F520079CA53 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		81A03B3F24276F520079CA53 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		81A03B4124276F520079CA53 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		81A03B4124276F520079CA53 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		81A03B4624276F540079CA53 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		81A03B4924276F540079CA53 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		81A03B4B24276F540079CA53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -76,6 +78,14 @@
 				815E4B8C2438E809009379E2 /* TotalsView.swift */,
 			);
 			path = Totals;
+			sourceTree = "<group>";
+		};
+		815E4B8F2438F1A4009379E2 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				815E4B902438F1B1009379E2 /* HomeViewController.swift */,
+			);
+			path = Home;
 			sourceTree = "<group>";
 		};
 		81A03B3124276F520079CA53 = {
@@ -132,6 +142,7 @@
 		81A03B55242778740079CA53 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				815E4B8F2438F1A4009379E2 /* Home */,
 				81A03B5A24277FA30079CA53 /* Main */,
 			);
 			path = Screens;
@@ -159,7 +170,7 @@
 		81A03B5A24277FA30079CA53 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				81A03B4124276F520079CA53 /* ViewController.swift */,
+				81A03B4124276F520079CA53 /* MainViewController.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -289,8 +300,9 @@
 				81A03B53242778090079CA53 /* AnchorsExtensions.swift in Sources */,
 				81A03B5824277B160079CA53 /* ColorsExtensions.swift in Sources */,
 				81E712B02427DA1C009BF466 /* PDFTemplateView.swift in Sources */,
-				81A03B4224276F520079CA53 /* ViewController.swift in Sources */,
+				81A03B4224276F520079CA53 /* MainViewController.swift in Sources */,
 				81E712B32427DB4C009BF466 /* UserForm.swift in Sources */,
+				815E4B912438F1B1009379E2 /* HomeViewController.swift in Sources */,
 				81A03B3E24276F520079CA53 /* AppDelegate.swift in Sources */,
 				815E4B8D2438E809009379E2 /* TotalsView.swift in Sources */,
 				81A03B4024276F520079CA53 /* SceneDelegate.swift in Sources */,
