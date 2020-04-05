@@ -15,18 +15,55 @@ import threading
 import traceback
 import subprocess
 import re
+import urllib.parse as urlparse
+from urllib.parse import parse_qs
 from reportlab.pdfgen import canvas
 from classifiers import TFClassifier
 from utilities import customize_report, export_pdf, export_html, generate_output_html, Calendar, ClickableQLabel
-from PyQt5.QtWidgets import QApplication, QSizePolicy, QWidget, QVBoxLayout, QPushButton, QFileDialog, QLabel, QDialog, QGridLayout, QFrame, QLineEdit, QTextEdit, QRubberBand, QMessageBox
+from PyQt5.QtWidgets import QApplication, QSizePolicy, QWidget, QVBoxLayout, QPushButton, QFileDialog, QLabel, QDialog, QGridLayout, QFrame, QLineEdit, QTextEdit, QRubberBand, QMessageBox, QMainWindow
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtCore import pyqtSlot, QThreadPool, QRunnable, QObject, pyqtSignal, Qt, QSize, QPoint, QRect
-from PyQt5.QtWebEngineWidgets import QWebEngineView
+from PyQt5.QtCore import pyqtSlot, QThreadPool, QRunnable, QObject, pyqtSignal, Qt, QSize, QPoint, QRect, QUrl
+from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 
+
+class ClickableWebPage(QWebEnginePage):
+    def __init__(self,parent=None):
+        super(ClickableWebPage,self).__init__(parent)
+        self.signals = AreaSignals()
+
+    @pyqtSlot()
+    def acceptNavigationRequest(self, url, type, isMainFrame):
+        result = super(ClickableWebPage,self).acceptNavigationRequest(url, type, isMainFrame)
+
+        parsed = urlparse.urlparse(url.toString())
+        valsDict = parse_qs(parsed.query)
+        if 'id' in valsDict.keys():
+            id = valsDict['id'][0]
+            self.signals.id.emit(id)
+            print("Clicked area "+id)
+
+        return result
+
+
+class VideoCropWindow(QMainWindow):
+    def __init__(self, parent=None):
+        super(VideoCropWindow, self).__init__(parent)
+        self.init_ui()
+
+    def init_ui(self):
+        self.setGeometry(50, 50, 100, 100)
+        self.setWindowTitle('Crop Video') 
+        self.setMaximumWidth(1280)
+        self.setMaximumHeight(1280)
+
+
+class AreaSignals(QObject):
+    id = pyqtSignal(str)
 
 
 class WorkerSignals(QObject):
     result = pyqtSignal(str)
+
 
 class VideoView(QLabel):
 
@@ -35,7 +72,7 @@ class VideoView(QLabel):
         QLabel.__init__(self, parent)
         self.rubberBand = QRubberBand(QRubberBand.Rectangle, self)
         self.origin = QPoint()
-        self.minSquareSide = 100
+        self.minSquareSide = 256
     
     def mousePressEvent(self, event):
     
@@ -54,13 +91,23 @@ class VideoView(QLabel):
             # get minimum side of selection to make square
             width = abs(newPoint.x() - self.origin.x())
             height = abs(newPoint.y() - self.origin.y())
-            side = max(self.minSquareSide,min(width,height))
+            #side = max(self.minSquareSide,min(width,height))
+            side = min(width,height)
 
             self.rubberBand.setGeometry(QRect(self.origin, QPoint(self.origin.x()+side, self.origin.y()+side)).normalized())
 
     
     def mouseReleaseEvent(self, event):
-        print("end selection")
+        newPoint = QPoint(event.pos())
+        width = abs(newPoint.x() - self.origin.x())
+        height = abs(newPoint.y() - self.origin.y())
+
+        side = min(width,height)
+
+        if(side < self.minSquareSide):
+            side = self.minSquareSide
+            self.rubberBand.setGeometry(QRect(self.origin, QPoint(self.origin.x()+side, self.origin.y()+side)).normalized())
+
         #if event.button() == Qt.LeftButton:
         #    self.rubberBand.hide()
 
@@ -131,6 +178,7 @@ class App(QWidget):
 
         self.tmp_dir = os.getcwd()+"/tmp"
         self.lungs_image = os.getcwd()+"/resources/lungs.svg"
+        self.lungs_image_page = os.getcwd()+"/resources/image_webView.html"
         # Mac
         self.ffmpeg_bin = os.getcwd()+"/bin/ffmpeg"
         # Windows
@@ -349,18 +397,28 @@ class App(QWidget):
 
         
         self.webview = QWebEngineView(None)
-        # self.webview.setHtml(self.html)
+        self.webpage = ClickableWebPage()
+        self.webview.setPage(self.webpage)
+
+        self.webview.load(QUrl("file://"+self.lungs_image_page))
+        self.webpage.signals.id.connect(self.choose_video_file)
+
         layout.addWidget(self.webview, 0, 1)
-        self.webview.hide()
+        self.webview.show()
 
 
+        self.video_crop_window = VideoCropWindow(self)
+        self.video_crop_window.layout = QVBoxLayout()
 
         # show video frame for cropping
         panel_video = QVBoxLayout()
         self.panel_video_frame = QFrame()
         self.panel_video_frame.setLayout(panel_video)
 
-        layout.addWidget(self.panel_video_frame, 0, 1)
+        #layout.addWidget(self.panel_video_frame, 0, 1)
+        self.video_crop_window.layout.addWidget(self.panel_video_frame)
+        self.video_crop_window.setCentralWidget(self.panel_video_frame)
+        self.video_crop_window.setLayout(self.video_crop_window.layout)
 
         self.video_label = VideoView()
         #self.video_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -374,33 +432,32 @@ class App(QWidget):
         panel_video.addWidget(self.video_label)
 
         self.crop_btn = QPushButton(text="CROP VIDEO")
-        self.crop_btn.setFixedWidth(self.video_label_width)
         self.crop_btn.setFixedHeight(button_height)
         self.crop_btn.setStyleSheet(button_style)
         self.crop_btn.clicked.connect(self.crop_video)
 
         panel_video.addWidget(self.crop_btn)
         
-        self.panel_video_frame.hide()
+        #self.panel_video_frame.hide()
 
 
-        panel_lungs = QVBoxLayout()
-        self.panel_lungs_frame = QFrame()
-        self.panel_lungs_frame.setLayout(panel_lungs)
-        # create view to show lung clickable areas
-        self.lungs_image_label = ClickableQLabel()
-        #TODO load from relative path
-        pixmap = QPixmap(self.lungs_image)
-        self.lungs_image_label.setPixmap(pixmap)
-        self.lungs_image_label.setScaledContents(True)
-        self.lungs_image_label.setMinimumSize(1,1)
+        # panel_lungs = QVBoxLayout()
+        # self.panel_lungs_frame = QFrame()
+        # self.panel_lungs_frame.setLayout(panel_lungs)
+        # # create view to show lung clickable areas
+        # self.lungs_image_label = ClickableQLabel()
+        # #TODO load from relative path
+        # pixmap = QPixmap(self.lungs_image)
+        # self.lungs_image_label.setPixmap(pixmap)
+        # self.lungs_image_label.setScaledContents(True)
+        # self.lungs_image_label.setMinimumSize(1,1)
 
-        self.lungs_image_label.clicked.connect(self.choose_video_file)
+        # self.lungs_image_label.clicked.connect(self.choose_video_file)
 
-        panel_lungs.addWidget(self.lungs_image_label)
-        layout.addWidget(self.panel_lungs_frame, 0, 1)
+        # panel_lungs.addWidget(self.lungs_image_label)
+        # layout.addWidget(self.panel_lungs_frame, 0, 1)
 
-        self.panel_lungs_frame.show()
+        # self.panel_lungs_frame.show()
 
         note_layout = QVBoxLayout()
         n_header = QLabel("Notes of the clinician")
@@ -451,21 +508,16 @@ class App(QWidget):
         worker.signals.result.connect(self.process_result)
         self.threadpool.start(worker)
 
-    @pyqtSlot()
-    def choose_video_file(self):
+
+    def choose_video_file(self, areaID):
         """ Opens the file chooser and starts processing in a separate thread """
         dialogResult = QFileDialog.getOpenFileName(self,"Open Video", ".", "Video Files (*.MOV *.mov *.AVI *.avi)")
 
-        print("DIALOG RESULT")
-        print(dialogResult[0])
         if len(dialogResult[0]) == 0:
             return
 
-
         self.video_file_path = dialogResult[0]
         self.frame_path = ""
-        print("video_file_path")
-        print(self.video_file_path)
         self.extract_video_frame(self.video_file_path)
 
 
@@ -569,7 +621,7 @@ class App(QWidget):
 
 
         if(self.frame_path != ""):
-            self.lungs_image_label.hide()
+            #self.lungs_image_label.hide()
 
             pixmap = QPixmap(self.frame_path)
             # calculate a view that preserves aspect ratio of video frame
@@ -577,15 +629,19 @@ class App(QWidget):
             #video_label_width = self.right_column_width - (self.left / 2)
             video_label_height = int((video_aspect_ratio*self.video_label_width))
 
-            self.video_label.setFixedWidth(self.video_label_width)
-            self.video_label.setFixedHeight(video_label_height)
+            self.video_label.setFixedWidth(pixmap.width())
+            self.video_label.setFixedHeight(pixmap.height())
+            self.crop_btn.setFixedWidth(pixmap.width())
+            # set window size too
+
             self.video_label.minSquareSide = int(self.video_label_width/(pixmap.width())*self.minImageCropSize)
 
-            self.panel_lungs_frame.hide()
+            #self.panel_lungs_frame.hide()
             self.video_label.setPixmap(pixmap)
-            self.panel_video_frame.show()
-            self.panel_video_frame.raise_()
+            #self.panel_video_frame.show()
+            #self.panel_video_frame.raise_()
             self.panel_video_frame.setFocus()
+            self.video_crop_window.show()
 
 
     def crop_video(self):
@@ -639,7 +695,7 @@ class App(QWidget):
             new_video_name
         ]
 
-        videoworker = VideoWorker(commandStringList, "Cropped video exported", "Error exporting cropped video")
+        videoworker = VideoWorker(commandStringList, "success", "Error exporting cropped video")
         videoworker.signals.result.connect(self.process_video_crop_result)
         self.threadpool.start(videoworker)
 
@@ -647,16 +703,18 @@ class App(QWidget):
     def process_video_crop_result(self, task):
         """ Retrieves the output of a task """
         task_dict = json.loads(task)
-        QMessageBox.about(self, "Crop Result", task_dict["value"])
+        if(task_dict["value"] != "success" ):
+            QMessageBox.about(self, "Crop Result", task_dict["value"])
 
         # clean tmp folder 
         self.delete_folder_contents(self.tmp_dir)
 
-        self.panel_video_frame.hide()
-        self.panel_lungs_frame.show()
-        self.panel_lungs_frame.raise_()
-        self.panel_lungs_frame.setFocus()
-        self.lungs_image_label.show()
+        self.video_crop_window.hide()
+
+        dir = os.path.dirname(self.video_file_path)
+        worker = Worker(dir, TFClassifier)
+        worker.signals.result.connect(self.process_result)
+        self.threadpool.start(worker)
 
 
     #TODO put in utils    
