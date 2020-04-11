@@ -50,7 +50,6 @@ class UserForm: UIView {
         self.translatesAutoresizingMaskIntoConstraints = false
         
         self.createTitles()
-        self.createFields()
         
         self.addSubview(self.titleStackView)
         self.titleStackView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
@@ -96,20 +95,29 @@ class UserForm: UIView {
         self.titleStackView.addArrangedSubview(currentLabel)
     }
     
-    private func createFields(){
+    private func createFields(patient: PatientReport){
         var currentLabel = UILabel()
-        currentLabel.text = "Mario"
+        currentLabel.text = patient.name
         self.fieldStackView.addArrangedSubview(currentLabel)
         
         currentLabel = UILabel()
-        currentLabel.text = "Rossi"
+        currentLabel.text = patient.lastName
         self.fieldStackView.addArrangedSubview(currentLabel)
         
         currentLabel = UILabel()
-        currentLabel.text = "21 Oct 1962"
+        currentLabel.text = patient.dateOfBirth
         self.fieldStackView.addArrangedSubview(currentLabel)
     }
     
+    func setData(patient: PatientReport){
+        for view in self.fieldStackView.arrangedSubviews {
+            view.removeFromSuperview()
+        }
+        self.createFields(patient: patient)
+        self.dateField.text = patient.dateOfAcquisition
+    }
+    
+    // MARK: utils
     func blockColors(){
         self.dateTitle.textColor = .black
         self.dateField.textColor = .black

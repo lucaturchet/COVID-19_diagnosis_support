@@ -24,9 +24,9 @@ class MainViewController: UIViewController, UIDocumentInteractionControllerDeleg
     static let yellow = Color.init(val: 0xFFE23B)
     static let gray = Color.init(val: 0x7D7C7C)
     let colors = [Color.white,
-                  MainViewController.red,
                   MainViewController.yellow,
                   MainViewController.brown,
+                  MainViewController.red,
                   MainViewController.gray]
     
     // nodes IDs of each SVG path // (the associated color is mocked for demonstration)
@@ -56,7 +56,8 @@ class MainViewController: UIViewController, UIDocumentInteractionControllerDeleg
         
         self.home.colors = self.colors
         self.home.nodes = self.nodes
-        self.home.onOpenPDF = {
+        self.home.onOpenPDF = {patient, areas, notes in
+            self.viewToRenderAsPDF.setData(patient: patient, decidedAreas: areas, notes: notes)
             self.renderPDF()
         }
         self.home.onColorDecided = {nodeTag, color in

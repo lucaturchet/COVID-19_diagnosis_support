@@ -9,13 +9,21 @@
 import UIKit
 import Macaw
 
-class HomeViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate {
+struct PatientReport {
+    var name: String
+    var lastName: String
+    var dateOfBirth: String
+    var dateOfAcquisition: String
+}
+
+class HomeViewController: UIViewController, UITextViewDelegate {
 
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.clipsToBounds = false
         scrollView.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
+        scrollView.showsVerticalScrollIndicator = false
         return scrollView
     }()
     
@@ -76,14 +84,14 @@ class HomeViewController: UIViewController, UITextViewDelegate, UITextFieldDeleg
         view.backgroundColor = .white
         view.layer.borderColor = UIColor.FlatColors.borderGray.cgColor
         view.layer.borderWidth = 1
-        view.text = "Here the clinician can add a general comment on the findings..."
+//        view.text = "Here the clinician can add a general comment on the findings..."
         
         return view
     }()
     
     var colors: [Color] = []
     var nodes: [String] = []
-    var onOpenPDF: (() -> ())?
+    var onOpenPDF: ((_ patient: PatientReport, _ areas: [Int], _ notes: String) -> ())?
     var onColorDecided: ((_ nodeTag: String, _ color: Color) -> ())?
     
     override func viewDidLoad() {
@@ -91,8 +99,6 @@ class HomeViewController: UIViewController, UITextViewDelegate, UITextFieldDeleg
         
         self.view.backgroundColor = UIColor.systemGray6
         
-        self.form.dateOfBirthTextField.delegate = self
-        self.form.dateOfAcquisitionTextField.delegate = self
         self.notesTextView.delegate = self
         
         // keyboard management
@@ -113,13 +119,15 @@ class HomeViewController: UIViewController, UITextViewDelegate, UITextFieldDeleg
                                    trailing: self.view.trailingAnchor, trailingC: -40,
                                    bottom: self.view.safeAreaLayoutGuide.bottomAnchor, bottomC: 0)
         
-        self.scrollView.addSubview(self.form)
-        self.form.anchorViewTopLeft(top: self.scrollView.topAnchor, topC: 0,
-                                    leading: self.scrollView.leadingAnchor, leadingC: 0,
-                                    width: 180, height: 260)
+        self.addChild(self.form)
+        self.scrollView.addSubview(self.form.view)
+        self.form.view.anchorViewTopLeft(top: self.scrollView.topAnchor, topC: 0,
+                                         leading: self.scrollView.leadingAnchor, leadingC: 0,
+                                         width: 180, height: 260)
+        self.form.didMove(toParent: self)
         
         self.scrollView.addSubview(self.legenda)
-        self.legenda.anchorViewTopLeft(top: self.form.bottomAnchor, topC: 10,
+        self.legenda.anchorViewTopLeft(top: self.form.view.bottomAnchor, topC: 10,
                                        leading: self.scrollView.leadingAnchor, leadingC: 0,
                                        width: 180, height: 220)
         
@@ -169,21 +177,20 @@ class HomeViewController: UIViewController, UITextViewDelegate, UITextFieldDeleg
 
     // MARK: Actions
     @objc func generateNewReport(){
+        var decided: [Int] = Array.init(repeating: 0, count: self.colors.count - 1)
         for node in self.nodes {
-            let color = self.colors[Int.random(in: 0..<self.colors.count)]
+            let index = Int.random(in: 0..<self.colors.count)
+            if index != 4 {
+                decided[index] += 1
+            }
+            let color = self.colors[index]
             //Change node color
             self.lungsSVGView.changeNodeColor(nodeTag: node, nodeColor: color)
             self.onColorDecided?(node, color)
         }
         
-        self.onOpenPDF?()
-    }
-    
-    // MARK: TextFieldDelegate
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        self.activeTextView = nil
-        
-        return true
+        self.totals.setAreas(decided: decided)
+        self.onOpenPDF?(self.form.getPatient(), decided, self.notesTextView.text)
     }
     
     // MARK: TextViewDelegate
@@ -191,6 +198,10 @@ class HomeViewController: UIViewController, UITextViewDelegate, UITextFieldDeleg
         self.activeTextView = textView
         
         return true
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        self.activeTextView = nil
     }
     
     var activeTextView: UITextView?
@@ -202,9 +213,10 @@ class HomeViewController: UIViewController, UITextViewDelegate, UITextFieldDeleg
         let keyboardViewEndFrame = keyboardScreenEndFrame
         
         if notification.name == UIResponder.keyboardWillShowNotification {
-            if activeTextView == self.notesTextView {
+            if self.activeTextView == self.notesTextView {
+                self.scrollView.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: keyboardViewEndFrame.size.height + 40, right: 0)
+                
                 let heightToAdd = keyboardViewEndFrame.size.height - (self.view.frame.maxY - self.notesTextView.frame.maxY) + 40
-                self.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: heightToAdd, right: 0)
                 let bottomOffset = CGPoint(x: 0, y: heightToAdd)
                 self.scrollView.setContentOffset(bottomOffset, animated: true)
             }

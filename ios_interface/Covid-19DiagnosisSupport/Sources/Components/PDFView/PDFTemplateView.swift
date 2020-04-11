@@ -111,6 +111,12 @@ class PDFTemplateView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func setData(patient: PatientReport, decidedAreas: [Int], notes: String){
+        self.userForm.setData(patient: patient)
+        self.totals.setAreas(decided: decidedAreas)
+        self.notesTextView.text = notes
+    }
 }
 
 extension PDFTemplateView {

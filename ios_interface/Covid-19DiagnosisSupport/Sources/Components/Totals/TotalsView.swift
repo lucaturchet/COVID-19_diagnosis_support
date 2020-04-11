@@ -76,9 +76,17 @@ class TotalsView: UIView {
                                  UIColor.FlatColors.darkGray]
         for i in 0...3 {
             let row = LegendaRowView()
-            row.viewSetup(color: colors[i], text: "\(i)")
+            row.viewSetup(color: colors[i], text: "0")
             row.label.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.bold)
             self.stackView.addArrangedSubview(row)
+        }
+    }
+    
+    func setAreas(decided: [Int]) {
+        for (index, view) in self.stackView.arrangedSubviews.enumerated() {
+            if let legend = view as? LegendaRowView {
+                legend.label.text = "\(decided[index])"
+            }
         }
     }
 
@@ -91,4 +99,5 @@ class TotalsView: UIView {
             (view as! LegendaRowView).blockColors()
         }
     }
+    
 }

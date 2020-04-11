@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FillableUserForm: UIView {
+class FillableUserForm: UIViewController, UITextFieldDelegate {
 
     let nameTitleLabel: UILabel = {
         let label = UILabel()
@@ -61,7 +61,9 @@ class FillableUserForm: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.borderWidth = 1
         view.layer.borderColor = UIColor.FlatColors.borderGray.cgColor
-        
+        view.placeholder = "dd/mm/aaaa"
+        view.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 50))
+        view.leftViewMode = .always
         return view
     }()
     
@@ -85,80 +87,127 @@ class FillableUserForm: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.borderWidth = 1
         view.layer.borderColor = UIColor.FlatColors.borderGray.cgColor
-        
+        view.placeholder = "dd/mm/aaaa"
+        view.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 50))
+        view.leftViewMode = .always
         return view
     }()
     
+    let datePicker = UIDatePicker()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override func viewDidLoad() {
         
-        self.translatesAutoresizingMaskIntoConstraints = false
-        self.backgroundColor = UIColor.DynamicColors.whiteBlack
-        self.layer.borderWidth = 1
-        self.layer.borderColor = UIColor.FlatColors.borderGray.cgColor
+        self.view.translatesAutoresizingMaskIntoConstraints = false
+        self.view.backgroundColor = UIColor.DynamicColors.whiteBlack
+        self.view.layer.borderWidth = 1
+        self.view.layer.borderColor = UIColor.FlatColors.borderGray.cgColor
         
-        self.addSubview(self.nameTitleLabel)
-        self.nameTitleLabel.anchorViewTop(top: self.topAnchor, topC: 10,
-                                          leading: self.leadingAnchor, leadingC: 5,
-                                          trailing: self.trailingAnchor, trailingC: -5,
+        // set date picker
+        self.datePicker.translatesAutoresizingMaskIntoConstraints = false
+        self.datePicker.datePickerMode = .date
+        
+        let endBtn = UIBarButtonItem(title: "Fine",
+                                     style: .done,
+                                     target: self,
+                                     action: #selector(dismissKeyboard))
+        
+        let endEditingBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 0, height: 40))
+        let emptySpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        endEditingBar.items = [emptySpace, endBtn]
+        
+        self.dateOfBirthTextField.inputAccessoryView = endEditingBar
+        self.dateOfBirthTextField.inputView = self.datePicker
+        self.dateOfBirthTextField.delegate = self
+        
+        self.dateOfAcquisitionTextField.inputAccessoryView = endEditingBar
+        self.dateOfAcquisitionTextField.inputView = self.datePicker
+        self.dateOfAcquisitionTextField.delegate = self
+                    
+        self.view.addSubview(self.nameTitleLabel)
+        self.nameTitleLabel.anchorViewTop(top: self.view.topAnchor, topC: 10,
+                                          leading: self.view.leadingAnchor, leadingC: 5,
+                                          trailing: self.view.trailingAnchor, trailingC: -5,
                                           height: nil)
         
-        self.addSubview(self.nameTextField)
+        self.view.addSubview(self.nameTextField)
         self.nameTextField.anchorViewTop(top: self.nameTitleLabel.bottomAnchor, topC: 0,
-                                         leading: self.leadingAnchor, leadingC: 5,
-                                         trailing: self.trailingAnchor, trailingC: -5,
+                                         leading: self.view.leadingAnchor, leadingC: 5,
+                                         trailing: self.view.trailingAnchor, trailingC: -5,
                                          height: 30)
         
-        self.addSubview(self.surnameTitleLabel)
+        self.view.addSubview(self.surnameTitleLabel)
         self.surnameTitleLabel.anchorViewTop(top: self.nameTextField.bottomAnchor, topC: 10,
-                                          leading: self.leadingAnchor, leadingC: 5,
-                                          trailing: self.trailingAnchor, trailingC: -5,
+                                          leading: self.view.leadingAnchor, leadingC: 5,
+                                          trailing: self.view.trailingAnchor, trailingC: -5,
                                           height: nil)
         
-        self.addSubview(self.surnameTextField)
+        self.view.addSubview(self.surnameTextField)
         self.surnameTextField.anchorViewTop(top: self.surnameTitleLabel.bottomAnchor, topC: 0,
-                                         leading: self.leadingAnchor, leadingC: 5,
-                                         trailing: self.trailingAnchor, trailingC: -5,
+                                         leading: self.view.leadingAnchor, leadingC: 5,
+                                         trailing: self.view.trailingAnchor, trailingC: -5,
                                          height: 30)
         
-        self.addSubview(self.dateOfBirthTitleLabel)
+        self.view.addSubview(self.dateOfBirthTitleLabel)
         self.dateOfBirthTitleLabel.anchorViewTop(top: self.surnameTextField.bottomAnchor, topC: 10,
-                                                 leading: self.leadingAnchor, leadingC: 5,
-                                                 trailing: self.trailingAnchor, trailingC: -5,
+                                                 leading: self.view.leadingAnchor, leadingC: 5,
+                                                 trailing: self.view.trailingAnchor, trailingC: -5,
                                                  height: nil)
         
-        self.addSubview(self.dateOfBirthIcon)
+        self.view.addSubview(self.dateOfBirthIcon)
         self.dateOfBirthIcon.anchorViewTopLeft(top: self.dateOfBirthTitleLabel.bottomAnchor, topC: 0,
-                                               leading: self.leadingAnchor, leadingC: 5,
+                                               leading: self.view.leadingAnchor, leadingC: 5,
                                                width: 30, height: 30)
         
-        self.addSubview(self.dateOfBirthTextField)
+        self.view.addSubview(self.dateOfBirthTextField)
         self.dateOfBirthTextField.anchorViewLeft(centerY: self.dateOfBirthIcon.centerYAnchor,
                                                  leading: self.dateOfBirthIcon.trailingAnchor, leadingC: 5,
-                                                 trailing: self.trailingAnchor, trailingC: -5,
+                                                 trailing: self.view.trailingAnchor, trailingC: -5,
                                                  width: nil, height: 30)
         
-        self.addSubview(self.dateOfAcquisitionTitleLabel)
+        self.view.addSubview(self.dateOfAcquisitionTitleLabel)
         self.dateOfAcquisitionTitleLabel.anchorViewTop(top: self.dateOfBirthTextField.bottomAnchor, topC: 10,
-                                                 leading: self.leadingAnchor, leadingC: 5,
-                                                 trailing: self.trailingAnchor, trailingC: -5,
+                                                 leading: self.view.leadingAnchor, leadingC: 5,
+                                                 trailing: self.view.trailingAnchor, trailingC: -5,
                                                  height: nil)
         
-        self.addSubview(self.dateOfAcquisitionIcon)
+        self.view.addSubview(self.dateOfAcquisitionIcon)
         self.dateOfAcquisitionIcon.anchorViewTopLeft(top: self.dateOfAcquisitionTitleLabel.bottomAnchor, topC: 0,
-                                               leading: self.leadingAnchor, leadingC: 5,
+                                               leading: self.view.leadingAnchor, leadingC: 5,
                                                width: 30, height: 30)
         
-        self.addSubview(self.dateOfAcquisitionTextField)
+        self.view.addSubview(self.dateOfAcquisitionTextField)
         self.dateOfAcquisitionTextField.anchorViewLeft(centerY: self.dateOfAcquisitionIcon.centerYAnchor,
                                                  leading: self.dateOfAcquisitionIcon.trailingAnchor, leadingC: 5,
-                                                 trailing: self.trailingAnchor, trailingC: -5,
+                                                 trailing: self.view.trailingAnchor, trailingC: -5,
                                                  width: nil, height: 30)
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    func getPatient() -> PatientReport {
+        let name = self.nameTextField.text ?? ""
+        let lastName = self.surnameTextField.text ?? ""
+        let dateB = self.dateOfBirthTextField.text ?? ""
+        let dateA = self.dateOfAcquisitionTextField.text ?? ""
+        return PatientReport(name: name, lastName: lastName, dateOfBirth: dateB, dateOfAcquisition: dateA)
     }
     
+    // MARK: Actions
+    @objc func dismissKeyboard(){
+        self.view.endEditing(true)
+    }
+    
+    var activeTextField: UITextField?
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        self.activeTextField = textField
+    }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        self.activeTextField = nil
+    }
+    
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy"
+        
+        self.activeTextField?.text = formatter.string(from: self.datePicker.date)
+        return true
+    }
 }
