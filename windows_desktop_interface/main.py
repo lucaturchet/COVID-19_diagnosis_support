@@ -34,13 +34,13 @@ class ClickableWebPage(QWebEnginePage):
     @pyqtSlot()
     def acceptNavigationRequest(self, url, type, isMainFrame):
         result = super(ClickableWebPage,self).acceptNavigationRequest(url, type, isMainFrame)
-
+        #print("Clicked url: "+ url.toString())
         parsed = urlparse.urlparse(url.toString())
         valsDict = parse_qs(parsed.query)
         if 'id' in valsDict.keys():
             id = valsDict['id'][0]
             self.signals.id.emit(id)
-            print("Clicked area "+id)
+            #print("Clicked area "+id)
 
         return result
 
@@ -91,7 +91,6 @@ class VideoView(QLabel):
             # get minimum side of selection to make square
             width = abs(newPoint.x() - self.origin.x())
             height = abs(newPoint.y() - self.origin.y())
-            #side = max(self.minSquareSide,min(width,height))
             side = min(width,height)
 
             self.rubberBand.setGeometry(QRect(self.origin, QPoint(self.origin.x()+side, self.origin.y()+side)).normalized())
@@ -107,9 +106,6 @@ class VideoView(QLabel):
         if(side < self.minSquareSide):
             side = self.minSquareSide
             self.rubberBand.setGeometry(QRect(self.origin, QPoint(self.origin.x()+side, self.origin.y()+side)).normalized())
-
-        #if event.button() == Qt.LeftButton:
-        #    self.rubberBand.hide()
 
 class Worker(QRunnable):
     '''
@@ -177,8 +173,10 @@ class App(QWidget):
         self.minImageCropSize   = 256 # min input size for neural network 
 
         self.tmp_dir = os.getcwd()+"/tmp"
-        self.lungs_image = os.getcwd()+"/resources/lungs.svg"
-        self.lungs_image_page = os.getcwd()+"/resources/image_webView.html"
+        self.lungs_template_page_name = "image_webView.html"
+        self.lungs_customized_page_name = "image_customized.html"
+        self.lungs_template_page = os.getcwd()+"/resources/"+self.lungs_template_page_name
+        self.lungs_customized_page = os.getcwd()+"/resources/"+self.lungs_customized_page_name
         # Mac
         self.ffmpeg_bin = os.getcwd()+"/bin/ffmpeg"
         # Windows
@@ -192,6 +190,9 @@ class App(QWidget):
         self.task = ""
 
         self.create_directory(self.tmp_dir)
+        # used when user wants to reset everything. Needed to choose the image file page to load
+        self.startNewSession = True
+        self.clickedAreaName = ""
 
 
     def init_ui(self):
@@ -225,17 +226,18 @@ class App(QWidget):
         clickable_label_style = "font-size: 17px; color: black; background-color:#ffffff; padding-left: 20px"
         button_height = 40
 
+        self.int_to_color_map      = {0: "white", 1: "yellow", 2: "orange", 3: "red", 4: "grey"}
 
         layout = QGridLayout()
 
         panel_top_left = QVBoxLayout()
 
-        self.open_btn = QPushButton(text="OPEN")
-        self.open_btn.setFixedHeight(button_height)
-        self.open_btn.setStyleSheet(button_style)
-        self.open_btn.clicked.connect(self.choose_file)
+        self.reset_btn = QPushButton(text="RESTART")
+        self.reset_btn.setFixedHeight(button_height)
+        self.reset_btn.setStyleSheet(button_style)
+        self.reset_btn.clicked.connect(self.reset_session)
 
-        panel_top_left.addWidget(self.open_btn)
+        panel_top_left.addWidget(self.reset_btn)
        
         registry = QVBoxLayout()
 
@@ -300,7 +302,6 @@ class App(QWidget):
         registry_frame.setLayout(registry)
         panel_top_left.addWidget(registry_frame)
         
-
         legend = QVBoxLayout()
         header_legend = QLabel("Legend")
         header_legend.setStyleSheet(header_style)
@@ -400,7 +401,7 @@ class App(QWidget):
         self.webpage = ClickableWebPage()
         self.webview.setPage(self.webpage)
 
-        self.webview.load(QUrl("file://"+self.lungs_image_page))
+        self.webpage.load(QUrl("file://"+self.lungs_template_page))
         self.webpage.signals.id.connect(self.choose_video_file)
 
         layout.addWidget(self.webview, 0, 1)
@@ -415,18 +416,12 @@ class App(QWidget):
         self.panel_video_frame = QFrame()
         self.panel_video_frame.setLayout(panel_video)
 
-        #layout.addWidget(self.panel_video_frame, 0, 1)
         self.video_crop_window.layout.addWidget(self.panel_video_frame)
         self.video_crop_window.setCentralWidget(self.panel_video_frame)
         self.video_crop_window.setLayout(self.video_crop_window.layout)
 
         self.video_label = VideoView()
-        #self.video_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        #self.video_label.setAlignment(Qt.AlignCenter)
-        #self.video_label.setGeometry(200, 0, 300, 200)
 
-
-        #self.video_label.setAlignment(Qt.AlignCenter)
         self.video_label.setScaledContents(True)
         self.video_label.setMinimumSize(1,1)
         panel_video.addWidget(self.video_label)
@@ -437,27 +432,6 @@ class App(QWidget):
         self.crop_btn.clicked.connect(self.crop_video)
 
         panel_video.addWidget(self.crop_btn)
-        
-        #self.panel_video_frame.hide()
-
-
-        # panel_lungs = QVBoxLayout()
-        # self.panel_lungs_frame = QFrame()
-        # self.panel_lungs_frame.setLayout(panel_lungs)
-        # # create view to show lung clickable areas
-        # self.lungs_image_label = ClickableQLabel()
-        # #TODO load from relative path
-        # pixmap = QPixmap(self.lungs_image)
-        # self.lungs_image_label.setPixmap(pixmap)
-        # self.lungs_image_label.setScaledContents(True)
-        # self.lungs_image_label.setMinimumSize(1,1)
-
-        # self.lungs_image_label.clicked.connect(self.choose_video_file)
-
-        # panel_lungs.addWidget(self.lungs_image_label)
-        # layout.addWidget(self.panel_lungs_frame, 0, 1)
-
-        # self.panel_lungs_frame.show()
 
         note_layout = QVBoxLayout()
         n_header = QLabel("Notes of the clinician")
@@ -511,32 +485,89 @@ class App(QWidget):
 
     def choose_video_file(self, areaID):
         """ Opens the file chooser and starts processing in a separate thread """
+
         dialogResult = QFileDialog.getOpenFileName(self,"Open Video", ".", "Video Files (*.MOV *.mov *.AVI *.avi)")
 
         if len(dialogResult[0]) == 0:
             return
 
+        self.clickedAreaName = areaID # to be used later in HTML substitution
         self.video_file_path = dialogResult[0]
         self.frame_path = ""
         self.extract_video_frame(self.video_file_path)
 
+    @pyqtSlot()
+    def reset_session(self):
+        """ In case user wants to start from scracth, template image webview page has to be loaded"""
+        self.startNewSession = True
+        # set the template page in the webView
+        self.webpage.load(QUrl("file://"+self.lungs_template_page))
+        # delete the customized page if present
+        if(os.path.exists(self.lungs_customized_page)):
+            os.remove(self.lungs_customized_page)
+
+
 
     def process_result(self, task):
         """ Retrieves the output of a task """
+
         task_dict = json.loads(task)
         self.task = task
-        html = customize_report("resources/image.html", task)
+        #html = customize_report("resources/image.html", task)
 
-        # Show output
-        self.html = html
-        self.webview.setHtml(self.html)
-        self.pathological_areas.setText("Pathological areas: <b>{}/14</b>".format(task_dict['pathological_areas']))
-        self.number_whites.setText(str(task_dict['n_score_0']))
-        self.number_yellow.setText(str(task_dict['n_score_1']))
-        self.number_orange.setText(str(task_dict['n_score_2']))
-        self.number_red.setText(str(task_dict['n_score_3']))
-        self.number_grey.setText(str(task_dict['n_not_measured']))
-        # Save to PDF
+        html = ""
+
+        if(self.startNewSession):
+            shutil.copy(self.lungs_template_page, self.lungs_customized_page)
+            self.startNewSession = False
+
+        with open(self.lungs_customized_page) as file:
+            html = "".join(file.readlines())
+
+        if len(html) == 0:
+            raise RuntimeError("The HTML template must not be empty")
+
+        if(self.clickedAreaName == ""):
+            raise RuntimeError("Clicked area name must not be empty")
+
+        newColorInt = task_dict[self.clickedAreaName[1:]]  # strip initial _ character
+        newColorClass = self.int_to_color_map[newColorInt] # must be same as in html CSS color class name
+
+        # find id attribute in HTML path tag to change color specifically for one area
+        matches = re.findall(r'<path id=\"'+self.clickedAreaName+'\" class=\"(.+?)\"', html)
+        
+        oldPath = ""
+        newPath = ""
+        paths = re.findall(r'<path.+?</path>', html)
+        for path in paths:
+            if(self.clickedAreaName in path):
+                oldPath = path
+                matches = re.findall(r'class=\"(.+?)\"', path)
+                if(len(matches) == 1):
+                    newPath = path.replace(matches[0], newColorClass)
+
+        if(oldPath != "" and newPath != ""):
+            html = html.replace(oldPath, newPath)
+
+            # replace in the template also the page name in the links
+            # TODO: do it only if it is start of new session
+            html = html.replace(self.lungs_template_page_name, self.lungs_customized_page_name)
+
+            self.html = html
+
+            export_html(html, self.lungs_customized_page)
+
+            self.webpage.load(QUrl("file://"+self.lungs_customized_page))
+
+            self.pathological_areas.setText("Pathological areas: <b>{}/14</b>".format(task_dict['pathological_areas']))
+            self.number_whites.setText(str(task_dict['n_score_0']))
+            self.number_yellow.setText(str(task_dict['n_score_1']))
+            self.number_orange.setText(str(task_dict['n_score_2']))
+            self.number_red.setText(str(task_dict['n_score_3']))
+            self.number_grey.setText(str(task_dict['n_not_measured']))
+        else:
+            raise RuntimeError("Error while customizing html template")
+
 
     def show_alert(self, task_dict, fields):
         """ Shows a generic alert. task_dict is a dictionary containing at least the "name" field and the one contained in fields """
@@ -609,7 +640,6 @@ class App(QWidget):
 
         task_dict = json.loads(task)
 
-
         if(task_dict["value"] == "success"):
             frame_basenames = sorted(
                 list(filter(re.compile(r'frame').search, os.listdir(self.tmp_dir))))
@@ -621,12 +651,10 @@ class App(QWidget):
 
 
         if(self.frame_path != ""):
-            #self.lungs_image_label.hide()
 
             pixmap = QPixmap(self.frame_path)
             # calculate a view that preserves aspect ratio of video frame
             video_aspect_ratio = pixmap.height() / pixmap.width()
-            #video_label_width = self.right_column_width - (self.left / 2)
             video_label_height = int((video_aspect_ratio*self.video_label_width))
 
             self.video_label.setFixedWidth(pixmap.width())
@@ -636,10 +664,7 @@ class App(QWidget):
 
             self.video_label.minSquareSide = int(self.video_label_width/(pixmap.width())*self.minImageCropSize)
 
-            #self.panel_lungs_frame.hide()
             self.video_label.setPixmap(pixmap)
-            #self.panel_video_frame.show()
-            #self.panel_video_frame.raise_()
             self.panel_video_frame.setFocus()
             self.video_crop_window.show()
 
@@ -664,23 +689,6 @@ class App(QWidget):
         videoFrameSpaceY = int((labelToVideoScaleHeight*labelY))
         videoFrameSpaceRight = int((labelToVideoScaleWidth*labelRight))
         videoFrameSpaceBottom = int((labelToVideoScaleHeight*labelBottom))
-
-        # DEBUG:
-        # print("Label width:"+str(self.video_label.width()))
-        # print("Label height:"+str(self.video_label.height()))
-        # print("Rect in label:")
-        # print(self.video_label.rubberBand.geometry().x())
-        # print(self.video_label.rubberBand.geometry().y())
-        # print(self.video_label.rubberBand.geometry().x()+self.video_label.rubberBand.geometry().width())
-        # print(self.video_label.rubberBand.geometry().y()+self.video_label.rubberBand.geometry().height())
-
-        # print("Video width:"+str(self.video_label.pixmap().width()))
-        # print("Video height:"+str(self.video_label.pixmap().height()))
-        # print("Rect in Video frame:")
-        # print(videoFrameSpaceX)
-        # print(videoFrameSpaceY)
-        # print(videoFrameSpaceRight)
-        # print(videoFrameSpaceBottom)
 
         pre, ext = os.path.splitext(self.video_file_path)
         new_video_name = pre+"_cropped"+ext
