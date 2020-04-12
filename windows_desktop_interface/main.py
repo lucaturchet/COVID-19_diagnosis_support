@@ -16,6 +16,7 @@ import traceback
 import subprocess
 import re
 import urllib.parse as urlparse
+from pathlib import Path
 from urllib.parse import parse_qs
 from reportlab.pdfgen import canvas
 from classifiers import TFClassifier
@@ -401,7 +402,7 @@ class App(QWidget):
         self.webpage = ClickableWebPage()
         self.webview.setPage(self.webpage)
 
-        self.webpage.load(QUrl("file://"+self.lungs_template_page))
+        self.webpage.load(QUrl(Path(self.lungs_template_page).absolute().as_uri()))
         self.webpage.signals.id.connect(self.choose_video_file)
 
         layout.addWidget(self.webview, 0, 1)
@@ -501,7 +502,7 @@ class App(QWidget):
         """ In case user wants to start from scracth, template image webview page has to be loaded"""
         self.startNewSession = True
         # set the template page in the webView
-        self.webpage.load(QUrl("file://"+self.lungs_template_page))
+        self.webpage.load(QUrl(Path(self.lungs_template_page).absolute().as_uri()))
         # delete the customized page if present
         if(os.path.exists(self.lungs_customized_page)):
             os.remove(self.lungs_customized_page)
@@ -557,7 +558,7 @@ class App(QWidget):
 
             export_html(html, self.lungs_customized_page)
 
-            self.webpage.load(QUrl("file://"+self.lungs_customized_page))
+            self.webpage.load(QUrl(Path(self.lungs_customized_page).absolute().as_uri()))
 
             self.pathological_areas.setText("Pathological areas: <b>{}/14</b>".format(task_dict['pathological_areas']))
             self.number_whites.setText(str(task_dict['n_score_0']))
