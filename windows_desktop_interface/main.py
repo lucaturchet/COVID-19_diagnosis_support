@@ -487,7 +487,7 @@ class App(QWidget):
     def choose_video_file(self, areaID):
         """ Opens the file chooser and starts processing in a separate thread """
 
-        dialogResult = QFileDialog.getOpenFileName(self,"Open Video", ".", "Video Files (*.MOV *.mov *.AVI *.avi)")
+        dialogResult = QFileDialog.getOpenFileName(self,"Open Video", "", "Video Files (*.MOV *.mov *.AVI *.avi)")
 
         if len(dialogResult[0]) == 0:
             return
