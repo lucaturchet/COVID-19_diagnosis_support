@@ -89,6 +89,8 @@ class HomeViewController: UIViewController, UITextViewDelegate {
         return view
     }()
     
+    var scrollViewBottomAnchor: NSLayoutConstraint?
+    
     var colors: [Color] = []
     var nodes: [String] = []
     var onOpenPDF: ((_ patient: PatientReport, _ areas: [Int], _ notes: String) -> ())?
@@ -114,10 +116,12 @@ class HomeViewController: UIViewController, UITextViewDelegate {
         self.generateReportButton.addTarget(self, action: #selector(generateNewReport), for: .touchUpInside)
         
         self.view.addSubview(self.scrollView)
-        self.scrollView.anchorView(top: self.view.safeAreaLayoutGuide.topAnchor, topC: 0,
-                                   leading: self.view.leadingAnchor, leadingC: 40,
-                                   trailing: self.view.trailingAnchor, trailingC: -40,
-                                   bottom: self.view.safeAreaLayoutGuide.bottomAnchor, bottomC: 0)
+        self.scrollView.anchorViewTop(top: self.view.safeAreaLayoutGuide.topAnchor, topC: 0,
+                                      leading: self.view.leadingAnchor, leadingC: 40,
+                                      trailing: self.view.trailingAnchor, trailingC: -40,
+                                      height: nil)
+        self.scrollViewBottomAnchor = self.scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        self.scrollViewBottomAnchor?.isActive = true
         
         self.addChild(self.form)
         self.scrollView.addSubview(self.form.view)
@@ -210,19 +214,26 @@ class HomeViewController: UIViewController, UITextViewDelegate {
         guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
         
         let keyboardScreenEndFrame = keyboardValue.cgRectValue
-        let keyboardViewEndFrame = keyboardScreenEndFrame
+        let keyboardViewHeight = keyboardScreenEndFrame.height
         
         if notification.name == UIResponder.keyboardWillShowNotification {
-            if self.activeTextView == self.notesTextView {
-                self.scrollView.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: keyboardViewEndFrame.size.height + 40, right: 0)
-                
-                let heightToAdd = keyboardViewEndFrame.size.height - (self.view.frame.maxY - self.notesTextView.frame.maxY) + 40
-                let bottomOffset = CGPoint(x: 0, y: heightToAdd)
-                self.scrollView.setContentOffset(bottomOffset, animated: true)
+            self.scrollView.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 40, right: 0)
+            self.scrollViewBottomAnchor?.constant = -keyboardViewHeight
+            UIView.animate(withDuration: 0.3) {
+                self.view.layoutIfNeeded()
+            }
+            if let active = self.activeTextView {
+                self.scrollView.scrollRectToVisible(self.view.convert(active.frame, to: self.view),
+                                                    animated: true)
+            }else{
+                self.scrollView.scrollRectToVisible(self.scrollView.convert(self.form.view.frame, to: self.scrollView),
+                                                    animated: true)
             }
         }else{
+            self.scrollView.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
+            self.scrollViewBottomAnchor?.constant = 0
             UIView.animate(withDuration: 0.3) {
-                self.scrollView.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
+                self.view.layoutIfNeeded()
             }
         }
     }
