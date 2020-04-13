@@ -416,6 +416,7 @@ class App(QWidget):
         # show video frame for cropping
         panel_video = QVBoxLayout()
         self.panel_video_frame = QFrame()
+        self.panel_video_frame.setFrameStyle(QFrame.NoFrame)
         self.panel_video_frame.setLayout(panel_video)
 
         self.video_crop_window.layout.addWidget(self.panel_video_frame)
@@ -435,19 +436,23 @@ class App(QWidget):
 
         panel_video.addWidget(self.crop_btn)
 
-        self.m_label_gif = QLabel()
+        self.gray_label = QLabel(self.video_label)
+        self.gray_label.setStyleSheet("border: 0px; background-color: rgba(124, 124, 124, 160);")
+        self.gray_label.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
+        self.gray_label.setScaledContents(True)
+        self.gray_label.hide()
 
+
+        self.m_label_gif = QLabel()
         self.m_movie_gif = QMovie("resources/loadingGif.gif")
         self.m_label_gif.setMovie(self.m_movie_gif)
         #self.m_label_gif.setScaledContents(True)
         self.m_label_gif.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.m_label_gif.setAlignment(Qt.AlignCenter)
         self.m_movie_gif.setScaledSize(QSize(75,75))
-
         gifLayout = QVBoxLayout()
         self.video_label.setLayout(gifLayout)
         gifLayout.addWidget(self.m_label_gif, alignment=Qt.AlignCenter)
-
         self.m_movie_gif.stop()
         self.m_label_gif.hide()
 
@@ -586,6 +591,7 @@ class App(QWidget):
             self.number_grey.setText(str(task_dict['n_not_measured']))
 
             self.video_crop_window.hide()
+            self.gray_label.hide()
             self.m_movie_gif.stop()
             self.m_label_gif.hide()
 
@@ -685,7 +691,8 @@ class App(QWidget):
             self.video_label.setFixedWidth(pixmap.width())
             self.video_label.setFixedHeight(pixmap.height())
             self.crop_btn.setFixedWidth(pixmap.width())
-            # set window size too
+
+            self.gray_label.setGeometry(0,0,pixmap.width(),pixmap.height())
 
             self.video_label.minSquareSide = int(self.video_label_width/(pixmap.width())*self.minImageCropSize)
 
@@ -697,6 +704,7 @@ class App(QWidget):
     def crop_video(self):
         """Crop from ffmpeg using scaled pixels of rubber band"""
 
+        self.gray_label.show()
         self.m_movie_gif.start()
         self.m_label_gif.show()
 
