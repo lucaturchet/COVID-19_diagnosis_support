@@ -21,11 +21,85 @@ from urllib.parse import parse_qs
 from reportlab.pdfgen import canvas
 from classifiers import TFClassifier
 from utilities import customize_report, export_pdf, export_html, generate_output_html, Calendar, ClickableQLabel
-from PyQt5.QtWidgets import QApplication, QSizePolicy, QWidget, QVBoxLayout, QPushButton, QFileDialog, QLabel, QDialog, QGridLayout, QFrame, QLineEdit, QTextEdit, QRubberBand, QMessageBox, QMainWindow
-from PyQt5.QtGui import QIcon, QPixmap, QMovie
+from PyQt5.QtWidgets import QApplication, QSizePolicy, QWidget, QVBoxLayout, QPushButton, QFileDialog, QLabel, QDialog, QGridLayout, QFrame, QLineEdit, QTextEdit, QRubberBand, QMessageBox, QMainWindow, QSizeGrip, QHBoxLayout
+from PyQt5.QtGui import QIcon, QPixmap, QMovie, QCursor, QPainter
 from PyQt5.QtCore import pyqtSlot, QThreadPool, QRunnable, QObject, pyqtSignal, Qt, QSize, QPoint, QRect, QUrl
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 
+
+class ResizableRubberBand(QWidget):
+    def __init__(self, parent=None):
+        super(ResizableRubberBand, self).__init__(parent)
+
+        self.draggable = True
+        self.dragging_threshold = 0
+        self.mousePressPos = None
+        self.mouseMovePos = None
+        self.borderRadius = 5
+
+        self.setWindowFlags(Qt.SubWindow)
+        layout = QHBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        
+        self.grip2 = QSizeGrip(self)
+        self.grip2.setFixedSize(15,15)
+
+        layout.addWidget(
+            self.grip2, 0,
+            Qt.AlignRight | Qt.AlignBottom)
+        self.band = QRubberBand(
+            QRubberBand.Rectangle, self)
+        self.band.show()
+        self.show()
+
+    def resizeEvent(self, event):
+        # Note: resizing from a top left grip creates loop
+        rect = self.geometry()
+        side = min(rect.width(), rect.height())
+
+        self.band.setGeometry(0,0,side,side)
+        self.setGeometry(self.x(),self.y(),side,side)
+
+    def paintEvent(self, event):
+        # Get current window size
+        window_size = self.size()
+        qp = QPainter()
+        qp.begin(self)
+        qp.setRenderHint(QPainter.Antialiasing, True)
+
+        side = min(window_size.width(),window_size.height())
+
+        qp.drawRoundedRect(0, 0, window_size.width(), window_size.height(),
+                           self.borderRadius, self.borderRadius)
+
+        qp.end()
+
+    def mousePressEvent(self, event):
+        if self.draggable and event.button() == Qt.LeftButton:
+            self.mousePressPos = event.globalPos()                # global
+            self.mouseMovePos = event.globalPos() - self.pos()    # local
+        super(ResizableRubberBand, self).mousePressEvent(event)
+
+    def mouseMoveEvent(self, event):
+        if self.draggable and event.buttons() & Qt.LeftButton:
+            globalPos = event.globalPos()
+            moved = globalPos - self.mousePressPos
+            if moved.manhattanLength() > self.dragging_threshold:
+                # Move when user drag window more than dragging_threshold
+                diff = globalPos - self.mouseMovePos
+                self.move(diff)
+                self.mouseMovePos = globalPos - self.pos()
+        super(ResizableRubberBand, self).mouseMoveEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        if self.mousePressPos is not None:
+            if event.button() == Qt.LeftButton:
+                moved = event.globalPos() - self.mousePressPos
+                if moved.manhattanLength() > self.dragging_threshold:
+                    # Do not call click event or so on
+                    event.ignore()
+                self.mousePressPos = None
+        super(ResizableRubberBand, self).mouseReleaseEvent(event)
 
 
 class ClickableWebPage(QWebEnginePage):
@@ -72,42 +146,16 @@ class VideoView(QLabel):
     def __init__(self, parent = None):
     
         QLabel.__init__(self, parent)
-        self.rubberBand = QRubberBand(QRubberBand.Rectangle, self)
-        self.origin = QPoint()
+
         self.minSquareSide = 256
-    
-    def mousePressEvent(self, event):
-    
-        if event.button() == Qt.LeftButton:
-            self.rubberBand.hide()
+        self.rubberBand = ResizableRubberBand(self)
+        self.rubberBand.setGeometry(0, 0, self.minSquareSide, self.minSquareSide)
+        dragCursor = QCursor()
+        dragCursor.setShape(Qt.SizeAllCursor)
+        self.rubberBand.setCursor(dragCursor)
+        self.rubberBand.setMinimumSize(self.minSquareSide, self.minSquareSide)
+        self.rubberBand.show()
 
-            self.origin = QPoint(event.pos())
-            print(self.origin)
-            self.rubberBand.setGeometry(QRect(self.origin, QSize()))
-            self.rubberBand.show()
-    
-    def mouseMoveEvent(self, event):
-    
-        if not self.origin.isNull():
-            newPoint = QPoint(event.pos())
-            # get minimum side of selection to make square
-            width = abs(newPoint.x() - self.origin.x())
-            height = abs(newPoint.y() - self.origin.y())
-            side = min(width,height)
-
-            self.rubberBand.setGeometry(QRect(self.origin, QPoint(self.origin.x()+side, self.origin.y()+side)).normalized())
-
-    
-    def mouseReleaseEvent(self, event):
-        newPoint = QPoint(event.pos())
-        width = abs(newPoint.x() - self.origin.x())
-        height = abs(newPoint.y() - self.origin.y())
-
-        side = min(width,height)
-
-        if(side < self.minSquareSide):
-            side = self.minSquareSide
-            self.rubberBand.setGeometry(QRect(self.origin, QPoint(self.origin.x()+side, self.origin.y()+side)).normalized())
 
 class Worker(QRunnable):
     '''
@@ -172,7 +220,6 @@ class App(QWidget):
         self.width 				= self.left_column_width + self.right_column_width
         self.height 			= self.top_row_height + self.bottom_row_height
         self.video_label_width  = 600 # height computed automatically to preserve aspect ratio
-        self.minImageCropSize   = 256 # min input size for neural network 
 
         self.tmp_dir = os.getcwd()+"/tmp"
         self.lungs_template_page_name = "image_webView.html"
@@ -442,7 +489,6 @@ class App(QWidget):
         self.gray_label.setScaledContents(True)
         self.gray_label.hide()
 
-
         self.m_label_gif = QLabel()
         self.m_movie_gif = QMovie("resources/loadingGif.gif")
         self.m_label_gif.setMovie(self.m_movie_gif)
@@ -694,9 +740,12 @@ class App(QWidget):
 
             self.gray_label.setGeometry(0,0,pixmap.width(),pixmap.height())
 
-            self.video_label.minSquareSide = int(self.video_label_width/(pixmap.width())*self.minImageCropSize)
-
             self.video_label.setPixmap(pixmap)
+
+            # center crop square only at beginning of each session
+            if(self.startNewSession):
+                self.video_label.rubberBand.setGeometry((pixmap.width() / 2) - (self.video_label.minSquareSide / 2), (pixmap.height() / 2) - (self.video_label.minSquareSide / 2), self.video_label.minSquareSide, self.video_label.minSquareSide)
+
             self.panel_video_frame.setFocus()
             self.video_crop_window.show()
 
