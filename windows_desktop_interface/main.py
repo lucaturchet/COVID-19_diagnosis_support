@@ -22,9 +22,10 @@ from reportlab.pdfgen import canvas
 from classifiers import TFClassifier
 from utilities import customize_report, export_pdf, export_html, generate_output_html, Calendar, ClickableQLabel
 from PyQt5.QtWidgets import QApplication, QSizePolicy, QWidget, QVBoxLayout, QPushButton, QFileDialog, QLabel, QDialog, QGridLayout, QFrame, QLineEdit, QTextEdit, QRubberBand, QMessageBox, QMainWindow
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QIcon, QPixmap, QMovie
 from PyQt5.QtCore import pyqtSlot, QThreadPool, QRunnable, QObject, pyqtSignal, Qt, QSize, QPoint, QRect, QUrl
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
+
 
 
 class ClickableWebPage(QWebEnginePage):
@@ -434,6 +435,23 @@ class App(QWidget):
 
         panel_video.addWidget(self.crop_btn)
 
+        self.m_label_gif = QLabel()
+
+        self.m_movie_gif = QMovie("resources/loadingGif.gif")
+        self.m_label_gif.setMovie(self.m_movie_gif)
+        #self.m_label_gif.setScaledContents(True)
+        self.m_label_gif.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.m_label_gif.setAlignment(Qt.AlignCenter)
+        self.m_movie_gif.setScaledSize(QSize(75,75))
+
+        gifLayout = QVBoxLayout()
+        self.video_label.setLayout(gifLayout)
+        gifLayout.addWidget(self.m_label_gif, alignment=Qt.AlignCenter)
+
+        self.m_movie_gif.stop()
+        self.m_label_gif.hide()
+
+
         note_layout = QVBoxLayout()
         n_header = QLabel("Notes of the clinician")
         n_header.setStyleSheet(header_style)
@@ -566,6 +584,12 @@ class App(QWidget):
             self.number_orange.setText(str(task_dict['n_score_2']))
             self.number_red.setText(str(task_dict['n_score_3']))
             self.number_grey.setText(str(task_dict['n_not_measured']))
+
+            self.video_crop_window.hide()
+            self.m_movie_gif.stop()
+            self.m_label_gif.hide()
+
+
         else:
             raise RuntimeError("Error while customizing html template")
 
@@ -673,6 +697,9 @@ class App(QWidget):
     def crop_video(self):
         """Crop from ffmpeg using scaled pixels of rubber band"""
 
+        self.m_movie_gif.start()
+        self.m_label_gif.show()
+
         labelX = self.video_label.rubberBand.geometry().x()
         labelY = self.video_label.rubberBand.geometry().y()
         labelRight = self.video_label.rubberBand.geometry().x()+self.video_label.rubberBand.geometry().width()
@@ -717,8 +744,6 @@ class App(QWidget):
 
         # clean tmp folder 
         self.delete_folder_contents(self.tmp_dir)
-
-        self.video_crop_window.hide()
 
         dir = os.path.dirname(self.video_file_path)
         worker = Worker(dir, TFClassifier)
