@@ -83,13 +83,16 @@ class ResizableRubberBand(QWidget):
     def mouseMoveEvent(self, event):
         if self.draggable and event.buttons() & Qt.LeftButton:
             globalPos = event.globalPos()
+
             moved = globalPos - self.mousePressPos
             if moved.manhattanLength() > self.dragging_threshold:
                 # Move when user drag window more than dragging_threshold
                 diff = globalPos - self.mouseMovePos
-                self.move(diff)
+                diffNew = QPoint(max(0,min(diff.x(),self.parent().geometry().width() - self.size().width())), max(0,min(diff.y(),self.parent().geometry().height() - self.size().height())))
+                self.move(diffNew)
                 self.mouseMovePos = globalPos - self.pos()
-        super(ResizableRubberBand, self).mouseMoveEvent(event)
+            
+            super(ResizableRubberBand, self).mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event):
         if self.mousePressPos is not None:
