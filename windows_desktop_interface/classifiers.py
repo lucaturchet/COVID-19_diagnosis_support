@@ -57,7 +57,7 @@ class TFClassifier(Classifier):
                     clf_output += curr_output.reshape((1, 1000))
 
                     ctr += 1
-                    print("Analizzato frame {} di {}".format(ctr, max_))
+                    #print("Analizzato frame {} di {}".format(ctr, max_))
                     if ctr == max_:
                         break
 
